@@ -2,7 +2,7 @@ import random
 import secrets
 import logging
 
-from tinydb import TinyDB, Query
+from tinydb import TinyDB, Query, where
 
 
 class Player:
@@ -32,34 +32,31 @@ class Player:
         # TODO: implement to dict method
         pass
 
-    def from_dict(self, player_dict):
+    @classmethod
+    def from_dict(cls, player_dict):
         """convert dict to player"""
         return Player(**player_dict)
-
-        # TODO: implement from dict method
 
     def create(self) -> None:
         """Create method for players"""
         self.db.insert(self.to_dict())
 
-        # TODO: implement create method
-        pass
+    @classmethod
+    def read_one(cls, player_id: str) -> dict | None:
+        """Read method for players (Read one)"""
+        player = Query()
+        result = cls.db.search(player.player_id == player_id)
+        return result[0] if result else None
 
-    def read_one(self) -> None:
-        """Read method for players"""
-        # TODO: implement read one method
-        pass
-
-    def read_all(self) -> None:
+    @classmethod
+    def read_all(cls) -> list[dict]:
         """Read all method for players"""
-        # TODO: implement read all method
-        pass
+        return cls.db.all()
 
-    def search_by(self, key: str, value) -> None:
+    @classmethod
+    def search_by(cls, key: str, value) -> list[dict]:
         """Search method for players by key and value"""
-        #  TODO: implement search by key and value
-
-    pass
+        return cls.db.search(where(key) == value)
 
     def update(self) -> None:
         """Update method for players"""
@@ -70,7 +67,6 @@ class Player:
         """Delete method for players"""
         # not necessary
         raise NotImplementedError("not included in specs")
-        pass
 
     def __repr__(self) -> str:
         """Player representation"""
@@ -78,14 +74,23 @@ class Player:
         return f"Player(firstname={self.firstname}, lastname={self.lastname}, birthdate={self.birthdate}, " \
                f"player_id={self.player_id})"
 
-    def delete_all(self):
+    @classmethod
+    def delete_all(cls) -> None:
         """delete all method for players"""
-        pass
+        cls.db.truncate()
 
-    def bootstrap(self):
-        """create 100 players"""
-        pass
+    @classmethod
+    def bootstrap(cls, num_players: int = 3) -> None:
+        """Create method for players (Bootstrap)"""
+        for _ in range(num_players):
+            firstname = "test" + secrets.token_hex(4)
+            lastname = "test" + secrets.token_hex(4)
+            birthdate = f"{random.randint(1970, 2000)}-01-01"
+            p = Player(firstname, lastname, birthdate)
+            p.create()
 
-    def reboot(self):
+    @classmethod
+    def reboot(cls,num_players: int = 100) -> None:
         """delete all players and create 100 players"""
-        pass
+        cls.delete_all()
+        cls.bootstrap(num_players)
