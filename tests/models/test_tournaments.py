@@ -8,7 +8,7 @@ from chess.models.tournaments import Tournament
 class TestTournament:
     """Test Tournament model"""
 
-    def test_init():
+    def test_init(self):
         """create a tournament"""
         name = "Tournament" + secrets.token_hex(4)
         start_date = "2023-01-01"
@@ -17,7 +17,7 @@ class TestTournament:
         t = Tournament(name, start_date, end_date)
         logging.warning(t)
 
-    def test_to_dict():
+    def test_to_dict(self):
         """convert tournament to dict"""
         name = "Tournament" + secrets.token_hex(4)
         start_date = "2023-01-01"
@@ -26,7 +26,7 @@ class TestTournament:
         t = Tournament(name, start_date, end_date)
         logging.warning(t.to_dict())
 
-    def test_from_dict():
+    def test_from_dict(self):
         """convert dict to tournament"""
         name = "Tournament" + secrets.token_hex(4)
         start_date = "2023-01-01"
@@ -40,7 +40,7 @@ class TestTournament:
         t = Tournament.from_dict(t_dict)
         logging.warning(t)
 
-    def test_create():
+    def test_create(self):
         """convert dict to tournament"""
         name = "Tournament" + secrets.token_hex(4)
         start_date = "2023-01-01"
@@ -50,7 +50,7 @@ class TestTournament:
         t.create()
         logging.warning(t)
 
-    def test_search_by_tournament():
+    def test_search_by_tournament(self):
         """search method for tournaments by key and value"""
         name = "Tournament" + "search"
         start_date = "2023-01-01"
