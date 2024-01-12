@@ -108,7 +108,10 @@ class Tournament:
 
     def update(self) -> None:
         """Update method for tournaments"""
+
+        # TODO FIX THIS
         # Not necessary for now
+
         raise NotImplementedError("Not included in specs")
 
     def delete(self) -> None:
@@ -200,10 +203,14 @@ class Tournament:
                 [self.player_id_list[1], self.player_id_list[2]],  # 2eme match
             ]
 
+            # match list
             match_list = [round_0, round_1, round_2]
 
             for i, match_list in enumerate(match_list):
-                self._add_round(i, match_list)
+                # add round id db
+                round_id = self._add_round(i, match_list)
+                # update round id list wuth new roud created
+                self.round_id_list.append(round_id)
 
             # Save rounds to DB
             self.status = "In Progress"
@@ -258,6 +265,8 @@ class Tournament:
         self.rounds_id_list.append(new_round.id_round)  # FAUX MAIS BONNE ID2E
 
         self.update()
+
+        return round_id
 
     def __repr__(self) -> str:
         """Tournament representation"""
