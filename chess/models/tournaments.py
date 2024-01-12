@@ -1,3 +1,5 @@
+import os
+import logging
 import secrets
 import random
 
@@ -13,19 +15,20 @@ class Tournament:
 
     N_PLAYERS = 4
     N_ROUNDS = 3
+    AUTORISED_STATUS = ["Created", "In Progress", "Completed"]
 
     def __init__(
-            self,
-            name: str,
-            start_date: str,
-            end_date: str,
-            description: str = "",
-            location: str = "",
-            tournament_id: str | None = None,
-            round_id_list: List[str] | None = None,
-            player_id_list: List[str] | None = None,
-            current_round_number: int = -1,
-            status: str = "Created",
+        self,
+        name: str,
+        start_date: str,
+        end_date: str,
+        description: str = "",
+        location: str = "",
+        tournament_id: str | None = None,
+        round_id_list: List[str] | None = None,
+        player_id_list: List[str] | None = None,
+        current_round_number: int = -1,
+        status: str = "Created",
     ):
         """Init method for tournaments
 
@@ -61,6 +64,12 @@ class Tournament:
     def to_dict(self) -> dict:
         """Convert tournament to dict"""
         return self.__dict__
+
+    @property
+    def n_players(self) -> int:
+        """Return number of players"""
+
+        return len(self.player_id_list)
 
     @classmethod
     def from_dict(cls, tournament_dict):
@@ -118,8 +127,8 @@ class Tournament:
             raise ValueError("Le jouer existe deja dans le tournament.")
 
         # TODO: Add verification that the player is not already in the Player DB Table
-        if player_exists_in_db(player_id): # a implementer
-            raise ValueError("Le jouer existe deja dans Player DB Table .")
+        # if self._player_exists_in_db(player_id):  # a implementer
+        #     raise ValueError("Le jouer existe deja dans Player DB Table .")
 
         # si status != created => trop tard mon coco :)
 
@@ -138,71 +147,98 @@ class Tournament:
 
         self.update()
 
-    def update_status(self):
+    def update_status(self, new_status: str):
+        """ """
 
-        # on passe de created à en cours, on passe de en cours à terminé
+        #     # on passe de created à en cours, on passe de en cours à terminé
 
-        # quand on passe de created à en cours :
-        #  - il faut calucler d'un coup toutes les rondes / tous les match
-        # round 0 = player 0 vs player 1, player 2 vs player 3
-        # round 1 = player 0 vs player 2, player 1 vs player 3
-        # round 2 = player 0 vs player 3, player 1 vs player 2
+        #     # quand on passe de created à en cours :
+        #     #  - il faut calucler d'un coup toutes les rondes / tous les match
+        #     # round 0 = player 0 vs player 1, player 2 vs player 3
+        #     # round 1 = player 0 vs player 2, player 1 vs player 3
+        #     # round 2 = player 0 vs player 3, player 1 vs player 2
 
-        # c'est ici que on va use self._add_round(blabla bla)
+        #     # c'est ici que on va use self._add_round(blabla bla)
 
-        # enregistrer les rounds dans la db
+        #     # enregistrer les rounds dans la db
 
-        # MAJ la rounds_id_list de la clas
-        # update le numéro de la ronde en cours
-        # save notre new  tournois
+        #     # MAJ la rounds_id_list de la clas
+        #     # update le numéro de la ronde en cours
+        #     # save notre new  tournois
 
-        # interdire de passer de terminé à en cours ou terminé à created !!!!
+        #     # interdire de passer de terminé à en cours ou terminé à created !!!!
 
-        # pas le droit de passer en created à en cours si pas 4 joeurs
+        #     # pas le droit de passer en created à en cours si pas 4 joeurs
 
-        # quand on passe de en cours à terminé ??? que se passe t'il ?
+        #     # quand on passe de en cours à terminé ??? que se passe t'il ?
 
-        pass
+        # check if new status is autorised
+        if new_status not in self.AUTORISED_STATUS:
+            raise ValueError("Invalid tournament status.")
 
-    def update_status(self):
-        if self.status == "Created":
+        # manage created
+        if self.status == "Created" and new_status == "In Progress":
+            # if not good n players
             if len(self.player_id_list) != self.N_PLAYERS:
-                raise ValueError("Pas possible de passer a 'In Progress' sans 4 jouers.")
-
-            self.status = "In Progress"
+                raise ValueError(
+                    "Pas possible de passer a 'In Progress' sans 4 jouers."
+                )
 
             # Calculate rounds and matches
-            for round_number in range(self.N_ROUNDS):
-                match_list = [f"Match{i}" for i in range(round_number * 2, (round_number + 1) * 2)]
-                self._add_round(round_number, match_list)
+            round_0 = [
+                [self.player_id_list[0], self.player_id_list[1]],  # 1er match
+                [self.player_id_list[2], self.player_id_list[3]],  # 2eme match
+            ]
+
+            round_1 = [
+                [self.player_id_list[0], self.player_id_list[2]],  # 1er match
+                [self.player_id_list[1], self.player_id_list[3]],  # 2eme match
+            ]
+
+            round_2 = [
+                [self.player_id_list[0], self.player_id_list[3]],  # 1er match
+                [self.player_id_list[1], self.player_id_list[2]],  # 2eme match
+            ]
+
+            match_list = [round_0, round_1, round_2]
+
+            for i, match_list in enumerate(match_list):
+                self._add_round(i, match_list)
 
             # Save rounds to DB
+            self.status = "In Progress"
             self.update()
 
-        elif self.status == "In Progress":
-            # Check si toutes le rounds sont finished
-            if self.current_round_number == self.N_ROUNDS - 1:
+        elif self.status == "In Progress" and new_status == "Completed":
+            # check that all round played
+            # update status
+            # udate tournanme
+            pass
 
-                # Update status et save
-                self.status = "Completed"
-                self.update()
-
-            else:
-                # On continue les rounds
-                self.current_round_number += 1
-                self.update()
-
-        elif self.status == "Completed":
-            raise ValueError("Cannot update status. Tournament already completed.")
         else:
-            raise ValueError("Invalid tournament status.")
+            raise ValueError(
+                f"Invalid tournament status. Cannot update from {self.status} to {new_status}"
+            )
+
+    def next_round(self):
+        """change the round +=1"""
+
+        # Check si toutes le rounds sont finished
+        if self.current_round_number == self.N_ROUNDS - 1:
+            # Update status et save
+            self.status = "Completed"
+            self.update()
+
+        else:
+            # On continue les rounds
+            self.current_round_number += 1
+            self.update()
 
     def get_current_round_number(self):
         # renvoyer la ronde en cours
         return ""
 
     def update_current_round_number(self, match_list=list):
-
         # charger la ronde en cours
         # update les match  et resutnst
         # save la roude
@@ -215,6 +251,7 @@ class Tournament:
     def _add_round(self, round_number: int, matches: List[str]) -> None:  # !!!!!!!!!!
         """Add a round to the tournament"""
 
+        round_id = self.tournament_id + "_round_" + str(round_number)
         new_round = Round(round_id, matches)
 
         # Add the round to the list of rounds
