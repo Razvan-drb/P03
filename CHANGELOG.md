@@ -18,8 +18,6 @@
 - validate round creattion when strat a tournament 
 - add fucntionality to update each round for the tournament + method update_round
 
-
-
 ### NICE TO HAVE
 - class testPlayer
 - add verification that the player is not already in the tournament
