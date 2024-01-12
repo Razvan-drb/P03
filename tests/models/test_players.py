@@ -5,6 +5,9 @@ import secrets
 from chess.models.players import Player
 
 
+# Todo: create class TestPlayer
+
+
 def test_init_player():
     """create a player"""
 
