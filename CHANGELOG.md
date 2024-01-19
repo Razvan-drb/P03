@@ -9,7 +9,10 @@
 - Update test for tournaments 
 - Update methods in tournament 
 - Test policy 
-
+- get_current_round_number
+- next_round
+- update_status
+- 
 ## Todo
 
 ### MUST HAVE

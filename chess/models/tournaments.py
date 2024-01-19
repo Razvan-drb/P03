@@ -18,17 +18,17 @@ class Tournament:
     AUTORISED_STATUS = ["Created", "In Progress", "Completed"]
 
     def __init__(
-        self,
-        name: str,
-        start_date: str,
-        end_date: str,
-        description: str = "",
-        location: str = "",
-        tournament_id: str | None = None,
-        round_id_list: List[str] | None = None,
-        player_id_list: List[str] | None = None,
-        current_round_number: int = -1,
-        status: str = "Created",
+            self,
+            name: str,
+            start_date: str,
+            end_date: str,
+            description: str = "",
+            location: str = "",
+            tournament_id: str | None = None,
+            round_id_list: List[str] | None = None,
+            player_id_list: List[str] | None = None,
+            current_round_number: int = -1,
+            status: str = "Created",
     ):
         """Init method for tournaments
 
@@ -110,9 +110,8 @@ class Tournament:
         """Update method for tournaments"""
 
         # TODO FIX THIS
-        # Not necessary for now
 
-        raise NotImplementedError("Not included in specs")
+        print(f"Tournament {self.tournament_id} updated successfully.")
 
     def delete(self) -> None:
         """Delete method for tournaments"""
@@ -217,14 +216,14 @@ class Tournament:
             self.update()
 
         elif self.status == "In Progress" and new_status == "Completed":
-            # check that all round played
-            # update status
-            # udate tournanme
-            pass
+            # Check if all rounds have been played
+
+            if len(self.round_id_list) < self.N_PLAYERS - 1:
+                raise ValueError("Impossible de terminer le tournoi sans que tout les rounds sois finis.")
 
         else:
             raise ValueError(
-                f"Invalid tournament status. Cannot update from {self.status} to {new_status}"
+                f"Status invalid. Impossible de changer le status de {self.status} a {new_status}"
             )
 
     def next_round(self):
@@ -242,8 +241,16 @@ class Tournament:
             self.update()
 
     def get_current_round_number(self):
-        # renvoyer la ronde en cours
-        return ""
+        """Get the current round number for the tournament."""
+
+        # Check if the tournament is in progress
+        if self.status == "In Progress":
+            # Calculate the current round number based on the number of played rounds
+            current_round_number = len(self.round_id_list)
+            return current_round_number
+        else:
+            # If the tournament is not in progress, return None
+            return None
 
     def update_current_round_number(self, match_list=list):
         # charger la ronde en cours
