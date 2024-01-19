@@ -54,7 +54,6 @@ class Tournament:
         self.description = description
         self.location = location
 
-        # computed args (not directly written by user)
         self.tournament_id = tournament_id if tournament_id else secrets.token_hex(4)
         self.round_id_list = round_id_list if round_id_list else []
         self.player_id_list = player_id_list if player_id_list else []
@@ -243,20 +242,30 @@ class Tournament:
     def get_current_round_number(self):
         """Get the current round number for the tournament."""
 
-        # Check if the tournament is in progress
-        if self.status == "In Progress":
-            # Calculate the current round number based on the number of played rounds
-            current_round_number = len(self.round_id_list)
-            return current_round_number
-        else:
-            # If the tournament is not in progress, return None
-            return None
+        if self.current_round_number >= 0:
+            round_id = self.round_id_list[self.current_round_number]  # recupere le round id de la list
+            round_search_results = Round.search(round_id)  # cherche le round id
+            if round_search_results:
+                return round_search_results[0]['round_number']  # return le round number
 
-    def update_current_round_number(self, match_list=list):
-        # charger la ronde en cours
-        # update les match  et resutnst
-        # save la roude
-        pass
+        return
+
+    def update_current_round_number(self, match_list=None):
+        """Update the current round number for the tournament."""
+
+        if self.current_round_number >= 0:
+            # Increment round number
+            if self.current_round_number < self.N_ROUNDS - 1:
+                self.current_round_number += 1
+
+                match_list = match_list[self.current_round_number]
+                new_round_number = self._add_round(self.current_round_number, match_list) # ajout a la DB
+                self.round_id_list.append(new_round_number) # ajout new round number a la round id list
+
+            else:
+                self.status = "Completed"
+
+            self.update()
 
     def get_score(self):
         # UN DES TRUC QUON FERRA A LA TOUTE FIN !!!

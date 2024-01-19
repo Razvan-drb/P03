@@ -1,6 +1,6 @@
 import secrets
 from typing import List
-from tinydb import TinyDB
+from tinydb import TinyDB, Query
 
 
 class Round:
@@ -24,6 +24,19 @@ class Round:
         """Convert round to dict"""
         return self.__dict__
 
+    def from_dict(self) -> dict:
+        """Convert dict to round"""
+        return self.__dict__
+
     def create(self) -> None:
         """Create method for rounds"""
         self.db.insert(self.to_dict())
+
+    # TODO def search
+    def search(self, round_id: str) -> list[dict]:
+        """Search for a round by round_id"""
+
+        round_search = Query()
+        result = self.db.search(round_search.round_id == round_id)
+
+        return [Round.from_dict(round_id) for round_id in result]
