@@ -18,17 +18,17 @@ class Tournament:
     AUTORISED_STATUS = ["Created", "In Progress", "Completed"]
 
     def __init__(
-            self,
-            name: str,
-            start_date: str,
-            end_date: str,
-            description: str = "",
-            location: str = "",
-            tournament_id: str | None = None,
-            round_id_list: List[str] | None = None,
-            player_id_list: List[str] | None = None,
-            current_round_number: int = -1,
-            status: str = "Created",
+        self,
+        name: str,
+        start_date: str,
+        end_date: str,
+        description: str = "",
+        location: str = "",
+        tournament_id: str | None = None,
+        round_id_list: List[str] | None = None,
+        player_id_list: List[str] | None = None,
+        current_round_number: int = -1,
+        status: str = "Created",
     ):
         """Init method for tournaments
 
@@ -218,7 +218,9 @@ class Tournament:
             # Check if all rounds have been played
 
             if len(self.round_id_list) < self.N_PLAYERS - 1:
-                raise ValueError("Impossible de terminer le tournoi sans que tout les rounds sois finis.")
+                raise ValueError(
+                    "Impossible de terminer le tournoi sans que tout les rounds sois finis."
+                )
 
         else:
             raise ValueError(
@@ -239,33 +241,47 @@ class Tournament:
             self.current_round_number += 1
             self.update()
 
-    def get_current_round_number(self):
+    def get_current_round(self):
         """Get the current round number for the tournament."""
 
-        if self.current_round_number >= 0:
-            round_id = self.round_id_list[self.current_round_number]  # recupere le round id de la list
-            round_search_results = Round.search(round_id)  # cherche le round id
-            if round_search_results:
-                return round_search_results[0]['round_number']  # return le round number
+        # find the current round numbner
+        # find the current round_id
+        # load the Round instance for the current round
 
-        return
+        # if self.current_round_number >= 0:
+        #     round_id = self.round_id_list[
+        #         self.current_round_number
+        #     ]  # recupere le round id de la list
+        #     round_search_results = Round.search(round_id)  # cherche le round id
+        #     if round_search_results:
+        #         return round_search_results[0]["round_number"]  # return le round number
 
-    def update_current_round_number(self, match_list=None):
+        # return
+
+    def update_current_round(self, match_list=None):
         """Update the current round number for the tournament."""
 
-        if self.current_round_number >= 0:
-            # Increment round number
-            if self.current_round_number < self.N_ROUNDS - 1:
-                self.current_round_number += 1
+        # find the round instance of the current round
+        # update the round
+        # save round updtaed
 
-                match_list = match_list[self.current_round_number]
-                new_round_number = self._add_round(self.current_round_number, match_list) # ajout a la DB
-                self.round_id_list.append(new_round_number) # ajout new round number a la round id list
+        # if self.current_round_number >= 0:
+        #     # Increment round number
+        #     if self.current_round_number < self.N_ROUNDS - 1:
+        #         self.current_round_number += 1
 
-            else:
-                self.status = "Completed"
+        #         match_list = match_list[self.current_round_number]
+        #         new_round_number = self._add_round(
+        #             self.current_round_number, match_list
+        #         )  # ajout a la DB
+        #         self.round_id_list.append(
+        #             new_round_number
+        #         )  # ajout new round number a la round id list
 
-            self.update()
+        #     else:
+        #         self.status = "Completed"
+
+        #     self.update()
 
     def get_score(self):
         # UN DES TRUC QUON FERRA A LA TOUTE FIN !!!

@@ -1,3 +1,18 @@
+# 204-01-22 - Code Review
+
+## Updated
+- fix / restructure test policy 
+- fix/update Tournament class
+
+## Todo 
+- specify librairies versions in requirements.txt
+- update README.md : 
+    - add a section "About"
+    - add a section "Install"
+- read about tests and uderstand WHY, WHAT, HOW we want to use the code
+- fix class Tournamanent 
+
+
 # 2024-01-12 - Mentoring
 
 
