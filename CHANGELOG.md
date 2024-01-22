@@ -11,11 +11,11 @@
     - add a section "Install"
 - read about tests and uderstand WHY, WHAT, HOW we want to use the code
 - fix class Tournamanent 
+- fix tournament. get_curent_round, update_current_round, update
+- fix the Round class
 
 
 # 2024-01-12 - Mentoring
-
-
 ## Validated
 - 
 
