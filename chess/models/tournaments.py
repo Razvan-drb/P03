@@ -18,17 +18,17 @@ class Tournament:
     AUTORISED_STATUS = ["Created", "In Progress", "Completed"]
 
     def __init__(
-            self,
-            name: str,
-            start_date: str,
-            end_date: str,
-            description: str = "",
-            location: str = "",
-            tournament_id: str | None = None,
-            round_id_list: List[str] | None = None,
-            player_id_list: List[str] | None = None,
-            current_round_number: int = -1,
-            status: str = "Created",
+        self,
+        name: str,
+        start_date: str,
+        end_date: str,
+        description: str = "",
+        location: str = "",
+        tournament_id: str | None = None,
+        round_id_list: List[str] | None = None,
+        player_id_list: List[str] | None = None,
+        current_round_number: int = -1,
+        status: str = "Created",
     ):
         """Init method for tournaments
 
@@ -112,6 +112,10 @@ class Tournament:
 
         print(f"Tournament {self.tournament_id} updated successfully.")
 
+        ######################################
+        # COME ON  !!!!!!! :(
+        ######################################
+
     def delete(self) -> None:
         """Delete method for tournaments"""
         # Not necessary for now
@@ -123,7 +127,6 @@ class Tournament:
         # TODO : add verification that the player is not already in the tournament
         # TODO : add verification that the player is not already in the Player DB Table
 
-        # TODO: Add verification that the player is not already in the tournament
         if player_id in self.player_id_list:
             raise ValueError("Le jouer existe deja dans le tournament.")
 
@@ -146,7 +149,7 @@ class Tournament:
         # add player to the player list
         self.player_id_list.append(player_id)
 
-        self.update()
+        self.update()  # for now it is useless   !!!!!
 
     def update_status(self, new_status: str):
         """ """
@@ -218,7 +221,9 @@ class Tournament:
             # Check if all rounds have been played
 
             if len(self.round_id_list) < self.N_PLAYERS - 1:
-                raise ValueError("Impossible de terminer le tournoi sans que tout les rounds sois finis.")
+                raise ValueError(
+                    "Impossible de terminer le tournoi sans que tout les rounds sois finis."
+                )
 
         else:
             raise ValueError(
@@ -239,33 +244,51 @@ class Tournament:
             self.current_round_number += 1
             self.update()
 
-    def get_current_round_number(self):
+    def get_current_round(self):
         """Get the current round number for the tournament."""
 
+        # find the current round numbner
+        # find the current round_id
+        # load the Round instance for the current round
+
+        """
         if self.current_round_number >= 0:
-            round_id = self.round_id_list[self.current_round_number]  # recupere le round id de la list
+            round_id = self.round_id_list[
+                self.current_round_number
+            ]  # recupere le round id de la list
             round_search_results = Round.search(round_id)  # cherche le round id
             if round_search_results:
-                return round_search_results[0]['round_number']  # return le round number
+                return round_search_results[0]["round_number"]  # return le round number
 
         return
+        """
 
-    def update_current_round_number(self, match_list=None):
+    def update_current_round(self, match_list=None):
         """Update the current round number for the tournament."""
 
-        if self.current_round_number >= 0:
-            # Increment round number
-            if self.current_round_number < self.N_ROUNDS - 1:
-                self.current_round_number += 1
+        # find the round instance of the current round
+        # update the round
+        # save round updated
 
-                match_list = match_list[self.current_round_number]
-                new_round_number = self._add_round(self.current_round_number, match_list) # ajout a la DB
-                self.round_id_list.append(new_round_number) # ajout new round number a la round id list
+        """
+        # if self.current_round_number >= 0:
+        #     # Increment round number
+        #     if self.current_round_number < self.N_ROUNDS - 1:
+        #         self.current_round_number += 1
 
-            else:
-                self.status = "Completed"
+        #         match_list = match_list[self.current_round_number]
+        #         new_round_number = self._add_round(
+        #             self.current_round_number, match_list
+        #         )  # ajout a la DB
+        #         self.round_id_list.append(
+        #             new_round_number
+        #         )  # ajout new round number a la round id list
 
-            self.update()
+        #     else:
+        #         self.status = "Completed"
+
+        #     self.update()
+        """
 
     def get_score(self):
         # UN DES TRUC QUON FERRA A LA TOUTE FIN !!!
@@ -274,15 +297,20 @@ class Tournament:
     def _add_round(self, round_number: int, matches: List[str]) -> None:  # !!!!!!!!!!
         """Add a round to the tournament"""
 
-        round_id = self.tournament_id + "_round_" + str(round_number)
-        new_round = Round(round_id, matches)
+        # not 100% sure we need it if  we have a good update_current_round
+        # but Why not on the paper ....
 
-        # Add the round to the list of rounds
-        self.rounds_id_list.append(new_round.id_round)  # FAUX MAIS BONNE ID2E
+        """
+        # round_id = self.tournament_id + "_round_" + str(round_number)
+        # new_round = Round(round_id, matches)
 
-        self.update()
+        # # Add the round to the list of rounds
+        # self.rounds_id_list.append(new_round.id_round)  # FAUX MAIS BONNE ID2E
 
-        return round_id
+        # self.update()
+
+        # return round_id
+        """
 
     def __repr__(self) -> str:
         """Tournament representation"""

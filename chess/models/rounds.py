@@ -5,14 +5,16 @@ from tinydb import TinyDB, Query
 
 class Round:
     """Round model class"""
-    db = TinyDB('./data/rounds.json')
 
-    def __init__(self,
-                 round_number: int,
-                 matches: List[str],
-                 round_id: str | None = None,
-                 status: str = "Created",
-                 ) -> None:
+    db = TinyDB("./data/rounds.json")
+
+    def __init__(
+        self,
+        round_number: int,
+        matches: List[str],
+        round_id: str | None = None,
+        status: str = "Created",
+    ) -> None:
         """Init method for rounds"""
 
         self.round_id = round_id if round_id else secrets.token_hex(4)
@@ -40,3 +42,9 @@ class Round:
         result = self.db.search(round_search.round_id == round_id)
 
         return [Round.from_dict(round_id) for round_id in result]
+
+    def search_by(self, key, value):
+        """WRITE A PROPER DOCSTRING"""
+
+        # I THINK WE NEED IT
+        raise not NotImplementedError("not implemented")
