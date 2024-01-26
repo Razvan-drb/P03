@@ -27,7 +27,7 @@
 - get_current_round_number
 - next_round
 - update_status
-- 
+- added search, search_by, create, update to all 3 classes
 ## Todo
 
 ### MUST HAVE

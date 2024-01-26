@@ -1,6 +1,7 @@
 import secrets
+
 from typing import List
-from tinydb import TinyDB, Query
+from tinydb import TinyDB, Query, where
 
 
 class Round:
@@ -26,25 +27,34 @@ class Round:
         """Convert round to dict"""
         return self.__dict__
 
-    def from_dict(self) -> dict:
+    @classmethod
+    def from_dict(cls, data):
         """Convert dict to round"""
-        return self.__dict__
+
+        return Round(**data)
 
     def create(self) -> None:
         """Create method for rounds"""
         self.db.insert(self.to_dict())
 
-    # TODO def search
     def search(self, round_id: str) -> list[dict]:
         """Search for a round by round_id"""
 
         round_search = Query()
         result = self.db.search(round_search.round_id == round_id)
 
-        return [Round.from_dict(round_id) for round_id in result]
+        return [Round.from_dict(data) for data in result]
 
-    def search_by(self, key, value):
-        """WRITE A PROPER DOCSTRING"""
+    @classmethod
+    def search_by(cls, key: str, value) -> list[dict]:
+        """Search method for rounds by key and value"""
+        res = cls.db.search(Query()[key] == value)
+        return res  # Return the list of matching rounds
 
-        # I THINK WE NEED IT
-        raise not NotImplementedError("not implemented")
+    def update(self):
+        """Update method for round"""
+
+        self.db.update(self.to_dict(), where('round_id') == self.round_id)
+
+        print(f"Round {self.round_id} updated successfully.")
+

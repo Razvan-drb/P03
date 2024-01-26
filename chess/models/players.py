@@ -58,6 +58,14 @@ class Player:
 
         return [Player.from_dict(player) for player in res]
 
+    def search(self, player_id: str) -> list[dict]:
+        """Search for a player by player_id"""
+
+        player_search = Query()
+        result = self.db.search(player_search.player_id == player_id)
+
+        return [Player.from_dict(data) for data in result]
+
     @classmethod
     def search_by(cls, key: str, value) -> list[dict]:
         """Search method for players by key and value"""
@@ -69,8 +77,9 @@ class Player:
     def update(self) -> None:
         """Update method for players"""
 
-        # not necessary
-        raise NotImplementedError("not included in specs")
+        self.db.update(self.to_dict(), where('player_id') == self.player_id)
+
+        print(f"Player {self.player_id} updated successfully.")
 
     def delete(self) -> None:
         """Delete method for players"""

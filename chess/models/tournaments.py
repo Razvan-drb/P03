@@ -5,7 +5,8 @@ import random
 
 from typing import List
 from tinydb import TinyDB, Query, where
-from .rounds import Round
+
+from chess.models.rounds import Round
 
 
 class Tournament:
@@ -15,7 +16,7 @@ class Tournament:
 
     N_PLAYERS = 4
     N_ROUNDS = 3
-    AUTORISED_STATUS = ["Created", "In Progress", "Completed"]
+    AUTHORISED_STATUS = ["Created", "In Progress", "Completed"]
 
     def __init__(
         self,
@@ -108,13 +109,9 @@ class Tournament:
     def update(self) -> None:
         """Update method for tournaments"""
 
-        # TODO FIX THIS
+        self.db.update(self.to_dict(), where('tournament_id') == self.tournament_id)
 
         print(f"Tournament {self.tournament_id} updated successfully.")
-
-        ######################################
-        # COME ON  !!!!!!! :(
-        ######################################
 
     def delete(self) -> None:
         """Delete method for tournaments"""
@@ -176,8 +173,8 @@ class Tournament:
 
         #     # quand on passe de en cours à terminé ??? que se passe t'il ?
 
-        # check if new status is autorised
-        if new_status not in self.AUTORISED_STATUS:
+        # check if new status is authorised
+        if new_status not in self.AUTHORISED_STATUS:
             raise ValueError("Invalid tournament status.")
 
         # manage created
@@ -246,22 +243,24 @@ class Tournament:
 
     def get_current_round(self):
         """Get the current round number for the tournament."""
+        if not self.round_id_list:
+            print("No rounds have been computed yet.")
+            return None
 
-        # find the current round numbner
-        # find the current round_id
-        # load the Round instance for the current round
+        current_round_id = self.round_id_list[-1]
+        print(f"Current Round ID: {current_round_id}")
 
-        """
-        if self.current_round_number >= 0:
-            round_id = self.round_id_list[
-                self.current_round_number
-            ]  # recupere le round id de la list
-            round_search_results = Round.search(round_id)  # cherche le round id
-            if round_search_results:
-                return round_search_results[0]["round_number"]  # return le round number
+        # Print the result of Round.search_by
+        current_round_data = Round.search_by('round_id', current_round_id)
+        print(f"Current Round Data: {current_round_data}")
 
-        return
-        """
+        if current_round_data:
+            current_round = current_round_data[0]
+            print(f"Current Round: {current_round}")
+            return current_round
+
+        print("No current round found.")
+        return None
 
     def update_current_round(self, match_list=None):
         """Update the current round number for the tournament."""
@@ -270,12 +269,12 @@ class Tournament:
         # update the round
         # save round updated
 
-        """
+        #
         # if self.current_round_number >= 0:
         #     # Increment round number
         #     if self.current_round_number < self.N_ROUNDS - 1:
         #         self.current_round_number += 1
-
+        #
         #         match_list = match_list[self.current_round_number]
         #         new_round_number = self._add_round(
         #             self.current_round_number, match_list
@@ -283,34 +282,29 @@ class Tournament:
         #         self.round_id_list.append(
         #             new_round_number
         #         )  # ajout new round number a la round id list
-
+        #
         #     else:
         #         self.status = "Completed"
-
+        #
         #     self.update()
-        """
+
 
     def get_score(self):
         # UN DES TRUC QUON FERRA A LA TOUTE FIN !!!
         pass
 
-    def _add_round(self, round_number: int, matches: List[str]) -> None:  # !!!!!!!!!!
-        """Add a round to the tournament"""
+    def _add_round(self, round_number: int, matches: List[str]) -> None:
+        """Add a round to the tournament."""
 
-        # not 100% sure we need it if  we have a good update_current_round
-        # but Why not on the paper ....
+        round_id = f"{self.tournament_id}_round_{round_number}"
+        new_round = Round(round_id, matches)
 
-        """
-        # round_id = self.tournament_id + "_round_" + str(round_number)
-        # new_round = Round(round_id, matches)
+        # Add the round to the list of rounds
+        self.round_id_list.append(new_round.round_id)
 
-        # # Add the round to the list of rounds
-        # self.rounds_id_list.append(new_round.id_round)  # FAUX MAIS BONNE ID2E
+        self.update()
 
-        # self.update()
-
-        # return round_id
-        """
+        return new_round.round_id
 
     def __repr__(self) -> str:
         """Tournament representation"""
