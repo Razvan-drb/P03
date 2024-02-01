@@ -243,6 +243,7 @@ class Tournament:
 
     def get_current_round(self):
         """Get the current round number for the tournament."""
+
         if not self.round_id_list:
             print("No rounds have been computed yet.")
             return None
@@ -250,54 +251,68 @@ class Tournament:
         current_round_id = self.round_id_list[-1]
         print(f"Current Round ID: {current_round_id}")
 
-        # Print the result of Round.search_by
+        # try get current round data
         current_round_data = Round.search_by('round_id', current_round_id)
-        print(f"Current Round Data: {current_round_data}")
 
-        if current_round_data:
-            current_round = current_round_data[0]
-            print(f"Current Round: {current_round}")
-            return current_round
+        if not current_round_data:
+            print(f"No data found for Round ID: {current_round_id}")
+            return None
 
-        print("No current round found.")
-        return None
+        current_round = current_round_data[0]
+        print(f"Current Round: {current_round}")
+        return current_round
 
     def update_current_round(self, match_list=None):
         """Update the current round number for the tournament."""
 
-        # find the round instance of the current round
-        # update the round
-        # save round updated
+        # Check if there are rounds to update
+        if not self.round_id_list:
+            print("No rounds have been computed yet.")
+            return
 
-        #
-        # if self.current_round_number >= 0:
-        #     # Increment round number
-        #     if self.current_round_number < self.N_ROUNDS - 1:
-        #         self.current_round_number += 1
-        #
-        #         match_list = match_list[self.current_round_number]
-        #         new_round_number = self._add_round(
-        #             self.current_round_number, match_list
-        #         )  # ajout a la DB
-        #         self.round_id_list.append(
-        #             new_round_number
-        #         )  # ajout new round number a la round id list
-        #
-        #     else:
-        #         self.status = "Completed"
-        #
-        #     self.update()
+        # Find the round instance of the current round
+        current_round_id = self.round_id_list[-1]
+        current_round_data = Round.search_by('round_id', current_round_id)
 
+        if not current_round_data:
+            print(f"No data found for Round ID: {current_round_id}")
+            return
+
+        current_round = current_round_data[0]
+
+        # Update the round with match_list if provided
+        if match_list is not None:
+            current_round.matches = match_list
+
+        # Save the updated round
+        current_round.update()
+
+        # Increment round number if applicable
+        if self.current_round_number >= 0:
+            if self.current_round_number < self.N_ROUNDS - 1:
+                self.current_round_number += 1
+
+                match_list = match_list[self.current_round_number]
+                new_round_number = self._add_round(
+                    self.current_round_number, match_list
+                )  # add to the DB
+                self.round_id_list.append(
+                    new_round_number
+                )  # add new round number to the round id list
+            else:
+                self.status = "Completed"
+
+            self.update()
 
     def get_score(self):
         # UN DES TRUC QUON FERRA A LA TOUTE FIN !!!
         pass
 
-    def _add_round(self, round_number: int, matches: List[str]) -> None:
+    def _add_round(self, round_number: int, matches: List[str]) -> str:
         """Add a round to the tournament."""
 
         round_id = f"{self.tournament_id}_round_{round_number}"
-        new_round = Round(round_id, matches)
+        new_round = Round(round_number, matches, round_id=round_id)
 
         # Add the round to the list of rounds
         self.round_id_list.append(new_round.round_id)

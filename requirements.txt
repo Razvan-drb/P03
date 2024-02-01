@@ -1,4 +1,4 @@
-tinydb
-pytest
-IPython
+tinydb==4.8.0
+pytest==8.0.0
+ipython==8.2.0
 

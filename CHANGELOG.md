@@ -5,13 +5,15 @@
 - fix/update Tournament class
 
 ## Todo 
-- specify librairies versions in requirements.txt
-- update README.md : 
+- specify librairies versions in requirements.txt - done
+- update README.md : - done
     - add a section "About"
     - add a section "Install"
-- read about tests and uderstand WHY, WHAT, HOW we want to use the code
-- fix class Tournamanent 
-- fix tournament. get_curent_round, update_current_round, update
+- read about tests and understand WHY, WHAT, HOW we want to use the code
+- fix class Tournament 
+- fix tournament. get_current_round,-(j'ai essayé une autre version) 
+- update_current_round - (j'ai essayé)
+- update 
 - fix the Round class
 
 
