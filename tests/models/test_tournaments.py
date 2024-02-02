@@ -1,10 +1,11 @@
-import pytest
 import logging
 import secrets
 
-from chess.models.tournaments import Tournament
-from chess.models.rounds import Round
+import pytest
+
 from chess.models.players import Player
+from chess.models.rounds import Round
+from chess.models.tournaments import Tournament
 
 
 @pytest.fixture

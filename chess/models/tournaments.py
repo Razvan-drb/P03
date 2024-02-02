@@ -1,18 +1,31 @@
 from __future__ import annotations
 
-import os
-import logging
-import secrets
 import random
-
+import secrets
 from typing import List
-from tinydb import TinyDB, Query, where
+
+from tinydb import Query, TinyDB, where
 
 from chess.models.rounds import Round
 
 
 class Tournament:
-    """Tournament model class"""
+    """Tournament model class
+
+    Positionnal args:
+        name - str - name of the tournament
+        start_date - str - start date of the tournament
+        end_date - str - end date of the tournament
+
+    Optional args:
+        description - str - description of the tournament - default = "" (empty string)
+        location - str - location of the tournament - default = "" (empty string)
+        tournament_id - str - id of the tournament - default = None
+        round_id_list - List[str] - list of rounds id - default = None
+        player_id_list - List[str] - list of players id - default = None
+        current_round_number - int - current round number - default = -1
+        status - str - status of the tournament - default = "Created"
+    """
 
     db = TinyDB("./data/tournaments.json")
 
@@ -33,22 +46,7 @@ class Tournament:
         current_round_number: int = -1,
         status: str = "Created",
     ):
-        """Init method for tournaments
-
-        Positionnal args:
-            name - str - name of the tournament
-            start_date - str - start date of the tournament
-            end_date - str - end date of the tournament
-
-        Optional args:
-            description - str - description of the tournament - default = "" (empty string)
-            location - str - location of the tournament - default = "" (empty string)
-            tournament_id - str - id of the tournament - default = None
-            round_id_list - List[str] - list of rounds id - default = None
-            player_id_list - List[str] - list of players id - default = None
-            current_round_number - int - current round number - default = -1
-            status - str - status of the tournament - default = "Created"
-        """
+        """Init method for tournaments"""
 
         # handly written args by user
         self.name = name
@@ -111,7 +109,7 @@ class Tournament:
     def update(self) -> None:
         """Update method for tournaments"""
 
-        self.db.update(self.to_dict(), where('tournament_id') == self.tournament_id)
+        self.db.update(self.to_dict(), where("tournament_id") == self.tournament_id)
 
         print(f"Tournament {self.tournament_id} updated successfully.")
 
@@ -254,10 +252,12 @@ class Tournament:
         print(f"Current Round ID: {current_round_id}")
 
         # try get current round data
-        current_round_data = Round.search_by('round_id', current_round_id)
+        current_round_data = Round.search_by("round_id", current_round_id)
 
         if not current_round_data:
-            print(f"No data found for Round ID: {current_round_id}") # logging instead of print
+            print(
+                f"No data found for Round ID: {current_round_id}"
+            )  # logging instead of print
             return None
 
         current_round = current_round_data[0]
@@ -269,17 +269,17 @@ class Tournament:
 
         # Check if there are rounds to update
 
-       # if not self.round_id_list:
-         #   print("No rounds have been computed yet.") #logging instead of print
-         #   return
+        # if not self.round_id_list:
+        #   print("No rounds have been computed yet.") #logging instead of print
+        #   return
 
         # Find the round instance of the current round
-        #current_round_id = self.round_id_list[-1]
-        #current_round_data = Round.search_by('round_id', current_round_id)
+        # current_round_id = self.round_id_list[-1]
+        # current_round_data = Round.search_by('round_id', current_round_id)
 
-        #if not current_round_data:
-          #  print(f"No data found for Round ID: {current_round_id}")
-         #   return
+        # if not current_round_data:
+        #  print(f"No data found for Round ID: {current_round_id}")
+        #   return
 
         current_round = self.get.current_round_data[0]
 

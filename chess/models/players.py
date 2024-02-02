@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import random
 import secrets
-import logging
 
-from tinydb import TinyDB, Query, where
+from tinydb import Query, TinyDB, where
 
 
 class Player:
@@ -79,7 +78,7 @@ class Player:
     def update(self) -> None:
         """Update method for players"""
 
-        self.db.update(self.to_dict(), where('player_id') == self.player_id)
+        self.db.update(self.to_dict(), where("player_id") == self.player_id)
 
         print(f"Player {self.player_id} updated successfully.")
 

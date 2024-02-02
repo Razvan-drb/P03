@@ -1,10 +1,11 @@
-import pytest
 import logging
 import secrets
 
-from chess.models.tournaments import Tournament
-from chess.models.rounds import Round
+import pytest
+
 from chess.models.players import Player
+from chess.models.rounds import Round
+from chess.models.tournaments import Tournament
 
 
 @pytest.fixture
@@ -173,7 +174,7 @@ class TestTournamentRun:
         # check current_round_number is OK
         assert (current_round_number + 1) == tournament.current_round_number
 
-    # def test_run_complete_tournament(self):
+        # def test_run_complete_tournament(self):
         # create 4 players
 
         # create tournament
@@ -202,7 +203,9 @@ class TestTournamentRun:
             player.save()
 
         # create tournament
-        tournament = Tournament(name="Test Tournament", location="Test Location", date="2024-01-01")
+        tournament = Tournament(
+            name="Test Tournament", location="Test Location", date="2024-01-01"
+        )
         tournament.save()
 
         return tournament, players

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import secrets
-
 from typing import List
-from tinydb import TinyDB, Query, where
+
+from tinydb import Query, TinyDB, where
 
 
 class Round:
@@ -56,7 +56,6 @@ class Round:
     def update(self):
         """Update method for round"""
 
-        self.db.update(self.to_dict(), where('round_id') == self.round_id)
+        self.db.update(self.to_dict(), where("round_id") == self.round_id)
 
         print(f"Round {self.round_id} updated successfully.")
-
