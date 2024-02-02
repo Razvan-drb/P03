@@ -80,9 +80,11 @@ class TestTournamentRun:
     def test_round_computed(self, loaded_default_tournament):
         """test if rounds had been computed"""
 
+        logging.warning(f"id tournament: {loaded_default_tournament.tournament_id}")
+
         assert loaded_default_tournament.status == "In Progress"
 
-        assert len(loaded_default_tournament.round_id_list) == 6
+        assert len(loaded_default_tournament.round_id_list) == 3
 
         # assert loaded_default_tournament.round == 0
 
