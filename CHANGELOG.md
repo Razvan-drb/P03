@@ -11,7 +11,7 @@
     - add a section "Install"
 - read about tests and understand WHY, WHAT, HOW we want to use the code
 - fix class Tournament 
-- fix tournament. get_current_round,-(j'ai essayé une autre version) 
+- fix tournament. get_current_round,-(j'ai essayé une version) 
 - update_current_round - (j'ai essayé)
 - update 
 - fix the Round class

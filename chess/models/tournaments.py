@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import logging
 import secrets
@@ -255,7 +257,7 @@ class Tournament:
         current_round_data = Round.search_by('round_id', current_round_id)
 
         if not current_round_data:
-            print(f"No data found for Round ID: {current_round_id}")
+            print(f"No data found for Round ID: {current_round_id}") # logging instead of print
             return None
 
         current_round = current_round_data[0]
@@ -266,26 +268,27 @@ class Tournament:
         """Update the current round number for the tournament."""
 
         # Check if there are rounds to update
-        if not self.round_id_list:
-            print("No rounds have been computed yet.")
-            return
+
+       # if not self.round_id_list:
+         #   print("No rounds have been computed yet.") #logging instead of print
+         #   return
 
         # Find the round instance of the current round
-        current_round_id = self.round_id_list[-1]
-        current_round_data = Round.search_by('round_id', current_round_id)
+        #current_round_id = self.round_id_list[-1]
+        #current_round_data = Round.search_by('round_id', current_round_id)
 
-        if not current_round_data:
-            print(f"No data found for Round ID: {current_round_id}")
-            return
+        #if not current_round_data:
+          #  print(f"No data found for Round ID: {current_round_id}")
+         #   return
 
-        current_round = current_round_data[0]
+        current_round = self.get.current_round_data[0]
 
         # Update the round with match_list if provided
         if match_list is not None:
             current_round.matches = match_list
 
         # Save the updated round
-        current_round.update()
+        self.get.current_round.update()
 
         # Increment round number if applicable
         if self.current_round_number >= 0:
