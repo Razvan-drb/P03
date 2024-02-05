@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import random
 import secrets
-import logging
 
-from tinydb import TinyDB, Query, where
+from tinydb import Query, TinyDB, where
 
 
 class Player:
@@ -60,11 +59,12 @@ class Player:
 
         return [Player.from_dict(player) for player in res]
 
-    def search(self, player_id: str) -> list[dict]:
+    @classmethod
+    def search(cls, player_id: str) -> list[dict]:
         """Search for a player by player_id"""
 
         player_search = Query()
-        result = self.db.search(player_search.player_id == player_id)
+        result = cls.db.search(player_search.player_id == player_id)
 
         return [Player.from_dict(data) for data in result]
 
@@ -79,7 +79,7 @@ class Player:
     def update(self) -> None:
         """Update method for players"""
 
-        self.db.update(self.to_dict(), where('player_id') == self.player_id)
+        self.db.update(self.to_dict(), where("player_id") == self.player_id)
 
         print(f"Player {self.player_id} updated successfully.")
 
@@ -88,14 +88,6 @@ class Player:
         # not necessary
 
         raise NotImplementedError("not included in specs")
-
-    def __repr__(self) -> str:
-        """Player representation"""
-
-        return (
-            f"Player(firstname={self.firstname}, lastname={self.lastname}, birthdate={self.birthdate}, "
-            f"player_id={self.player_id})"
-        )
 
     @classmethod
     def delete_all(cls) -> None:
@@ -121,3 +113,11 @@ class Player:
 
         cls.delete_all()
         cls.bootstrap(num_players)
+
+    def __repr__(self) -> str:
+        """Player representation"""
+
+        return (
+            f"Player(firstname={self.firstname}, lastname={self.lastname}, birthdate={self.birthdate}, "
+            f"player_id={self.player_id})"
+        )

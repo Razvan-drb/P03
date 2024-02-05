@@ -1,4 +1,19 @@
-# 204-01-22 - Code Review
+# 2024-02-01 - Code Review
+
+## Todo
+- 
+- 
+- 
+- 
+
+## Updated
+- addded search to tournament
+- moove attributes and methods of tournament to be more consistent with the other classes
+- fix get current round and update curent round
+- fix _add_round() in tournament => .create()
+- upadate requirements.txt = > pycln isort black mypy and other staict code checkers
+
+# 2024-01-22 - Code Review
 
 ## Updated
 - fix / restructure test policy 

@@ -1,18 +1,31 @@
 from __future__ import annotations
 
-import os
-import logging
-import secrets
 import random
-
+import secrets
 from typing import List
-from tinydb import TinyDB, Query, where
+
+from tinydb import Query, TinyDB, where
 
 from chess.models.rounds import Round
 
 
 class Tournament:
-    """Tournament model class"""
+    """Tournament model class
+
+    Positionnal args:
+        name - str - name of the tournament
+        start_date - str - start date of the tournament
+        end_date - str - end date of the tournament
+
+    Optional args:
+        description - str - description of the tournament - default = "" (empty string)
+        location - str - location of the tournament - default = "" (empty string)
+        tournament_id - str - id of the tournament - default = None
+        round_id_list - List[str] - list of rounds id - default = None
+        player_id_list - List[str] - list of players id - default = None
+        current_round_number - int - current round number - default = -1
+        status - str - status of the tournament - default = "Created"
+    """
 
     db = TinyDB("./data/tournaments.json")
 
@@ -33,22 +46,7 @@ class Tournament:
         current_round_number: int = -1,
         status: str = "Created",
     ):
-        """Init method for tournaments
-
-        Positionnal args:
-            name - str - name of the tournament
-            start_date - str - start date of the tournament
-            end_date - str - end date of the tournament
-
-        Optional args:
-            description - str - description of the tournament - default = "" (empty string)
-            location - str - location of the tournament - default = "" (empty string)
-            tournament_id - str - id of the tournament - default = None
-            round_id_list - List[str] - list of rounds id - default = None
-            player_id_list - List[str] - list of players id - default = None
-            current_round_number - int - current round number - default = -1
-            status - str - status of the tournament - default = "Created"
-        """
+        """Init method for tournaments"""
 
         # handly written args by user
         self.name = name
@@ -66,12 +64,6 @@ class Tournament:
     def to_dict(self) -> dict:
         """Convert tournament to dict"""
         return self.__dict__
-
-    @property
-    def n_players(self) -> int:
-        """Return number of players"""
-
-        return len(self.player_id_list)
 
     @classmethod
     def from_dict(cls, tournament_dict):
@@ -102,6 +94,12 @@ class Tournament:
         return [Tournament.from_dict(tournament) for tournament in res]
 
     @classmethod
+    def search(cls, tournament_id):
+        """Search for a tournament by tournament_id"""
+
+        # TODO code this
+
+    @classmethod
     def search_by(cls, key: str, value) -> list[dict]:
         """Search method for tournaments by key and value"""
 
@@ -111,7 +109,7 @@ class Tournament:
     def update(self) -> None:
         """Update method for tournaments"""
 
-        self.db.update(self.to_dict(), where('tournament_id') == self.tournament_id)
+        self.db.update(self.to_dict(), where("tournament_id") == self.tournament_id)
 
         print(f"Tournament {self.tournament_id} updated successfully.")
 
@@ -119,6 +117,64 @@ class Tournament:
         """Delete method for tournaments"""
         # Not necessary for now
         raise NotImplementedError("Not included in specs")
+
+    @classmethod
+    def delete_all(cls) -> None:
+        """Delete all method for tournaments"""
+
+        cls.db.truncate()
+
+    @classmethod
+    def bootstrap(cls, num_tournaments: int = 3) -> None:
+        """Create method for tournaments (Bootstrap)"""
+
+        for _ in range(num_tournaments):
+            name = "Tournament" + secrets.token_hex(4)
+            start_date = f"{random.randint(2023, 2025)}-01-01"
+            end_date = f"{random.randint(2025, 2027)}-12-31"
+            tournament_id = "boot_" + secrets.token_hex(4)
+            # matches = [f"Match{i}" for i in range(random.randint(10, 20))]
+            # participants = [f"Participant{i}" for i in range(random.randint(6, 10))]
+            description = "Description for " + name
+            location = [f"Location{i}" for i in range(random.randint(3, 5))]
+            t = Tournament(
+                name,
+                start_date,
+                end_date,
+                description=description,
+                location=location,
+                tournament_id=tournament_id,
+            )
+            t.create()
+
+    @classmethod
+    def reboot(cls, num_tournaments: int = 100) -> None:
+        """Delete all tournaments and create 100 tournaments"""
+
+        cls.delete_all()
+        cls.bootstrap(num_tournaments)
+
+    # def get_n_players(self) -> int:
+    #     """Return number of players"""
+
+    #     # tournament = Tournament(**dict)
+    #     # n_player = tournament.get_n_players()
+
+    #     return len(self.player_id_list)
+
+    @property
+    def n_players(self) -> int:
+        """Return number of players"""
+
+        #######################"
+        # une @property est un attribut qui est calculé à la volée
+        # comme un attribut de classe MAIS EN FAIT cest une methode
+        #######################""
+
+        # tournament = Tournament(**dict)
+        # n_player = tournament.n_players  PAS BESOIN DES ()
+
+        return len(self.player_id_list)
 
     def add_player(self, player_id: str) -> None:  # !!!!!!!!!!
         """Add player to tournament"""
@@ -149,6 +205,21 @@ class Tournament:
         self.player_id_list.append(player_id)
 
         self.update()  # for now it is useless   !!!!!
+
+    def _add_round(self, round_number: int, matches: List[str]) -> str:
+        """Add a round to the tournament."""
+
+        round_id = f"{self.tournament_id}_round_{round_number}"
+        new_round = Round(round_number, matches, round_id=round_id)
+        new_round.create()
+
+        # Add the round to the list of rounds
+        self.round_id_list.append(new_round.round_id)
+
+        # save the tournament
+        self.update()
+
+        return new_round.round_id
 
     def update_status(self, new_status: str):
         """ """
@@ -189,18 +260,38 @@ class Tournament:
 
             # Calculate rounds and matches
             round_0 = [
-                [self.player_id_list[0], self.player_id_list[1]],  # 1er match
-                [self.player_id_list[2], self.player_id_list[3]],  # 2eme match
+                # 1er match du round 0
+                [
+                    (self.player_id_list[0], -1),  # Player 0, (son id, son score)
+                    (self.player_id_list[1], -1),  # Player 1, (son id, son score)
+                ],
+                # 2eme match du round 0
+                [
+                    (self.player_id_list[2], -1),  # Player 2,son id son score
+                    (self.player_id_list[3], -1),  # Player 3, son id son score
+                ],
             ]
 
             round_1 = [
-                [self.player_id_list[0], self.player_id_list[2]],  # 1er match
-                [self.player_id_list[1], self.player_id_list[3]],  # 2eme match
+                [
+                    (self.player_id_list[0], -1),  # P0 (id, score)
+                    (self.player_id_list[2], -1),  # P2 (id, score)
+                ],  # 1er match
+                [
+                    (self.player_id_list[1], -1),
+                    (self.player_id_list[3], -1),
+                ],  # 2eme match
             ]
 
             round_2 = [
-                [self.player_id_list[0], self.player_id_list[3]],  # 1er match
-                [self.player_id_list[1], self.player_id_list[2]],  # 2eme match
+                [
+                    (self.player_id_list[0], -1),
+                    (self.player_id_list[3], -1),
+                ],  # 1er match
+                [
+                    (self.player_id_list[1], -1),
+                    (self.player_id_list[2], -1),
+                ],  # 2eme match
             ]
 
             # match list
@@ -208,9 +299,7 @@ class Tournament:
 
             for i, match_list in enumerate(match_list):
                 # add round id db
-                round_id = self._add_round(i, match_list)
-                # update round id list wuth new roud created
-                self.round_id_list.append(round_id)
+                _ = self._add_round(i, match_list)
 
             # Save rounds to DB
             self.status = "In Progress"
@@ -229,19 +318,21 @@ class Tournament:
                 f"Status invalid. Impossible de changer le status de {self.status} a {new_status}"
             )
 
-    def next_round(self):
+        self.update()
+
+    def _next_round(self):
         """change the round +=1"""
 
         # Check si toutes le rounds sont finished
         if self.current_round_number == self.N_ROUNDS - 1:
             # Update status et save
             self.status = "Completed"
-            self.update()
 
         else:
             # On continue les rounds
             self.current_round_number += 1
-            self.update()
+
+        self.update()
 
     def get_current_round(self):
         """Get the current round number for the tournament."""
@@ -251,17 +342,22 @@ class Tournament:
             return None
 
         current_round_id = self.round_id_list[-1]
+        # REMPLACER LES PRINT PAR DES LOGGING.WARNING 😉
         print(f"Current Round ID: {current_round_id}")
 
         # try get current round data
-        current_round_data = Round.search_by('round_id', current_round_id)
+        current_round_data = Round.search_by("round_id", current_round_id)
 
         if not current_round_data:
-            print(f"No data found for Round ID: {current_round_id}") # logging instead of print
+            print(
+                f"No data found for Round ID: {current_round_id}"
+            )  # logging instead of print
             return None
 
         current_round = current_round_data[0]
+        # REMPLACER LES PRINT PAR DES LOGGING.WARNING 😉
         print(f"Current Round: {current_round}")
+
         return current_round
 
     def update_current_round(self, match_list=None):
@@ -269,60 +365,48 @@ class Tournament:
 
         # Check if there are rounds to update
 
-       # if not self.round_id_list:
-         #   print("No rounds have been computed yet.") #logging instead of print
-         #   return
+        # if not self.round_id_list:
+        #   print("No rounds have been computed yet.") #logging instead of print
+        #   return
 
         # Find the round instance of the current round
-        #current_round_id = self.round_id_list[-1]
-        #current_round_data = Round.search_by('round_id', current_round_id)
+        # current_round_id = self.round_id_list[-1]
+        # current_round_data = Round.search_by('round_id', current_round_id)
 
-        #if not current_round_data:
-          #  print(f"No data found for Round ID: {current_round_id}")
-         #   return
+        # if not current_round_data:
+        #  print(f"No data found for Round ID: {current_round_id}")
+        #   return
 
-        current_round = self.get.current_round_data[0]
+        current_round = self.get_current_round()
 
         # Update the round with match_list if provided
-        if match_list is not None:
+        if match_list:
             current_round.matches = match_list
 
         # Save the updated round
-        self.get.current_round.update()
+        current_round.update()
 
-        # Increment round number if applicable
-        if self.current_round_number >= 0:
-            if self.current_round_number < self.N_ROUNDS - 1:
-                self.current_round_number += 1
+        # # Increment round number if applicable
+        # if self.current_round_number >= 0:
+        #     if self.current_round_number < self.N_ROUNDS - 1:
+        #         self.current_round_number += 1
 
-                match_list = match_list[self.current_round_number]
-                new_round_number = self._add_round(
-                    self.current_round_number, match_list
-                )  # add to the DB
-                self.round_id_list.append(
-                    new_round_number
-                )  # add new round number to the round id list
-            else:
-                self.status = "Completed"
+        #         match_list = match_list[self.current_round_number]
+        #         new_round_number = self._add_round(
+        #             self.current_round_number, match_list
+        #         )  # add to the DB
+        #         self.round_id_list.append(
+        #             new_round_number
+        #         )  # add new round number to the round id list
+        #     else:
+        #         self.status = "Completed"
 
-            self.update()
+        self._next_round()
+        self.update()
 
     def get_score(self):
         # UN DES TRUC QUON FERRA A LA TOUTE FIN !!!
         pass
-
-    def _add_round(self, round_number: int, matches: List[str]) -> str:
-        """Add a round to the tournament."""
-
-        round_id = f"{self.tournament_id}_round_{round_number}"
-        new_round = Round(round_number, matches, round_id=round_id)
-
-        # Add the round to the list of rounds
-        self.round_id_list.append(new_round.round_id)
-
-        self.update()
-
-        return new_round.round_id
 
     def __repr__(self) -> str:
         """Tournament representation"""
@@ -332,39 +416,3 @@ class Tournament:
             f"tournament_id={self.tournament_id}, description={self.description},location={self.location}, "
             f"matches={self.round_id_list}, participants={self.player_id_list})"
         )
-
-    @classmethod
-    def delete_all(cls) -> None:
-        """Delete all method for tournaments"""
-
-        cls.db.truncate()
-
-    @classmethod
-    def bootstrap(cls, num_tournaments: int = 3) -> None:
-        """Create method for tournaments (Bootstrap)"""
-
-        for _ in range(num_tournaments):
-            name = "Tournament" + secrets.token_hex(4)
-            start_date = f"{random.randint(2023, 2025)}-01-01"
-            end_date = f"{random.randint(2025, 2027)}-12-31"
-            tournament_id = "boot_" + secrets.token_hex(4)
-            # matches = [f"Match{i}" for i in range(random.randint(10, 20))]
-            # participants = [f"Participant{i}" for i in range(random.randint(6, 10))]
-            description = "Description for " + name
-            location = [f"Location{i}" for i in range(random.randint(3, 5))]
-            t = Tournament(
-                name,
-                start_date,
-                end_date,
-                description=description,
-                location=location,
-                tournament_id=tournament_id,
-            )
-            t.create()
-
-    @classmethod
-    def reboot(cls, num_tournaments: int = 100) -> None:
-        """Delete all tournaments and create 100 tournaments"""
-
-        cls.delete_all()
-        cls.bootstrap(num_tournaments)

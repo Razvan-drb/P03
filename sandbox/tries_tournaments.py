@@ -1,24 +1,26 @@
-import secrets
 import random
-
+import secrets
 from typing import List
-from tinydb import TinyDB, Query, where
+
+from tinydb import Query, TinyDB, where
 
 
 class Tournament:
     """Tournament model class"""
-    db = TinyDB('./data/tournaments.json')
 
-    def __init__(self,
-                 name: str,
-                 start_date: str,
-                 end_date: str,
-                 tournament_id: str | None = None,
-                 rounds_id_list: List[str] = None,
-                 player_id_list: List[str] = None,
-                 current_round_number: int = 0,
-                 status: str = "Created"
-                 ) -> None:
+    db = TinyDB("./data/tournaments.json")
+
+    def __init__(
+        self,
+        name: str,
+        start_date: str,
+        end_date: str,
+        tournament_id: str | None = None,
+        rounds_id_list: List[str] = None,
+        player_id_list: List[str] = None,
+        current_round_number: int = 0,
+        status: str = "Created",
+    ) -> None:
         """Init method for tournaments"""
 
         self.status = status
@@ -31,11 +33,13 @@ class Tournament:
         self.current_round_number = current_round_number
 
     def add_player(self, player_id: str) -> None:
-        """ Add player to tournament"""
+        """Add player to tournament"""
 
         # verify that current player number not higher than number of players (4)
         if len(self.player_id_list) > 4:
-            raise AttributeError("Current player number is higher than number of players (4)")
+            raise AttributeError(
+                "Current player number is higher than number of players (4)"
+            )
 
         # verify that current player in not in player list
         if player_id in self.player_id_list:
@@ -103,8 +107,10 @@ class Tournament:
 
     def __repr__(self) -> str:
         """Tournament representation"""
-        return (f"Tournament(name={self.name}, start_date={self.start_date}, end_date={self.end_date}, "
-                f"tournament_id={self.tournament_id}, matches={self.rounds_id_list}, participants={self.player_id_list})")
+        return (
+            f"Tournament(name={self.name}, start_date={self.start_date}, end_date={self.end_date}, "
+            f"tournament_id={self.tournament_id}, matches={self.rounds_id_list}, participants={self.player_id_list})"
+        )
 
     @classmethod
     def delete_all(cls) -> None:
@@ -121,7 +127,9 @@ class Tournament:
             tournament_id = secrets.token_hex(4)
             matches = [f"Match{i}" for i in range(random.randint(10, 20))]
             participants = [f"Participant{i}" for i in range(random.randint(6, 10))]
-            t = Tournament(name, start_date, end_date, tournament_id, matches, participants)
+            t = Tournament(
+                name, start_date, end_date, tournament_id, matches, participants
+            )
             t.create()
 
     @classmethod

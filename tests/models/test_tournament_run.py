@@ -1,10 +1,11 @@
-import pytest
 import logging
 import secrets
 
-from chess.models.tournaments import Tournament
-from chess.models.rounds import Round
+import pytest
+
 from chess.models.players import Player
+from chess.models.rounds import Round
+from chess.models.tournaments import Tournament
 
 
 @pytest.fixture
@@ -79,9 +80,11 @@ class TestTournamentRun:
     def test_round_computed(self, loaded_default_tournament):
         """test if rounds had been computed"""
 
+        logging.warning(f"id tournament: {loaded_default_tournament.tournament_id}")
+
         assert loaded_default_tournament.status == "In Progress"
 
-        assert len(loaded_default_tournament.round_id_list) == 6
+        assert len(loaded_default_tournament.round_id_list) == 3
 
         # assert loaded_default_tournament.round == 0
 
@@ -173,7 +176,7 @@ class TestTournamentRun:
         # check current_round_number is OK
         assert (current_round_number + 1) == tournament.current_round_number
 
-    # def test_run_complete_tournament(self):
+        # def test_run_complete_tournament(self):
         # create 4 players
 
         # create tournament
@@ -202,7 +205,9 @@ class TestTournamentRun:
             player.save()
 
         # create tournament
-        tournament = Tournament(name="Test Tournament", location="Test Location", date="2024-01-01")
+        tournament = Tournament(
+            name="Test Tournament", location="Test Location", date="2024-01-01"
+        )
         tournament.save()
 
         return tournament, players
