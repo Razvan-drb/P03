@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import random
 import secrets
 from typing import List
@@ -111,7 +112,7 @@ class Tournament:
 
         self.db.update(self.to_dict(), where("tournament_id") == self.tournament_id)
 
-        print(f"Tournament {self.tournament_id} updated successfully.")
+        logging.warning(f"Tournament {self.tournament_id} updated successfully.")
 
     def delete(self) -> None:
         """Delete method for tournaments"""
@@ -338,25 +339,21 @@ class Tournament:
         """Get the current round number for the tournament."""
 
         if not self.round_id_list:
-            print("No rounds have been computed yet.")
+            logging.warning("No rounds have been computed yet.")
             return None
 
         current_round_id = self.round_id_list[-1]
-        # REMPLACER LES PRINT PAR DES LOGGING.WARNING 😉
-        print(f"Current Round ID: {current_round_id}")
+        logging.warning(f"Current Round ID: {current_round_id}")
 
-        # try get current round data
+        # try to get current round data
         current_round_data = Round.search_by("round_id", current_round_id)
 
         if not current_round_data:
-            print(
-                f"No data found for Round ID: {current_round_id}"
-            )  # logging instead of print
+            logging.warning(f"No data found for Round ID: {current_round_id}")
             return None
 
         current_round = current_round_data[0]
-        # REMPLACER LES PRINT PAR DES LOGGING.WARNING 😉
-        print(f"Current Round: {current_round}")
+        logging.warning(f"Current Round: {current_round}")
 
         return current_round
 
