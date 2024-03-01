@@ -48,7 +48,7 @@ class Tournament:
     ):
         """Init method for tournaments"""
 
-        # handly written args by user
+        # handle written args by user
         self.name = name
         self.start_date = start_date
         self.end_date = end_date
