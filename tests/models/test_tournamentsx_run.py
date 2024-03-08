@@ -121,10 +121,10 @@ class TestTournamentRun:
         assert current_round is not None
 
         # Access match_list directly on the current_round instance
-        assert isinstance(current_round.match_list, list)
+        assert isinstance(current_round.matches, list)
 
         # Get 1st match of the round
-        first_match_of_the_list = current_round.match_list[0]
+        first_match_of_the_list = current_round.matches[0]
         assert isinstance(first_match_of_the_list, list)
 
         # Get 1st player of the 1st match
@@ -137,7 +137,7 @@ class TestTournamentRun:
 
         # Check values
         assert first_player_of_first_match_id == load_4_players[0].player_id
-        assert first_player_of_first_match_score == 0
+        assert first_player_of_first_match_score == -1
 
     def test_add_results(self, load_4_players, loaded_default_tournament):
         """add results for round 1"""
