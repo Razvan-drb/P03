@@ -89,5 +89,6 @@ update_current_round:
     modifier la round
     get la round. round.match list == new match list
     round.update
-    
+PYTEST COMMAND 
+pytest -vvx --capture=tee-sys --log-cli-level=INFO tests/models
 

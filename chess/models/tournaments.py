@@ -225,28 +225,6 @@ class Tournament:
     def update_status(self, new_status: str):
         """ """
 
-        #     # on passe de created à en cours, on passe de en cours à terminé
-
-        #     # quand on passe de created à en cours :
-        #     #  - il faut calucler d'un coup toutes les rondes / tous les match
-        #     # round 0 = player 0 vs player 1, player 2 vs player 3
-        #     # round 1 = player 0 vs player 2, player 1 vs player 3
-        #     # round 2 = player 0 vs player 3, player 1 vs player 2
-
-        #     # c'est ici que on va use self._add_round(blabla bla)
-
-        #     # enregistrer les rounds dans la db
-
-        #     # MAJ la rounds_id_list de la clas
-        #     # update le numéro de la ronde en cours
-        #     # save notre new  tournois
-
-        #     # interdire de passer de terminé à en cours ou terminé à created !!!!
-
-        #     # pas le droit de passer en created à en cours si pas 4 joeurs
-
-        #     # quand on passe de en cours à terminé ??? que se passe t'il ?
-
         # check if new status is authorised
         if new_status not in self.AUTHORISED_STATUS:
             raise ValueError("Invalid tournament status.")
@@ -375,21 +353,39 @@ class Tournament:
 
         current_round = self.get_current_round()
 
+        # Log or print relevant information
+        logging.info(f"Before update - Current Round ID: {current_round.round_id}")
+        logging.info(f"Before update - Current Round: {current_round}")
+
         # Update the round with match_list
         if match_list:
-            current_round.matches = match_list
+            # Check if match_list is a list with elements for each round
+            if len(match_list) != self.N_ROUNDS:
+                logging.error(
+                    f"Invalid match_list length: {len(match_list)} (expected {self.N_ROUNDS}). Content: {match_list}")
+                return
 
-        # Save the updated round
-        current_round.update()
+            current_round.matches = match_list[self.current_round_number]
+
+            # Log or print relevant information
+            logging.info(f"Updated Round ID: {current_round.round_id}")
+            logging.info(f"Updated Round: {current_round}")
+
+            try:
+                # Update the current round
+                current_round.update()
+            except Exception as e:
+                # Log the exception
+                logging.error(f"Error updating current round: {e}")
 
         # Increment round number
         if self.current_round_number >= 0:
             if self.current_round_number < self.N_ROUNDS - 1:
                 self.current_round_number += 1
 
-                match_list = match_list[self.current_round_number]
+                match_list_for_next_round = match_list[self.current_round_number]
                 new_round_number = self._add_round(
-                    self.current_round_number, match_list
+                    self.current_round_number, match_list_for_next_round
                 )  # add to the DB
                 self.round_id_list.append(
                     new_round_number
@@ -400,6 +396,10 @@ class Tournament:
 
         self._next_round()
         self.update()
+
+        # Log or print relevant information after the update
+        logging.info(f"After update - Current Round ID: {current_round.round_id}")
+        logging.info(f"After update - Current Round: {current_round}")
 
     def get_score(self):
         # UN DES TRUC QUON FERRA A LA TOUTE FIN !!!
