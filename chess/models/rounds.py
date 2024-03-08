@@ -10,7 +10,7 @@ from tinydb import Query, TinyDB, where
 class Round:
     """Round model class"""
 
-    db = TinyDB("./data/players.json")
+    db = TinyDB("./data/rounds.json")
 
     def __init__(
         self,
