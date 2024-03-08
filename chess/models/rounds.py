@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import secrets
 from typing import List
 
@@ -9,7 +10,7 @@ from tinydb import Query, TinyDB, where
 class Round:
     """Round model class"""
 
-    db = TinyDB("./data/rounds.json")
+    db = TinyDB("/home/razvandaraban/Projets/OC/Projet_03_OC/data/players.json")
 
     def __init__(
         self,
@@ -39,23 +40,31 @@ class Round:
         """Create method for rounds"""
         self.db.insert(self.to_dict())
 
-    def search(self, round_id: str) -> list[dict]:
+    def search(self, round_id: str) -> List[dict]:
         """Search for a round by round_id"""
 
         round_search = Query()
         result = self.db.search(round_search.round_id == round_id)
 
-        return [Round.from_dict(data) for data in result]
+        return result
 
     @classmethod
-    def search_by(cls, key: str, value) -> list[dict]:
+    def search_by(cls, key: str, value) -> List['Round']:
         """Search method for rounds by key and value"""
-        res = cls.db.search(Query()[key] == value)
-        return res  # Return the list of matching rounds
+        try:
+            res = cls.db.search(Query()[key] == value)
+            return [cls.from_dict(data) for data in res]
+        except Exception as e:
+            logging.error(f"Error searching for rounds: {e}")
+            return []
 
     def update(self):
         """Update method for round"""
 
-        self.db.update(self.to_dict(), where("round_id") == self.round_id)
+        self.db.update(self.to_dict(), where("round_id") & (Query().round_id == self.round_id))
 
-        print(f"Round {self.round_id} updated successfully.")
+        logging.warning(f"Round {self.round_id} updated successfully.")
+
+
+
+

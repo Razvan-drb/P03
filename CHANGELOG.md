@@ -18,6 +18,8 @@
 ## Updated
 - fix / restructure test policy 
 - fix/update Tournament class
+- test_players PASSES
+- test_tournaments PASSES
 
 ## Todo 
 - specify librairies versions in requirements.txt - done
