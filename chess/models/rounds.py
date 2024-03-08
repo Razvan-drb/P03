@@ -10,7 +10,7 @@ from tinydb import Query, TinyDB, where
 class Round:
     """Round model class"""
 
-    db = TinyDB("/home/razvandaraban/Projets/OC/Projet_03_OC/data/players.json")
+    db = TinyDB("./data/players.json")
 
     def __init__(
         self,
@@ -49,7 +49,7 @@ class Round:
         return result
 
     @classmethod
-    def search_by(cls, key: str, value) -> List['Round']:
+    def search_by(cls, key: str, value) -> List["Round"]:
         """Search method for rounds by key and value"""
         try:
             res = cls.db.search(Query()[key] == value)
@@ -61,10 +61,8 @@ class Round:
     def update(self):
         """Update method for round"""
 
-        self.db.update(self.to_dict(), where("round_id") & (Query().round_id == self.round_id))
+        self.db.update(
+            self.to_dict(), where("round_id") & (Query().round_id == self.round_id)
+        )
 
         logging.warning(f"Round {self.round_id} updated successfully.")
-
-
-
-
