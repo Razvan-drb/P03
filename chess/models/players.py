@@ -9,7 +9,7 @@ from tinydb import Query, TinyDB, where
 class Player:
     """players model class"""
 
-    db = TinyDB("/home/razvandaraban/Projets/OC/Projet_03_OC/data/players.json")
+    db = TinyDB("./data/players.json")
 
     def __init__(
         self,

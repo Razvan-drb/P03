@@ -28,7 +28,7 @@ class Tournament:
         status - str - status of the tournament - default = "Created"
     """
 
-    db = TinyDB("/home/razvandaraban/Projets/OC/Projet_03_OC/data/players.json")
+    db = TinyDB("./data/tournaments.json")
 
     N_PLAYERS = 4
     N_ROUNDS = 3
@@ -367,7 +367,7 @@ class Tournament:
 
         # Find the round instance of the current round
         current_round_id = self.round_id_list[-1]
-        current_round_data = Round.search_by('round_id', current_round_id)
+        current_round_data = Round.search_by("round_id", current_round_id)
 
         if not current_round_data:
             logging.warning(f"No data found for Round ID: {current_round_id}")
