@@ -116,3 +116,30 @@ class TestTournamentBase:
         result = Tournament.search_by("name", name)
         logging.info(result)
         assert len(result) == 1
+
+    def test_update(self, created_default_tournament):
+        """update tournament"""
+
+        # load mon default tournament
+        created_default_tournament
+
+        # recup valeur à la con location
+        # store cette  valeur
+        old_location = created_default_tournament.location
+
+        # # changer à la main
+        new_location = "Fake_Loc_" + str(secrets.token_hex(4))
+        created_default_tournament.location = new_location
+
+        # updante
+        created_default_tournament.update()
+
+        # store id tournois
+        id_tournament = created_default_tournament.tournament_id
+
+        # reoard à la main le tournois sur base id
+        same_tournament = Tournament.read_one(id_tournament)
+
+        # assert
+        assert same_tournament.location != old_location
+        assert same_tournament.location == new_location

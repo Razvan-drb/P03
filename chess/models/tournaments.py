@@ -98,7 +98,11 @@ class Tournament:
     def search(cls, tournament_id):
         """Search for a tournament by tournament_id"""
 
-        # TODO code this
+        tournament = Query()
+        result = cls.db.search(tournament.tournament_id == tournament_id)
+        res = result[0] if result else None
+
+        return Tournament.from_dict(res) if res else None
 
     @classmethod
     def search_by(cls, key: str, value) -> list[dict]:
@@ -350,7 +354,9 @@ class Tournament:
         if not current_round_data:
             logging.warning(f"No data found for Round ID: {current_round_id}")
         else:
-            logging.info(f"Found data for Round ID: {current_round_id}, Data: {current_round_data}")
+            logging.info(
+                f"Found data for Round ID: {current_round_id}, Data: {current_round_data}"
+            )
             return
 
         current_round = self.get_current_round()
@@ -364,7 +370,8 @@ class Tournament:
             # Check if match_list is a list with elements for each round
             if len(match_list) != self.N_ROUNDS:
                 logging.error(
-                    f"Invalid match_list length: {len(match_list)} (expected {self.N_ROUNDS}). Content: {match_list}")
+                    f"Invalid match_list length: {len(match_list)} (expected {self.N_ROUNDS}). Content: {match_list}"
+                )
                 return
 
             current_round.matches = match_list[self.current_round_number]
