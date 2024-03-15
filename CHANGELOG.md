@@ -1,11 +1,23 @@
+# 2024-03-15 - Code Review
+
+## Todo
+- 
+- 
+- 
+
+## Updated
+- 
+- 
+- 
+
 # 2024-03-08 - Code Review
 
 ## Todo
 - [x] continue debug class Player to pass tests and run entire Tournament from creation to end
 
 ## Updated
-- [x]Fix files errors 
-- [x]Reset DB
+- [x] Fix files errors 
+- [x] Reset DB
 - [x] Debug tets and Models
 
 # 2024-03-01 - Code Review
@@ -17,9 +29,6 @@
 # 2024-02-01 - Code Review
 
 ## Todo
-- 
-- 
-- 
 - 
 
 ## Updated
