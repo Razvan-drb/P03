@@ -313,13 +313,19 @@ class Tournament:
         if self.status == "Created" and new_status == "In Progress":
             # Check if there are enough players
             if len(self.player_id_list) != self.N_PLAYERS:
-                raise ValueError(
-                    "Impossible de passer à 'In Progress' sans 4 joueurs."
-                )
+                raise ValueError("Impossible de passer à 'In Progress' sans 4 joueurs.")
 
             # on initialize les matchs avec random scores (1 or 0)
-            match_list = [[[(player_id, random.choice([1, 0])) for player_id in self.player_id_list] for _ in
-                           range(self.N_MATCHES_PER_ROUND)] for _ in range(self.N_ROUNDS)]
+            match_list = [
+                [
+                    [
+                        (player_id, random.choice([1, 0]))
+                        for player_id in self.player_id_list
+                    ]
+                    for _ in range(self.N_MATCHES_PER_ROUND)
+                ]
+                for _ in range(self.N_ROUNDS)
+            ]
 
             # Add rounds to database
             for i, round_matches in enumerate(match_list):
