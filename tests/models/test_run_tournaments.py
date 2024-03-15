@@ -114,7 +114,7 @@ class TestTournamentRun:
 
         # Check values
         assert first_player_of_first_match_id == four_players[0].player_id
-        assert first_player_of_first_match_score == -1
+        assert first_player_of_first_match_score in [0, 1]
 
     def test_add_1st_results(self, four_players, loaded_default_tournament):
         """add results for round 1"""
@@ -193,3 +193,20 @@ class TestTournamentRun:
             logging.critical(
                 f"loaded_default_tournament.tournament_id: {loaded_default_tournament.tournament_id}"
             )
+
+    def test_get_score(self, four_players, loaded_default_tournament):
+        """Test the get_score method"""
+
+        # Iterate through each player
+        for player in four_players:
+            # Get the player's ID
+            player_id = player.player_id
+
+            # Call the get_score method for the current player
+            player_score = loaded_default_tournament.get_score(player_id)
+
+            # Log the player's ID and score
+            logging.info(f"Player ID: {player_id}, Score: {player_score}")
+
+            # Check if the actual score is an integer
+            assert isinstance(player_score, int)

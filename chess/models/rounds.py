@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import secrets
-from typing import List
+from typing import List, Optional
 
 from tinydb import Query, TinyDB, where
 
@@ -48,15 +48,28 @@ class Round:
 
         return result
 
+    # @classmethod
+    # def search_by(cls, key: str, value) -> List["Round"]:
+    #     """Search method for rounds by key and value"""
+    #     try:
+    #         res = cls.db.search(Query()[key] == value)
+    #         return [cls.from_dict(data) for data in res]
+    #     except Exception as e:
+    #         logging.error(f"Error searching for rounds: {e}")
+    #         return []
+
     @classmethod
-    def search_by(cls, key: str, value) -> List["Round"]:
+    def search_by(cls, key: str, value) -> Optional["Round"]:
         """Search method for rounds by key and value"""
         try:
             res = cls.db.search(Query()[key] == value)
-            return [cls.from_dict(data) for data in res]
+            if res:
+                return cls.from_dict(res[0])
+            else:
+                return None
         except Exception as e:
             logging.error(f"Error searching for rounds: {e}")
-            return []
+            return None
 
     def update(self):
         """Update method for round"""

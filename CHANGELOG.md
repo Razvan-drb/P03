@@ -1,8 +1,8 @@
 # 2024-03-15 - 09h00 - Code Review
 
 ## Todo
-- Tackle update  tournament problem => we want score OK 1/0 not -1 -1 in the rounds.json !!!! 
-- What abour computing results by player ????
+- Tackle update  tournament problem => we want score OK 1/0 not -1 -1 in the rounds.json !!!! Check
+- What about computing results by player ???? get score Check
 - write proto AND OR code about thi feature
 
 ## Updated

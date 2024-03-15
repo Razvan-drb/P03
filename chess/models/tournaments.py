@@ -32,6 +32,7 @@ class Tournament:
 
     N_PLAYERS = 4
     N_ROUNDS = 3
+    N_MATCHES_PER_ROUND = 2
     AUTHORISED_STATUS = ["Created", "In Progress", "Completed"]
 
     def __init__(
@@ -226,81 +227,121 @@ class Tournament:
 
         return new_round.round_id
 
-    def update_status(self, new_status: str):
-        """ """
+    # def update_status(self, new_status: str):
+    #     """ """
+    #
+    #     # check if new status is authorised
+    #     if new_status not in self.AUTHORISED_STATUS:
+    #         raise ValueError("Invalid tournament status.")
+    #
+    #     # manage created
+    #     if self.status == "Created" and new_status == "In Progress":
+    #         # if not good n players
+    #         if len(self.player_id_list) != self.N_PLAYERS:
+    #             raise ValueError(
+    #                 "Pas possible de passer a 'In Progress' sans 4 jouers."
+    #             )
+    #
+    #         # Calculate rounds and matches
+    #         round_0 = [
+    #             # 1er match du round 0
+    #             [
+    #                 (self.player_id_list[0], -1),  # Player 0, (son id, son score)
+    #                 (self.player_id_list[1], -1),  # Player 1, (son id, son score)
+    #             ],
+    #             # 2eme match du round 0
+    #             [
+    #                 (self.player_id_list[2], -1),  # Player 2,son id son score
+    #                 (self.player_id_list[3], -1),  # Player 3, son id son score
+    #             ],
+    #         ]
+    #
+    #         round_1 = [
+    #             [
+    #                 (self.player_id_list[0], -1),  # P0 (id, score)
+    #                 (self.player_id_list[2], -1),  # P2 (id, score)
+    #             ],  # 1er match
+    #             [
+    #                 (self.player_id_list[1], -1),
+    #                 (self.player_id_list[3], -1),
+    #             ],  # 2eme match
+    #         ]
+    #
+    #         round_2 = [
+    #             [
+    #                 (self.player_id_list[0], -1),
+    #                 (self.player_id_list[3], -1),
+    #             ],  # 1er match
+    #             [
+    #                 (self.player_id_list[1], -1),
+    #                 (self.player_id_list[2], -1),
+    #             ],  # 2eme match
+    #         ]
+    #
+    #         # match list
+    #         match_list = [round_0, round_1, round_2]
+    #
+    #         for i, match_list in enumerate(match_list):
+    #             # add round id db
+    #             _ = self._add_round(i, match_list)
+    #
+    #         # Save rounds to DB
+    #         self.status = "In Progress"
+    #         self.update()
+    #
+    #     elif self.status == "In Progress" and new_status == "Completed":
+    #         # Check if all rounds have been played
+    #
+    #         if len(self.round_id_list) < self.N_PLAYERS - 1:
+    #             raise ValueError(
+    #                 "Impossible de terminer le tournoi sans que tout les rounds sois finis."
+    #             )
+    #
+    #     else:
+    #         raise ValueError(
+    #             f"Status invalid. Impossible de changer le status de {self.status} a {new_status}"
+    #         )
+    #
+    #     self.update()
 
-        # check if new status is authorised
+    def update_status(self, new_status: str):
+        """Update the status of the tournament."""
+
         if new_status not in self.AUTHORISED_STATUS:
             raise ValueError("Invalid tournament status.")
 
-        # manage created
         if self.status == "Created" and new_status == "In Progress":
-            # if not good n players
+            # Check if there are enough players
             if len(self.player_id_list) != self.N_PLAYERS:
                 raise ValueError(
-                    "Pas possible de passer a 'In Progress' sans 4 jouers."
+                    "Impossible de passer à 'In Progress' sans 4 joueurs."
                 )
 
-            # Calculate rounds and matches
-            round_0 = [
-                # 1er match du round 0
-                [
-                    (self.player_id_list[0], -1),  # Player 0, (son id, son score)
-                    (self.player_id_list[1], -1),  # Player 1, (son id, son score)
-                ],
-                # 2eme match du round 0
-                [
-                    (self.player_id_list[2], -1),  # Player 2,son id son score
-                    (self.player_id_list[3], -1),  # Player 3, son id son score
-                ],
-            ]
+            # on initialize les matchs avec random scores (1 or 0)
+            match_list = [[[(player_id, random.choice([1, 0])) for player_id in self.player_id_list] for _ in
+                           range(self.N_MATCHES_PER_ROUND)] for _ in range(self.N_ROUNDS)]
 
-            round_1 = [
-                [
-                    (self.player_id_list[0], -1),  # P0 (id, score)
-                    (self.player_id_list[2], -1),  # P2 (id, score)
-                ],  # 1er match
-                [
-                    (self.player_id_list[1], -1),
-                    (self.player_id_list[3], -1),
-                ],  # 2eme match
-            ]
+            # Add rounds to database
+            for i, round_matches in enumerate(match_list):
+                _ = self._add_round(i, round_matches)
 
-            round_2 = [
-                [
-                    (self.player_id_list[0], -1),
-                    (self.player_id_list[3], -1),
-                ],  # 1er match
-                [
-                    (self.player_id_list[1], -1),
-                    (self.player_id_list[2], -1),
-                ],  # 2eme match
-            ]
-
-            # match list
-            match_list = [round_0, round_1, round_2]
-
-            for i, match_list in enumerate(match_list):
-                # add round id db
-                _ = self._add_round(i, match_list)
-
-            # Save rounds to DB
+            # Update status to 'In Progress' and save
             self.status = "In Progress"
             self.update()
 
         elif self.status == "In Progress" and new_status == "Completed":
-            # Check if all rounds have been played
-
-            if len(self.round_id_list) < self.N_PLAYERS - 1:
+            # Check if all rounds are played
+            if len(self.round_id_list) < self.N_ROUNDS:
                 raise ValueError(
-                    "Impossible de terminer le tournoi sans que tout les rounds sois finis."
+                    "Impossible de terminer le tournoi sans que tous les rounds soient finis."
                 )
 
         else:
             raise ValueError(
-                f"Status invalid. Impossible de changer le status de {self.status} a {new_status}"
+                f"Statut invalide. Impossible de changer le statut de {self.status} à {new_status}."
             )
 
+        # Update the status
         self.update()
 
     def _next_round(self):
@@ -319,7 +360,6 @@ class Tournament:
 
     def get_current_round(self):
         """Get the current round number for the tournament."""
-
         if not self.round_id_list:
             logging.warning("No rounds have been computed yet.")
             return None
@@ -328,14 +368,11 @@ class Tournament:
         logging.warning(f"Current Round ID: {current_round_id}")
 
         # try to get current round data
-        current_round_data = Round.search_by("round_id", current_round_id)
+        current_round = Round.search_by("round_id", current_round_id)
 
-        if not current_round_data:
+        if not current_round:
             logging.warning(f"No data found for Round ID: {current_round_id}")
             return None
-
-        current_round = current_round_data[0]
-        logging.warning(f"Current Round: {current_round}")
 
         return current_round
 
@@ -410,10 +447,6 @@ class Tournament:
         logging.info(f"After update - Current Round ID: {current_round.round_id}")
         logging.info(f"After update - Current Round: {current_round}")
 
-    def get_score(self):
-        # UN DES TRUC QUON FERRA A LA TOUTE FIN !!!
-        pass
-
     def __repr__(self) -> str:
         """Tournament representation"""
 
@@ -422,3 +455,19 @@ class Tournament:
             f"tournament_id={self.tournament_id}, description={self.description},location={self.location}, "
             f"matches={self.round_id_list}, participants={self.player_id_list})"
         )
+
+    def get_score(self, player_id):
+        player_score = 0
+
+        # Iterate through rounds
+        for round_id in self.round_id_list:
+            round_data = Round.search_by("round_id", round_id)
+
+            if round_data:
+                for match in round_data.matches:
+                    # Iterate matches to find player's score
+                    for player_tuple in match:
+                        if player_tuple[0] == player_id:
+                            player_score += player_tuple[1]
+
+        return player_score
