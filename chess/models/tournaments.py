@@ -349,6 +349,8 @@ class Tournament:
 
         if not current_round_data:
             logging.warning(f"No data found for Round ID: {current_round_id}")
+        else:
+            logging.info(f"Found data for Round ID: {current_round_id}, Data: {current_round_data}")
             return
 
         current_round = self.get_current_round()

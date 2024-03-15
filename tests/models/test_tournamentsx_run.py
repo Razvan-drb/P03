@@ -161,6 +161,13 @@ class TestTournamentRun:
                 # 2nd player of the 2nd match
                 (load_4_players[3].player_id, 0),  # id, score
             ),
+            # 3rd match
+            (
+                # 1st player of 3rd match
+                (load_4_players[0].player_id, 1),  # id, score
+                # 2nd player of the 3rd match
+                (load_4_players[2].player_id, 0),  # id, score
+            ),
         ]
 
         # do update
