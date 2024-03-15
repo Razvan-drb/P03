@@ -1,14 +1,15 @@
-# 2024-03-15 - Code Review
+# 2024-03-15 - 09h00 - Code Review
 
 ## Todo
-- 
-- 
-- 
+- Tackle update  tournament problem => we want score OK 1/0 not -1 -1 in the rounds.json !!!! 
+- What abour computing results by player ????
+- write proto AND OR code about thi feature
 
 ## Updated
-- 
-- 
-- 
+- MAJ classe Tournament with search pb
+- Added code test for all 3 rounds all matches 
+- Added test update tournament 
+- clean code 
 
 # 2024-03-08 - Code Review
 
