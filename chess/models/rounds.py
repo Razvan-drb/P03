@@ -79,3 +79,6 @@ class Round:
         )
 
         logging.warning(f"Round {self.round_id} updated successfully.")
+
+    def __repr__(self) -> str:
+        return f"{self.__dict__}"

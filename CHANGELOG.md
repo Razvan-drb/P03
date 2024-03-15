@@ -1,3 +1,26 @@
+
+# 2024-03-15 - 17h00 - Code Review
+
+
+## Problem
+- When i try to update the current round, the round is not updated in the tournament (in database )
+
+- Example usage 
+    - Supose we have a tournament with 3 rounds, 4 players, curent_id_round = 0
+    - Suppose we have defaults score results at -1
+    - Supose we have a new_res to push
+    - t.update_current_round(new_res) => no update in the tournament DATABASE
+
+    -  the proble is here : ```t.update_current_round(new_res)```   
+
+## Todo
+- Fix this 
+- Start Front app / views and Controlers 
+- Write print  functions to display the  menu / option how to read user input to store values for players in a dict
+
+
+
+
 # 2024-03-15 - 09h00 - Code Review
 
 ## Todo
