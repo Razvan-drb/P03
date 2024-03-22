@@ -45,7 +45,7 @@ class Tournament:
         tournament_id: str | None = None,
         round_id_list: List[str] | None = None,
         player_id_list: List[str] | None = None,
-        current_round_number: int = -1,
+        current_round_number: int = -1,  # change rand ? or ? !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         status: str = "Created",
     ):
         """Init method for tournaments"""
@@ -313,19 +313,13 @@ class Tournament:
         if self.status == "Created" and new_status == "In Progress":
             # Check if there are enough players
             if len(self.player_id_list) != self.N_PLAYERS:
-                raise ValueError("Impossible de passer à 'In Progress' sans 4 joueurs.")
+                raise ValueError(
+                    "Impossible de passer à 'In Progress' sans 4 joueurs."
+                )
 
             # on initialize les matchs avec random scores (1 or 0)
-            match_list = [
-                [
-                    [
-                        (player_id, random.choice([1, 0]))
-                        for player_id in self.player_id_list
-                    ]
-                    for _ in range(self.N_MATCHES_PER_ROUND)
-                ]
-                for _ in range(self.N_ROUNDS)
-            ]
+            match_list = [[[(player_id, random.choice([1, 0])) for player_id in self.player_id_list] for _ in
+                           range(self.N_MATCHES_PER_ROUND)] for _ in range(self.N_ROUNDS)]
 
             # Add rounds to database
             for i, round_matches in enumerate(match_list):
@@ -407,7 +401,7 @@ class Tournament:
         # Log or print relevant information
         logging.info(f"Before update - Current Round ID: {current_round.round_id}")
         logging.info(f"Before update - Current Round: {current_round}")
-
+        print("*****************************************************************************************")
         # Update the round with match_list
         if match_list:
             # Check if match_list is a list with elements for each round
@@ -416,7 +410,6 @@ class Tournament:
                     f"Invalid match_list length: {len(match_list)} (expected {self.N_ROUNDS}). Content: {match_list}"
                 )
                 return
-
             current_round.matches = match_list[self.current_round_number]
 
             # Log or print relevant information
