@@ -314,12 +314,22 @@ class Tournament:
             # Check if there are enough players
             if len(self.player_id_list) != self.N_PLAYERS:
                 raise ValueError(
-                    "Impossible de passer à 'In Progress' sans 4 joueurs."
+                    f"Impossible de passer à 'In Progress' sans {self.N_PLAYERS} joueurs."
                 )
 
             # on initialize les matchs avec random scores (1 or 0)
-            match_list = [[[(player_id, random.choice([1, 0])) for player_id in self.player_id_list] for _ in
-                           range(self.N_MATCHES_PER_ROUND)] for _ in range(self.N_ROUNDS)]
+            # Ca au final c'est pas top
+            # car on peut avoir 1 1 en resultat ou 0 0
+            match_list = [
+                [
+                    [
+                        (player_id, random.choice([1, 0]))
+                        for player_id in self.player_id_list
+                    ]
+                    for _ in range(self.N_MATCHES_PER_ROUND)
+                ]
+                for _ in range(self.N_ROUNDS)
+            ]
 
             # Add rounds to database
             for i, round_matches in enumerate(match_list):
@@ -327,6 +337,7 @@ class Tournament:
 
             # Update status to 'In Progress' and save
             self.status = "In Progress"
+            self.current_round_number = 0
             self.update()
 
         elif self.status == "In Progress" and new_status == "Completed":
@@ -360,6 +371,7 @@ class Tournament:
 
     def get_current_round(self):
         """Get the current round number for the tournament."""
+
         if not self.round_id_list:
             logging.warning("No rounds have been computed yet.")
             return None
@@ -401,7 +413,9 @@ class Tournament:
         # Log or print relevant information
         logging.info(f"Before update - Current Round ID: {current_round.round_id}")
         logging.info(f"Before update - Current Round: {current_round}")
-        print("*****************************************************************************************")
+        print(
+            "*****************************************************************************************"
+        )
         # Update the round with match_list
         if match_list:
             # Check if match_list is a list with elements for each round
