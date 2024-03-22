@@ -115,6 +115,7 @@ class Tournament:
     def update(self) -> None:
         """Update method for tournaments"""
 
+        """ PB MAJ TPURNEMENT"""
         self.db.update(self.to_dict(), where("tournament_id") == self.tournament_id)
 
         logging.warning(f"Tournament {self.tournament_id} updated successfully.")
