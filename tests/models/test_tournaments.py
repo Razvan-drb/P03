@@ -9,19 +9,6 @@ from chess.models.tournaments import Tournament
 
 
 @pytest.fixture
-def load_4_players():
-    """load 4 players"""
-
-    p_list = Player.read_all()
-    p_list = [i for i in p_list if i.firstname.startswith("Test")]
-    p_list = p_list[:4]
-
-    assert len(p_list) >= 4
-    assert isinstance(p_list[0], Player)
-    return p_list
-
-
-@pytest.fixture
 def created_default_tournament():
     """create a tournament"""
 

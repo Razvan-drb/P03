@@ -4,17 +4,17 @@ import secrets
 import pytest
 
 from chess.models.players import Player
+from chess.helpers import now
 
 
-# Todo: create class TestPlayer
 class TestPlayer:
     def test_init_player(self):
         """create a player"""
 
         firstname = "test" + secrets.token_hex(4)
         lastname = "test" + secrets.token_hex(4)
-
-        p = Player(lastname, firstname)
+        player_id = "test" + secrets.token_hex(4) + "_" + now()
+        p = Player(lastname, firstname, player_id=player_id)
         logging.warning(p)
 
         assert isinstance(p, Player)
