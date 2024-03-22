@@ -50,11 +50,12 @@ def last_four_players():
 def default_tournament():
     """create a tournament"""
 
-    name = "TestTournament" + secrets.token_hex(4)
+    tournament_id = secrets.token_hex(4) + "_" + now()
+    name = "TestTournament_" + tournament_id
     start_date = "2023-01-01"
     end_date = "2023-12-31"
 
-    t = Tournament(name, start_date, end_date)
+    t = Tournament(name, start_date, end_date, tournament_id=tournament_id)
     t.create()
 
     return t

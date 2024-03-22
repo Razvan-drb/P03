@@ -9,20 +9,6 @@ from chess.models.tournaments import Tournament
 
 
 @pytest.fixture
-def created_default_tournament():
-    """create a tournament"""
-
-    name = "TestTournament" + secrets.token_hex(4)
-    start_date = "2023-01-01"
-    end_date = "2023-12-31"
-
-    t = Tournament(name, start_date, end_date)
-    t.create()
-
-    return t
-
-
-@pytest.fixture
 def loaded_default_tournament():
     """load a tournament"""
 
@@ -104,25 +90,25 @@ class TestTournamentBase:
         logging.info(result)
         assert len(result) == 1
 
-    def test_update(self, created_default_tournament):
+    def test_update(self, default_tournament):
         """update tournament"""
 
         # load mon default tournament
-        created_default_tournament
+        default_tournament
 
         # recup valeur à la con location
         # store cette  valeur
-        old_location = created_default_tournament.location
+        old_location = default_tournament.location
 
         # # changer à la main
         new_location = "Fake_Loc_" + str(secrets.token_hex(4))
-        created_default_tournament.location = new_location
+        default_tournament.location = new_location
 
         # updante
-        created_default_tournament.update()
+        default_tournament.update()
 
         # store id tournois
-        id_tournament = created_default_tournament.tournament_id
+        id_tournament = default_tournament.tournament_id
 
         # reoard à la main le tournois sur base id
         same_tournament = Tournament.read_one(id_tournament)
