@@ -1,5 +1,5 @@
 """
-Find here all shared fixtrure used by all tests
+Find here all shared fixtures used by all tests
 """
 
 import logging
@@ -16,21 +16,19 @@ from chess.helpers import now
 
 @pytest.fixture
 def new_four_players():
-    """4 players"""
+    """Generate 4 unique players"""
 
-    p_list = []
+    players = []
     for _ in range(4):
+        firstname = "Test" + secrets.token_hex(4)
+        lastname = "TEST" + secrets.token_hex(4)
+        player_id = "test" + secrets.token_hex(4)
+        player = Player(firstname, lastname, player_id=player_id)
+        player.create()
+        logging.warning(f"Generated player: {player}")
+        players.append(player)
 
-        firstname = "test" + secrets.token_hex(4)
-        lastname = "test" + secrets.token_hex(4)
-        player_id = "test" + secrets.token_hex(4) + "_" + now()
-        p = Player(lastname, firstname, player_id=player_id)
-        p.create()
-        logging.warning(p)
-
-        p_list.add(p)
-
-    return p_list
+    return players
 
 
 @pytest.fixture

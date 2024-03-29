@@ -5,7 +5,7 @@
 - Add conftest
 - Add new 4 players 
 - rename fixture
-- change curent round number at 0 whe, status change to in progress
+- change curent round number at 0 when status change to in progress
 
 # 2024-03-15 - 17h00 - Code Review
 

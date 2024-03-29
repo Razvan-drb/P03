@@ -9,7 +9,7 @@ from tinydb import Query, TinyDB, where
 class Player:
     """players model class"""
 
-    db = TinyDB("data/players.json")
+    db = TinyDB("/home/razvandaraban/Projets/OC/Projet_03_OC/data/players.json")
 
     def __init__(
         self,
@@ -36,10 +36,16 @@ class Player:
 
         return Player(**player_dict)
 
+    # def create(self) -> None:
+    #     """Create method for players"""
+    #
+    #     self.db.insert(self.to_dict())
+
     def create(self) -> None:
         """Create method for players"""
-
-        self.db.insert(self.to_dict())
+        player_dict = self.to_dict()
+        player_dict['player_id'] = str(player_dict['player_id'])
+        self.db.insert(player_dict)
 
     @classmethod
     def read_one(cls, player_id: str) -> dict | None:

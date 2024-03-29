@@ -28,7 +28,7 @@ class Tournament:
         status - str - status of the tournament - default = "Created"
     """
 
-    db = TinyDB("./data/tournaments.json")
+    db = TinyDB("/home/razvandaraban/Projets/OC/Projet_03_OC/data/tournaments.json")
 
     N_PLAYERS = 4
     N_ROUNDS = 3
