@@ -65,6 +65,7 @@ class Tournament:
 
     def to_dict(self) -> dict:
         """Convert tournament to dict"""
+
         return self.__dict__
 
     @classmethod
@@ -115,8 +116,10 @@ class Tournament:
     def update(self) -> None:
         """Update method for tournaments"""
 
-        """ PB MAJ TPURNEMENT"""
+        """ PB MAJ TOURNAMENT     **********************************************************************************"""
+        logging.critical(self.tournament_id)
         self.db.update(self.to_dict(), where("tournament_id") == self.tournament_id)
+        logging.critical(self.tournament_id)
 
         logging.warning(f"Tournament {self.tournament_id} updated successfully.")
 
@@ -320,7 +323,7 @@ class Tournament:
 
             # on initialize les matchs avec random scores (1 or 0)
             # Ca au final c'est pas top
-            # car on peut avoir 1 1 en resultat ou 0 0
+            # car on peut avoir 1 1 en resultat ou 0 0  WORKING ON IT !********************************************
             match_list = [
                 [
                     [
