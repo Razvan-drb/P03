@@ -62,6 +62,12 @@ class Player:
         return [Player.from_dict(player) for player in res]
 
     @classmethod
+    def all_ids(cls) -> list[str]:
+        """return all player ids"""
+
+        return [player.player_id for player in cls.read_all()]
+
+    @classmethod
     def search(cls, player_id: str) -> list[dict]:
         """Search for a player by player_id"""
 
