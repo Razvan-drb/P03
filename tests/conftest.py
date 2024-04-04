@@ -28,6 +28,8 @@ def run_before_tests():
 def new_four_players():
     """Generate 4 unique players"""
 
+    logging.warning("Generating 4 players")
+
     players = []
     for _ in range(4):
         token = "test_" + secrets.token_hex(3)
@@ -43,6 +45,8 @@ def new_four_players():
 def last_four_players():
     """load 4 players"""
 
+    logging.warning("Loading 4 players")
+
     p_list = Player.read_all()
     p_list = [i for i in p_list if i.firstname.startswith("test_")]
     p_list = p_list[-4:]
@@ -56,6 +60,8 @@ def last_four_players():
 @pytest.fixture
 def default_tournament():
     """create a tournament"""
+
+    logging.warning("Generating a tournament")
 
     token = "test_" + secrets.token_hex(3) + "_" + now()
     start_date = "2023-01-01"
@@ -71,6 +77,7 @@ def default_tournament():
 def last_tournament():
     """load a tournament"""
 
+    logging.warning("Loading last tournament")
     tournament_list = Tournament.read_all()
 
     tournament_list = [
