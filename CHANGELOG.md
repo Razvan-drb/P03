@@ -1,4 +1,16 @@
 
+# 2024-04-05 - 10h00 - Code Review
+
+## Updated 
+- Add a const.py to fix data fn problem
+- clean code
+- fix tests
+- fix tournament management 
+
+## Todo 
+- Understand the code
+- work on get_results, get_scores etc etc 
+
 # 2024-03-22 - 10h00 - Code Review
 
 ## Updated 
