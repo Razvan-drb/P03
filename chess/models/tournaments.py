@@ -82,30 +82,20 @@ class Tournament:
             logging.warning("No rounds have been computed yet.")
             return None
 
-        # logging.warning(f"Current Round ID: {self.current_round_id}")
-
         # try to get current round data
-        current_round = Round.search_by("round_id", self.current_round_id)
-        assert len(current_round) == 1
-        current_round = current_round[0]
+        current_round_ = Round.search_by("round_id", self.current_round_id)
+        assert len(current_round_) == 1
+        current_round_ = current_round_[0]
 
-        if not current_round:
+        if not current_round_:
             logging.warning(f"No data found for Round ID: {self.current_round_id}")
             return None
 
-        return current_round
+        return current_round_
 
     @property
     def n_players(self) -> int:
         """Return number of players"""
-
-        #######################"
-        # une @property est un attribut qui est calculé à la volée
-        # comme un attribut de classe MAIS EN FAIT cest une methode
-        #######################""
-
-        # tournament = Tournament(**dict)
-        # n_player = tournament.n_players  PAS BESOIN DES ()
 
         return len(self.player_id_list)
 
@@ -149,8 +139,9 @@ class Tournament:
         tournament = Query()
         result = cls.db.search(tournament.tournament_id == tournament_id)
         res = result[0] if result else None
+        t = Tournament.from_dict(res) if res else None
 
-        return Tournament.from_dict(res) if res else None
+        return [t]
 
     @classmethod
     def search_by(cls, key: str, value) -> list[dict]:
@@ -311,6 +302,11 @@ class Tournament:
 
         self.update()
 
+    def get_current_round(self):
+
+        c = self.current_round
+        return Round.from_dict(c.to_dict())
+
     def update_current_round(self, match_list=None):
         """Update the current round number for the tournament."""
 
@@ -318,8 +314,11 @@ class Tournament:
             raise ValueError("Match list is empty")
 
         # update current round with match list
-        self.current_round.matches = match_list
-        self.current_round.update()
+        current_round = self.get_current_round()
+        current_round.matches = match_list
+
+        logging.critical(f"Current Round: {self.current_round}")
+        current_round.update()
 
         # next round
         self._next_round()
@@ -376,10 +375,4 @@ class Tournament:
         cls.bootstrap(num_tournament)
 
     def __repr__(self) -> str:
-        """Tournament representation"""
-
-        return (
-            f"Tournament(name={self.name}, start_date={self.start_date}, end_date={self.end_date}, "
-            f"tournament_id={self.tournament_id}, description={self.description},location={self.location}, "
-            f"matches={self.round_id_list}, participants={self.player_id_list})"
-        )
+        return f"{self.__dict__}"
