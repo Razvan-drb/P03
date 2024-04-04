@@ -7,7 +7,9 @@ from typing import List
 
 from tinydb import Query, TinyDB, where
 
+from chess.helpers import now
 from chess.models.rounds import Round
+from .consts import TOURNAMENT_FILE
 
 
 class Tournament:
@@ -28,7 +30,7 @@ class Tournament:
         status - str - status of the tournament - default = "Created"
     """
 
-    db = TinyDB("/home/razvandaraban/Projets/OC/Projet_03_OC/data/tournaments.json")
+    db = TinyDB(TOURNAMENT_FILE)
 
     N_PLAYERS = 4
     N_ROUNDS = 3
@@ -62,6 +64,20 @@ class Tournament:
         self.player_id_list = player_id_list if player_id_list else []
         self.current_round_number = current_round_number
         self.status = status
+
+    @property
+    def n_players(self) -> int:
+        """Return number of players"""
+
+        #######################"
+        # une @property est un attribut qui est calculé à la volée
+        # comme un attribut de classe MAIS EN FAIT cest une methode
+        #######################""
+
+        # tournament = Tournament(**dict)
+        # n_player = tournament.n_players  PAS BESOIN DES ()
+
+        return len(self.player_id_list)
 
     def to_dict(self) -> dict:
         """Convert tournament to dict"""
@@ -116,16 +132,11 @@ class Tournament:
     def update(self) -> None:
         """Update method for tournaments"""
 
-        """ PB MAJ TOURNAMENT     **********************************************************************************"""
-        logging.critical(self.tournament_id)
         self.db.update(self.to_dict(), where("tournament_id") == self.tournament_id)
-        logging.critical(self.tournament_id)
-
-        logging.warning(f"Tournament {self.tournament_id} updated successfully.")
 
     def delete(self) -> None:
         """Delete method for tournaments"""
-        # Not necessary for now
+
         raise NotImplementedError("Not included in specs")
 
     @classmethod
@@ -133,58 +144,6 @@ class Tournament:
         """Delete all method for tournaments"""
 
         cls.db.truncate()
-
-    @classmethod
-    def bootstrap(cls, num_tournaments: int = 3) -> None:
-        """Create method for tournaments (Bootstrap)"""
-
-        for _ in range(num_tournaments):
-            name = "Tournament" + secrets.token_hex(4)
-            start_date = f"{random.randint(2023, 2025)}-01-01"
-            end_date = f"{random.randint(2025, 2027)}-12-31"
-            tournament_id = "boot_" + secrets.token_hex(4)
-            # matches = [f"Match{i}" for i in range(random.randint(10, 20))]
-            # participants = [f"Participant{i}" for i in range(random.randint(6, 10))]
-            description = "Description for " + name
-            location = [f"Location{i}" for i in range(random.randint(3, 5))]
-            t = Tournament(
-                name,
-                start_date,
-                end_date,
-                description=description,
-                location=location,
-                tournament_id=tournament_id,
-            )
-            t.create()
-
-    @classmethod
-    def reboot(cls, num_tournaments: int = 100) -> None:
-        """Delete all tournaments and create 100 tournaments"""
-
-        cls.delete_all()
-        cls.bootstrap(num_tournaments)
-
-    # def get_n_players(self) -> int:
-    #     """Return number of players"""
-
-    #     # tournament = Tournament(**dict)
-    #     # n_player = tournament.get_n_players()
-
-    #     return len(self.player_id_list)
-
-    @property
-    def n_players(self) -> int:
-        """Return number of players"""
-
-        #######################"
-        # une @property est un attribut qui est calculé à la volée
-        # comme un attribut de classe MAIS EN FAIT cest une methode
-        #######################""
-
-        # tournament = Tournament(**dict)
-        # n_player = tournament.n_players  PAS BESOIN DES ()
-
-        return len(self.player_id_list)
 
     def add_player(self, player_id: str) -> None:  # !!!!!!!!!!
         """Add player to tournament"""
@@ -464,15 +423,6 @@ class Tournament:
         logging.info(f"After update - Current Round ID: {current_round.round_id}")
         logging.info(f"After update - Current Round: {current_round}")
 
-    def __repr__(self) -> str:
-        """Tournament representation"""
-
-        return (
-            f"Tournament(name={self.name}, start_date={self.start_date}, end_date={self.end_date}, "
-            f"tournament_id={self.tournament_id}, description={self.description},location={self.location}, "
-            f"matches={self.round_id_list}, participants={self.player_id_list})"
-        )
-
     def get_score(self, player_id):
         player_score = 0
 
@@ -488,3 +438,44 @@ class Tournament:
                             player_score += player_tuple[1]
 
         return player_score
+
+    @classmethod
+    def bootstrap(cls, num_tournaments: int = 3) -> None:
+        """Create method for tournaments (Bootstrap)"""
+
+        for _ in range(num_tournaments):
+            token = "test_" + secrets.token_hex(3) + "_" + now()
+
+            t = Tournament(
+                token + "_" + now(),
+                token,
+                token,
+                tournament_id=token + "_" + now(),
+            )
+            t.create()
+
+    @classmethod
+    def bootstrap(cls, num_tournament: int = 4) -> None:
+        """Create method for players (Bootstrap)"""
+
+        for _ in range(num_tournament):
+            token = "test_" + secrets.token_hex(3)
+
+            p = Tournament(token, token, token, tournament_id=token)
+            p.create()
+
+    @classmethod
+    def reboot(cls, num_tournament: int = 4) -> None:
+        """delete all players and create 100 players"""
+
+        cls.delete_all()
+        cls.bootstrap(num_tournament)
+
+    def __repr__(self) -> str:
+        """Tournament representation"""
+
+        return (
+            f"Tournament(name={self.name}, start_date={self.start_date}, end_date={self.end_date}, "
+            f"tournament_id={self.tournament_id}, description={self.description},location={self.location}, "
+            f"matches={self.round_id_list}, participants={self.player_id_list})"
+        )
