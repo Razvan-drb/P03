@@ -5,11 +5,13 @@ import secrets
 
 from tinydb import Query, TinyDB, where
 
+from .consts import PLAYER_FILE
+
 
 class Player:
     """players model class"""
 
-    db = TinyDB("/home/razvandaraban/Projets/OC/Projet_03_OC/data/players.json")
+    db = TinyDB(PLAYER_FILE)
 
     def __init__(
         self,
@@ -36,16 +38,10 @@ class Player:
 
         return Player(**player_dict)
 
-    # def create(self) -> None:
-    #     """Create method for players"""
-    #
-    #     self.db.insert(self.to_dict())
-
     def create(self) -> None:
         """Create method for players"""
-        player_dict = self.to_dict()
-        player_dict['player_id'] = str(player_dict['player_id'])
-        self.db.insert(player_dict)
+
+        self.db.insert(self.to_dict())
 
     @classmethod
     def read_one(cls, player_id: str) -> dict | None:
@@ -87,11 +83,10 @@ class Player:
 
         self.db.update(self.to_dict(), where("player_id") == self.player_id)
 
-        print(f"Player {self.player_id} updated successfully.")
+        # print(f"Player {self.player_id} updated successfully.")
 
     def delete(self) -> None:
         """Delete method for players"""
-        # not necessary
 
         raise NotImplementedError("not included in specs")
 
@@ -102,28 +97,20 @@ class Player:
         cls.db.truncate()
 
     @classmethod
-    def bootstrap(cls, num_players: int = 3) -> None:
+    def bootstrap(cls, num_players: int = 5) -> None:
         """Create method for players (Bootstrap)"""
 
         for _ in range(num_players):
-            firstname = "test" + secrets.token_hex(4)
-            lastname = "test" + secrets.token_hex(4)
-            birthdate = f"{random.randint(1970, 2000)}-01-01"
-
-            p = Player(firstname, lastname, birthdate)
+            token = "test_" + secrets.token_hex(3)
+            p = Player(token, token, token, player_id=token)
             p.create()
 
     @classmethod
-    def reboot(cls, num_players: int = 100) -> None:
+    def reboot(cls, num_players: int = 5) -> None:
         """delete all players and create 100 players"""
 
         cls.delete_all()
         cls.bootstrap(num_players)
 
     def __repr__(self) -> str:
-        """Player representation"""
-
-        return (
-            f"Player(firstname={self.firstname}, lastname={self.lastname}, birthdate={self.birthdate}, "
-            f"player_id={self.player_id})"
-        )
+        return f"{self.__dict__}"
