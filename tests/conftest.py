@@ -14,18 +14,26 @@ from chess.models.tournaments import Tournament
 from chess.helpers import now
 
 
+@pytest.fixture(autouse=True)
+def run_before_tests():
+    """Fixture to execute asserts before and after a test is run"""
+
+    logging.warning("Starting tests")
+
+    Player.reboot()
+    Tournament.reboot()
+
+
 @pytest.fixture
 def new_four_players():
     """Generate 4 unique players"""
 
     players = []
     for _ in range(4):
-        firstname = "Test" + secrets.token_hex(4)
-        lastname = "TEST" + secrets.token_hex(4)
-        player_id = "test" + secrets.token_hex(4)
-        player = Player(firstname, lastname, player_id=player_id)
+        token = "test_" + secrets.token_hex(3)
+        player = Player(token, token, player_id=token)
         player.create()
-        logging.warning(f"Generated player: {player}")
+        # logging.warning(f"Generated player: {player}")
         players.append(player)
 
     return players
@@ -36,11 +44,12 @@ def last_four_players():
     """load 4 players"""
 
     p_list = Player.read_all()
-    p_list = [i for i in p_list if i.firstname.startswith("Test")]
+    p_list = [i for i in p_list if i.firstname.startswith("test_")]
     p_list = p_list[-4:]
 
-    assert len(p_list) >= 4
+    assert len(p_list) == 4
     assert isinstance(p_list[0], Player)
+
     return p_list
 
 
@@ -48,12 +57,11 @@ def last_four_players():
 def default_tournament():
     """create a tournament"""
 
-    tournament_id = secrets.token_hex(4) + "_" + now()
-    name = "TestTournament_" + tournament_id
+    token = "test_" + secrets.token_hex(3) + "_" + now()
     start_date = "2023-01-01"
     end_date = "2023-12-31"
 
-    t = Tournament(name, start_date, end_date, tournament_id=tournament_id)
+    t = Tournament(token, start_date, end_date, tournament_id=token)
     t.create()
 
     return t
