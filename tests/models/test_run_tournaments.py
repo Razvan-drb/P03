@@ -9,7 +9,8 @@ import secrets
 from chess.models.players import Player
 from chess.models.rounds import Round
 from chess.models.tournaments import Tournament
-from ..conftest import new_four_players
+
+# from ..conftest import new_four_players
 
 
 class TestTournamentRun:
@@ -23,19 +24,22 @@ class TestTournamentRun:
     def test_add_players(self, new_four_players, default_tournament):
         """test add 4 players"""
 
-        # create 4 players
-        logging.info(new_four_players)
+        assert default_tournament.n_players == 0
 
-        # create tournament
-        logging.info(default_tournament)
+        # # create 4 players
+        # logging.info(new_four_players)
 
-        default_tournament.player_id_list = []
+        # # create tournament
+        # logging.info(default_tournament)
+
+        assert default_tournament.player_id_list == []
 
         # add players to tournament
         for player in new_four_players:
             default_tournament.add_player(player.player_id)
 
         assert default_tournament.n_players == 4
+        default_tournament.update()
 
         # just reload the tournament from db to check update OK in db
         id_tournament = default_tournament.tournament_id
@@ -65,7 +69,10 @@ class TestTournamentRun:
             f"last_tournament.round_id_list is {last_tournament.round_id_list}"
         )
 
-        round_objects = [Round(round_number=1, matches=[], round_id=i) for i in last_tournament.round_id_list]
+        round_objects = [
+            Round(round_number=1, matches=[], round_id=i)
+            for i in last_tournament.round_id_list
+        ]
 
         id_tournament = last_tournament.tournament_id
 
