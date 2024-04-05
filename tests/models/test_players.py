@@ -8,14 +8,19 @@ from chess.helpers import now
 
 
 class TestPlayer:
+    """Test Player class"""
+
     def test_init_player(self):
         """create a player"""
 
         firstname = "test" + secrets.token_hex(4)
         lastname = "test" + secrets.token_hex(4)
+
         player_id = "test" + secrets.token_hex(4) + "_" + now()
+
         p = Player(lastname, firstname, player_id=player_id)
-        logging.warning(p)
+
+        # logging.warning(p)
 
         assert isinstance(p, Player)
 
@@ -26,7 +31,7 @@ class TestPlayer:
         lastname = "test" + secrets.token_hex(4)
 
         p = Player(lastname, firstname)
-        logging.warning(p.to_dict())
+        # logging.warning(p.to_dict())
 
         assert isinstance(p.to_dict(), dict)
 
@@ -41,7 +46,7 @@ class TestPlayer:
         }
 
         p = Player.from_dict(p_dict)
-        logging.warning(p)
+        # logging.warning(p)
 
         assert isinstance(p, Player)
 
@@ -58,7 +63,10 @@ class TestPlayer:
         # create a player
         p = Player(firstname, lastname)
         p.create()
-        logging.warning(p)
+        # logging.warning(p)
+
+        # delete player
+        del p
 
         # nb of players after creation
         list_player = Player.read_all()
@@ -66,14 +74,20 @@ class TestPlayer:
 
         assert n1 == n0 + 1
 
+    def test_search(self):
+        """ """
+
     def test_search_by(self):
         """search method for players by key and value"""
-        firstname = "test" + "search"
-        lastname = "test" + secrets.token_hex(4)
+
+        firstname = "test_" + "search"
+        lastname = "test_" + "search"
+        player_id = "test_" + "search"
 
         p_dict = {
             "firstname": firstname.capitalize(),
             "lastname": lastname.upper(),
+            "player_id": player_id,
         }
 
         # reboot db
@@ -85,7 +99,7 @@ class TestPlayer:
 
         # find one
         result = Player.search_by("firstname", firstname.capitalize())
-        logging.info(result)
+        # logging.info(result)
 
         # check result
         assert len(result) == 1
