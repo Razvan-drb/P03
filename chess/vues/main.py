@@ -1,8 +1,15 @@
-import secrets
+"""
+Vues module for the chess application
+"""
+
 import datetime
+import secrets
 import sys
-from chess.models.tournaments import Tournament
+
 from chess.models.players import Player
+from chess.models.tournaments import Tournament
+
+from chess.templates.player import PlayerTemplate
 
 
 class TournamentManagementSystem:
@@ -19,20 +26,31 @@ class TournamentManagementSystem:
                 datetime.datetime.strptime(start_date, "%Y-%m-%d")
                 break
             except ValueError:
-                print("Invalid date format. Please enter the date in YYYY-MM-DD format.")
+                print(
+                    "Invalid date format. Please enter the date in YYYY-MM-DD format."
+                )
         while True:
             end_date = input("Enter the end date of the tournament (YYYY-MM-DD): ")
             try:
                 datetime.datetime.strptime(end_date, "%Y-%m-%d")
                 break
             except ValueError:
-                print("Invalid date format. Please enter the date in YYYY-MM-DD format.")
+                print(
+                    "Invalid date format. Please enter the date in YYYY-MM-DD format."
+                )
         description = input("Enter the description of the tournament: ")
         location = input("Enter the location of the tournament: ")
 
         tournament_id = secrets.token_hex(2)
 
-        self.tournament = Tournament(name, start_date, end_date, description, location, tournament_id=tournament_id)
+        self.tournament = Tournament(
+            name,
+            start_date,
+            end_date,
+            description,
+            location,
+            tournament_id=tournament_id,
+        )
         self.tournament.create()
 
         # Automatically create rounds
@@ -58,13 +76,19 @@ class TournamentManagementSystem:
             print(e)
 
     def create_player(self):
-        print("Creating a new player...")
-        firstname = input("Enter the first name of the player: ")
-        lastname = input("Enter the last name of the player: ")
-        birthdate = input("Enter the birthdate of the player (optional): ")
+        """Create a new player and add them to the tournament if it exists."""
+
+        # call the template to get player data from user 😁
+        p_dict = PlayerTemplate.create()
 
         # Create a Player object
-        new_player = Player(firstname, lastname, birthdate)
+        new_player = Player(
+            firstname=p_dict["firstname"],
+            lastname=p_dict["lastname"],
+            birthdate=p_dict["birthdate"],
+        )
+
+        # new_player = Player(**p_dict) # formulation alternative
 
         # Insert the player into the database
         new_player.create()
@@ -95,18 +119,14 @@ def main():
 
         choice = input("Enter your choice (1-4): ")
 
-        if choice == '1':
+        if choice == "1":
             tms.create_tournament()
-        elif choice == '2':
+        elif choice == "2":
             tms.create_player()
-        elif choice == '3':
+        elif choice == "3":
             tms.launch_tournament()
-        elif choice == '4':
+        elif choice == "4":
             print("Exiting the program...")
             sys.exit()
         else:
             print("Invalid choice. Please enter a number between 1 and 4.")
-
-
-if __name__ == "__main__":
-    main()

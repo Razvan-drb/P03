@@ -1,4 +1,17 @@
 
+
+# 2024-04-12 - 10h00 - Code Review
+
+## Updated 
+- added main.py 
+- added tempaltes and vues placeholders 
+- mooved the player template form vues to PlayerTemplate 
+
+## Todo
+- Update tournament menue vues and templates to really add playes to the tournament
+- moove all the templates to the templates folder (no print OR input in vues)
+- add logic code for all the tournament (add players, start tournament, update rounds, get results, get scores, get ranking)
+
 # 2024-04-05 - 10h00 - Code Review
 
 ## Updated 

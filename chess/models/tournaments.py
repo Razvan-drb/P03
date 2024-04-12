@@ -8,10 +8,9 @@ from typing import List
 from tinydb import Query, TinyDB, where
 
 from chess.helpers import now
-from chess.models.rounds import Round
-
 from chess.models.consts import TOURNAMENT_FILE
 from chess.models.players import Player
+from chess.models.rounds import Round
 
 
 class Tournament:
