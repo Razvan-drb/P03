@@ -9,8 +9,9 @@ from tinydb import Query, TinyDB, where
 
 from chess.helpers import now
 from chess.models.rounds import Round
-from .players import Player
-from .consts import TOURNAMENT_FILE
+
+from chess.models.consts import TOURNAMENT_FILE
+from chess.models.players import Player
 
 
 class Tournament:
@@ -48,7 +49,7 @@ class Tournament:
         tournament_id: str | None = None,
         round_id_list: List[str] | None = None,
         player_id_list: List[str] | None = None,
-        current_round_number: int = -1,  # change rand ? or ? !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        current_round_number: int = -1,
         status: str = "Created",
     ):
         """Init method for tournaments"""

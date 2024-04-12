@@ -86,3 +86,20 @@ class TestTournamentBase:
         t_list = Tournament.search_by("tournament_id", token)
         t = t_list[0]
         assert t.name == "ON A CHANGé"
+
+    def test_get_score(self, last_four_players, last_tournament):
+        """Test the get_score method"""
+
+        # Iterate through each player
+        for player in last_four_players:
+            # Get the player's ID
+            player_id = player.player_id
+
+            # Call the get_score method for the current player
+            player_score = last_tournament.get_score(player_id)
+
+            # Log the player's ID and score
+            logging.info(f"Player ID: {player_id}, Score: {player_score}")
+
+            # Check if the actual score is an integer
+            assert isinstance(player_score, int)

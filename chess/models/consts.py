@@ -1,5 +1,6 @@
 # SOURCE = "/home/razvandaraban/Projets/OC/Projet_03_OC/"
-SOURCE = "./"
+from config import SOURCE
+
 DATA = SOURCE + "data/"
 PLAYER_FILE = DATA + "players.json"
 TOURNAMENT_FILE = DATA + "tournaments.json"
