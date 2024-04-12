@@ -3,8 +3,8 @@ import secrets
 
 import pytest
 
-from chess.models.players import Player
 from chess.helpers import now
+from chess.models.players import Player
 
 
 class TestPlayer:

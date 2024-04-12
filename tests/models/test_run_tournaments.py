@@ -1,14 +1,15 @@
 import logging
 import secrets
 
+from chess.models.players import Player
+from chess.models.rounds import Round
+from chess.models.tournaments import Tournament
+
 # import pytest
 # from ...chess.models.players import Player
 # from ...chess.models.rounds import Round
 # from ...chess.models.tournaments import Tournament
 
-from chess.models.players import Player
-from chess.models.rounds import Round
-from chess.models.tournaments import Tournament
 
 # from ..conftest import new_four_players
 
