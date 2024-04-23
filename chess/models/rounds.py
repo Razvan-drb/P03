@@ -76,9 +76,6 @@ class Round:
 
         return [Round.from_dict(player) for player in res]
 
-    def update(self):
-        """Update method for round"""
-
     def update(self) -> None:
         """Update method for players"""
 
