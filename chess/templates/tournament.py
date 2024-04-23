@@ -156,3 +156,6 @@ class TournamentManagementSystem:
                     print(f"Player with ID {player_id} not found.")
         else:
             print("No tournament available to display player scores.")
+
+    def display_available_tournaments(self):
+        pass

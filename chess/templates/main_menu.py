@@ -2,6 +2,19 @@ import sys
 
 from chess.templates.tournament import TournamentManagementSystem
 
+def display_available_tournaments(list_tournaments: list) -> str:
+    """Display a list of available tournaments."""
+
+    if list_tournaments:
+        print("\nAvailable Tournaments:")
+        for i, tournament in enumerate(list_tournaments):
+            print(f"{i} - {tournament}")
+    else:
+        print("No tournaments available.")
+
+    return input("\nEnter the ID of the tournament you want to choose (or press Enter to return to the main menu): ")
+
+
 
 def main():
     tms = TournamentManagementSystem()
@@ -14,6 +27,7 @@ def main():
         print("4. Play Round")
         print("5. View Player Scores")
         print("6. Exit")
+        print("7. Choose a tournament")
 
         choice = input("Enter your choice (1-6): ")
 
@@ -27,6 +41,8 @@ def main():
             tms.play_rounds_auto()
         elif choice == "5":
             tms.display_player_scores()
+        elif choice == "7":
+            tms.display_available_tournaments()
         elif choice == "6":
             print("Exiting the program...")
             sys.exit()
@@ -37,3 +53,4 @@ def main():
 if __name__ == "__main__":
     main()
 
+# TODO choose tournament from available list of tournaments available

@@ -83,6 +83,7 @@ class Tournament:
 
         # try to get current round data
         current_round_ = Round.search_by("round_id", self.current_round_id)
+        print("***********************", current_round_)
         assert len(current_round_) == 1
         current_round_ = current_round_[0]
 
