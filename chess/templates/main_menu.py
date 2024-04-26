@@ -1,6 +1,5 @@
 import sys
 
-from chess.models.tournaments import Tournament
 from chess.templates.tournament import TournamentManagementSystem
 
 
@@ -14,8 +13,12 @@ def display_available_tournaments(list_tournaments: list) -> str:
     else:
         print("No tournaments available.")
 
-    return input("\nEnter the ID of the tournament you want to choose (or press Enter to return to the main menu): ")
+    return input(
+        "\nEnter the ID of the tournament you want to choose (or press Enter to return to the main menu): "
+    )
 
+
+##### INTERDIT ###### => View :)
 
 
 def main():
@@ -51,6 +54,7 @@ def main():
             display_available_tournaments(show_all)
         else:
             print("Invalid choice. Please enter a number between 1 and 7.")
+
 
 if __name__ == "__main__":
     main()

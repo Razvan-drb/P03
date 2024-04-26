@@ -9,6 +9,7 @@ class PlayerTemplate:
     def create(cls) -> dict:
 
         print("Creating a new player...")
+
         firstname = input("Enter the first name of the player: ")
         lastname = input("Enter the last name of the player: ")
         birthdate = input("Enter the birthdate of the player (optional): ")

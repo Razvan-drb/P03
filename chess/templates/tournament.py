@@ -1,15 +1,13 @@
 import datetime
 import secrets
 
-from chess.models.tournaments import Tournament
-from chess.models.players import Player
-from chess.models.rounds import Round
 
 from chess.templates.player import PlayerTemplate
 
 
 class TournamentManagementSystem:
     def __init__(self):
+
         self.tournament = None
         self.players = []
 
@@ -22,19 +20,24 @@ class TournamentManagementSystem:
                 datetime.datetime.strptime(start_date, "%Y-%m-%d")
                 break
             except ValueError:
-                print("Invalid date format. Please enter the date in YYYY-MM-DD format.")
+                print(
+                    "Invalid date format. Please enter the date in YYYY-MM-DD format."
+                )
         while True:
             end_date = input("Enter the end date of the tournament (YYYY-MM-DD): ")
             try:
                 datetime.datetime.strptime(end_date, "%Y-%m-%d")
                 break
             except ValueError:
-                print("Invalid date format. Please enter the date in YYYY-MM-DD format.")
+                print(
+                    "Invalid date format. Please enter the date in YYYY-MM-DD format."
+                )
         description = input("Enter the description of the tournament: ")
         location = input("Enter the location of the tournament: ")
 
         tournament_id = secrets.token_hex(2)
 
+        # INTERDIT
         self.tournament = Tournament(
             name,
             start_date,
