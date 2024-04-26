@@ -1,6 +1,8 @@
 import sys
 
+from chess.models.tournaments import Tournament
 from chess.templates.tournament import TournamentManagementSystem
+
 
 def display_available_tournaments(list_tournaments: list) -> str:
     """Display a list of available tournaments."""
@@ -27,9 +29,9 @@ def main():
         print("4. Play Round")
         print("5. View Player Scores")
         print("6. Exit")
-        print("7. Choose a tournament")
+        print("7. Display Available Tournaments")
 
-        choice = input("Enter your choice (1-6): ")
+        choice = input("Enter your choice (1-7): ")
 
         if choice == "1":
             tms.create_tournament()
@@ -41,14 +43,14 @@ def main():
             tms.play_rounds_auto()
         elif choice == "5":
             tms.display_player_scores()
-        elif choice == "7":
-            tms.display_available_tournaments()
         elif choice == "6":
             print("Exiting the program...")
             sys.exit()
+        elif choice == "7":
+            show_all = Tournament.read_all()
+            display_available_tournaments(show_all)
         else:
-            print("Invalid choice. Please enter a number between 1 and 6.")
-
+            print("Invalid choice. Please enter a number between 1 and 7.")
 
 if __name__ == "__main__":
     main()
