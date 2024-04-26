@@ -73,25 +73,40 @@ class Tournament:
             logging.error(f"Error getting current round id: {e}")
             return None
 
+    # @property
+    # def current_round(self):
+    #     """Get the current round number for the tournament."""
+    #
+    #     if not self.round_id_list:
+    #         logging.warning("No rounds have been computed yet.")
+    #         return None
+    #
+    #     # try to get current round data
+    #     current_round_ = Round.search_by("round_id", self.current_round_id)
+    #     print("***********************", current_round_)
+    #     assert len(current_round_) == 1
+    #     current_round_ = current_round_[0]
+    #
+    #     if not current_round_:
+    #         logging.warning(f"No data found for Round ID: {self.current_round_id}")
+    #         return None
+    #
+    #     return current_round_
     @property
     def current_round(self):
-        """Get the current round number for the tournament."""
+        """Get the current round for the tournament."""
 
         if not self.round_id_list:
             logging.warning("No rounds have been computed yet.")
             return None
 
-        # try to get current round data
-        current_round_ = Round.search_by("round_id", self.current_round_id)
-        print("***********************", current_round_)
-        assert len(current_round_) == 1
-        current_round_ = current_round_[0]
-
-        if not current_round_:
+        # Try to get current round data
+        current_round_data = Round.search_by("round_id", self.current_round_id)
+        if not current_round_data:
             logging.warning(f"No data found for Round ID: {self.current_round_id}")
             return None
 
-        return current_round_
+        return current_round_data[0]
 
     @property
     def n_players(self) -> int:
