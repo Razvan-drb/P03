@@ -11,7 +11,11 @@ class MainView:
         choice = MainTemplate.menu()
 
         if choice == "1":
-            return "PlayerView_menu", data
+            return "PlayerView.menu", data
+
+        elif choice == "42":
+
+            return "exit", data
 
         else:
-            return "MainView_menu", data
+            return "MainView.menu", data

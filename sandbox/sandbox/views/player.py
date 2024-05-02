@@ -11,14 +11,17 @@ class PlayerView:
         choice = PlayerTemplate.menu()
 
         if choice == "1":
-            return "PlayerView_create", data
+            return "PlayerView.create", data
 
         elif choice == "2":
-            return "PlayerView_list_all", data
+            return "PlayerView.list_all", data
 
+        elif choice == "42":
+
+            return "exit", data
         else:
 
-            return "MainView_menu", data
+            return "MainView.menu", data
 
     @classmethod
     def create(self, data={}):
@@ -30,7 +33,7 @@ class PlayerView:
 
         PlayerTemplate.ok_created(player)
 
-        return "PlayerView_menu", {"player": player}
+        return "PlayerView.menu", {"player": player}
 
     @classmethod
     def list_all(self, data={}):
@@ -47,4 +50,4 @@ class PlayerView:
         if choice:
             data["selected_player"] = players[int(choice) - 1]
 
-        return "PlayerView_menu", data
+        return "PlayerView.menu", data

@@ -4,20 +4,24 @@ from views.player import PlayerView
 
 routes = {
     # MainView
-    "MainView_menu": MainView.menu,
+    "MainView.menu": MainView.menu,
     # PlayerView
-    "PlayerView_menu": PlayerView.menu,
-    "PlayerView_create": PlayerView.create,
-    "PlayerView_list_all": PlayerView.list_all,
+    "PlayerView.menu": PlayerView.menu,
+    "PlayerView.create": PlayerView.create,
+    "PlayerView.list_all": PlayerView.list_all,
+    "exit": "exit",
 }
 
 
 def main():
 
-    view_str = "MainView_menu"
+    view_str = "MainView.menu"
     data = {}
 
     while True:
+
+        if view_str == "exit":
+            raise ArithmeticError("Fin du programme")
 
         view_func = routes[view_str]
         view_str, data = view_func(data)
