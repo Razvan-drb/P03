@@ -42,7 +42,7 @@ class PlayerTemplate:
         print("List of players:")
 
         for i, player in enumerate(pl_list):
-            print(f"{i+1}. {player['firstname']} {player['lastname']}")
+            print(f"{i+1}. {player} ")
 
         return input(
             "Enter the number of the player you want to select or press Enter to cancel:"

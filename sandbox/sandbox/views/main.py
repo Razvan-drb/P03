@@ -1,5 +1,5 @@
-from ..templates.main import MainTemplate
-from ..templates.player import PlayerTemplate
+from templates.main import MainTemplate
+from templates.player import PlayerTemplate
 
 
 class MainView:

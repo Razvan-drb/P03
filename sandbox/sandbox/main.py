@@ -21,3 +21,7 @@ def main():
 
         view_func = routes[view_str]
         view_str, data = view_func(data)
+
+
+if __name__ == "__main__":
+    main()

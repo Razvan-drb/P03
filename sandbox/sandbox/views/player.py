@@ -1,4 +1,4 @@
-from ..templates.player import PlayerTemplate
+from templates.player import PlayerTemplate
 
 # from ..models.player import Player
 
@@ -36,7 +36,7 @@ class PlayerView:
     def list_all(self, data={}):
 
         # players = Player.list_all()
-        players = [
+        players = [  # MOCK UP :p
             {"name": "John"},
             {"name": "Doe"},
             {"name": "Jane"},
