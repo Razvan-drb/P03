@@ -3,6 +3,8 @@ import secrets
 
 from chess.models.tournaments import Tournament
 
+# tu veux pas trop les inputs dans les vues....
+
 
 class TournamentManagementSystem:
     def __init__(self):
@@ -84,6 +86,7 @@ def play_rounds(tms, tournament):
 def display_available_tournaments(list_tournaments: list) -> str:
     """Display a list of available tournaments."""
 
+    # template
     if list_tournaments:
         print("\nAvailable Tournaments:")
         for i, tournament in enumerate(list_tournaments):

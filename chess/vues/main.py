@@ -1,6 +1,7 @@
 """
 Vues module for the chess application
 """
+
 import logging
 import sys
 
@@ -15,7 +16,9 @@ def main():
     tms = TournamentManagementSystem()
     player_view = PlayerView()
     tour = Tournament
+
     while True:
+        # menu template
         print("\n===== Tournament Management System =====")
         print("1. Create Tournament")
         print("2. Create Player")

@@ -3,7 +3,7 @@
 import datetime
 import secrets
 
-from chess.models.tournaments import Tournament
+# Pas de modeles dans les temlates ;)
 
 
 class TournamentManagementSystem:
