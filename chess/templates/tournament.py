@@ -1,69 +1,70 @@
-import datetime
-import secrets
+# import datetime
+# import secrets
 
 
-class TournamentManagementSystem:
-    def __init__(self, tournament_class):
-        self.tournament_class = tournament_class
-        self.tournament = None
-        self.players = []
+# class TournamentManagementSystem:
 
-    def create_tournament(self):
-        print("Creating a new tournament...")
-        name = input("Enter the name of the tournament: ")
-        while True:
-            start_date = input("Enter the start date of the tournament (YYYY-MM-DD): ")
-            try:
-                datetime.datetime.strptime(start_date, "%Y-%m-%d")
-                break
-            except ValueError:
-                print(
-                    "Invalid date format. Please enter the date in YYYY-MM-DD format."
-                )
-        while True:
-            end_date = input("Enter the end date of the tournament (YYYY-MM-DD): ")
-            try:
-                datetime.datetime.strptime(end_date, "%Y-%m-%d")
-                break
-            except ValueError:
-                print(
-                    "Invalid date format. Please enter the date in YYYY-MM-DD format."
-                )
-        description = input("Enter the description of the tournament: ")
-        location = input("Enter the location of the tournament: ")
+#     def __init__(self, tournament_class):
+#         self.tournament_class = tournament_class
+#         self.tournament = None
+#         self.players = []
 
-        tournament_id = secrets.token_hex(2)
+#     def create_tournament(self):
+#         print("Creating a new tournament...")
+#         name = input("Enter the name of the tournament: ")
+#         while True:
+#             start_date = input("Enter the start date of the tournament (YYYY-MM-DD): ")
+#             try:
+#                 datetime.datetime.strptime(start_date, "%Y-%m-%d")
+#                 break
+#             except ValueError:
+#                 print(
+#                     "Invalid date format. Please enter the date in YYYY-MM-DD format."
+#                 )
+#         while True:
+#             end_date = input("Enter the end date of the tournament (YYYY-MM-DD): ")
+#             try:
+#                 datetime.datetime.strptime(end_date, "%Y-%m-%d")
+#                 break
+#             except ValueError:
+#                 print(
+#                     "Invalid date format. Please enter the date in YYYY-MM-DD format."
+#                 )
+#         description = input("Enter the description of the tournament: ")
+#         location = input("Enter the location of the tournament: ")
 
-        self.tournament = self.tournament_class(
-            name,
-            start_date,
-            end_date,
-            description,
-            location,
-            tournament_id=tournament_id,
-        )
-        self.tournament.create()
+#         tournament_id = secrets.token_hex(2)
 
-        # Automatically create rounds
-        self.auto_create_rounds()
+#         self.tournament = self.tournament_class(
+#             name,
+#             start_date,
+#             end_date,
+#             description,
+#             location,
+#             tournament_id=tournament_id,
+#         )
+#         self.tournament.create()
 
-        # Launch tournament if enough players
-        if len(self.players) >= self.tournament.N_PLAYERS:
-            self.launch_tournament()
+#         # Automatically create rounds
+#         self.auto_create_rounds()
 
-    def auto_create_rounds(self):
-        print("Automatically creating rounds...")
-        for round_number in range(1, self.tournament.N_ROUNDS + 1):
-            matches = []
-            self.tournament.add_round(round_number, matches)
-        print("Rounds created successfully.")
+#         # Launch tournament if enough players
+#         if len(self.players) >= self.tournament.N_PLAYERS:
+#             self.launch_tournament()
 
-    def launch_tournament(self):
-        if self.tournament:
-            try:
-                self.tournament.update_status("In Progress")
-                print("Tournament launched successfully.")
-            except ValueError as e:
-                print(e)
-        else:
-            print("No tournament available to launch.")
+#     def auto_create_rounds(self):
+#         print("Automatically creating rounds...")
+#         for round_number in range(1, self.tournament.N_ROUNDS + 1):
+#             matches = []
+#             self.tournament.add_round(round_number, matches)
+#         print("Rounds created successfully.")
+
+#     def launch_tournament(self):
+#         if self.tournament:
+#             try:
+#                 self.tournament.update_status("In Progress")
+#                 print("Tournament launched successfully.")
+#             except ValueError as e:
+#                 print(e)
+#         else:
+#             print("No tournament available to launch.")

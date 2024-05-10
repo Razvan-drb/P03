@@ -17,6 +17,7 @@ def main():
     player_view = PlayerView()
     tour = Tournament
 
+    # TODO : Template
     while True:
         # menu template
         print("\n===== Tournament Management System =====")
@@ -70,54 +71,3 @@ def main():
                     logging.warning("Tournament not found.")
         else:
             print("Invalid choice. Please enter a number between 1 and 7.")
-
-
-if __name__ == "__main__":
-    main()
-
-# add route to access this function
-
-
-# def main():
-#     show_all = Tournament.read_all()
-#     chosen_tournament_id = display_available_tournaments(show_all)
-#
-#     if chosen_tournament_id:
-#         selected_tournament = Tournament.read_one(chosen_tournament_id)
-#         if selected_tournament:
-#             print("You have selected the tournament:")
-#             print(selected_tournament)
-#         else:
-#             logging.warning("Tournament not found.")
-#
-# if __name__ == "__main__":
-#     main()
-
-# def main():
-#
-#     show_all = Tournament.read_all()
-#     display_available_tournaments(show_all)
-
-
-# def DummyView():
-#
-#     # READ
-#     # li = Model.get_all()
-#     # out = Template.my_template(li)
-#
-#     # CREATE
-#     # plyaer = Player(out)
-#     # player.save()
-#     # None = Template.ok_created(dict(player)
-#     # go to menu player
-#
-#     # return ??????  ===> POINT HYPER SENSIBE A DISCUTER
-#
-#     pass
-#
-#
-# if __name__ == "__main__":
-#     main()
-
-
-# TODO choose tournament from available list of tournaments available

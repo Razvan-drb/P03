@@ -12,6 +12,7 @@ class PlayerTemplate:
         print("1. Create a player")
         print("2. List all players")
         print("3. Return to the main menu")
+
         return input("Enter the number you want: ")
 
     @classmethod
@@ -19,6 +20,7 @@ class PlayerTemplate:
         """Create a new player."""
 
         print("\nCreating a new player...")
+
         firstname = input("Enter the first name of the player: ")
         lastname = input("Enter the last name of the player: ")
         birthdate = input("Enter the birthdate of the player (optional): ")
@@ -37,12 +39,17 @@ class PlayerTemplate:
         for i, player in enumerate(players, 1):
             print(f"{i}. {player['firstname']} {player['lastname']}")
 
+        return input(
+            "Press The number of the player if selected else press Enter to return to the main menu."
+        )
+
     @classmethod
     def confirm_delete(cls, player: dict) -> bool:
         """Confirm player deletion."""
 
         print(f"\nSelected player: {player['firstname']} {player['lastname']}")
         ans = input("Are you sure you want to delete this player? (y/n): ")
+
         return ans.lower() == "y"
 
     @classmethod
@@ -58,8 +65,10 @@ class PlayerTemplate:
         """Update player attributes."""
 
         print("\nUpdate Player")
+
         for key, value in player.items():
             new_value = input(f"Enter new value for {key} (or press Enter to keep): ")
             if new_value:
                 player[key] = new_value
+
         return player
