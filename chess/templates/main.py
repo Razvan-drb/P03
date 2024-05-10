@@ -1,5 +1,3 @@
-
-
 class MainTemplate:
     """Template for the main menu."""
 

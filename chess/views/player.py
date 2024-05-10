@@ -38,7 +38,6 @@ class PlayerView:
         return PlayerTemplate.update_player(player)
 
 
-
 # class PlayerView:
 #
 #     @staticmethod

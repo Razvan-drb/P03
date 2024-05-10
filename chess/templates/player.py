@@ -49,7 +49,9 @@ class PlayerTemplate:
     def deleted_successfully(cls, player: dict):
         """Confirmation message for successful delete."""
 
-        print(f"Player {player['firstname']} {player['lastname']} deleted successfully.")
+        print(
+            f"Player {player['firstname']} {player['lastname']} deleted successfully."
+        )
 
     @classmethod
     def update_player(cls, player: dict) -> dict:
