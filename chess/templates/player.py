@@ -1,15 +1,24 @@
-"""
-un peu comme du html 
-"""
+from typing import List
 
 
 class PlayerTemplate:
+    """Template for player management."""
+
+    @classmethod
+    def menu(cls) -> str:
+        """Display menu options."""
+
+        print("\nPlayer Menu")
+        print("1. Create a player")
+        print("2. List all players")
+        print("3. Return to the main menu")
+        return input("Enter the number you want: ")
 
     @classmethod
     def create(cls) -> dict:
+        """Create a new player."""
 
-        print("Creating a new player...")
-
+        print("\nCreating a new player...")
         firstname = input("Enter the first name of the player: ")
         lastname = input("Enter the last name of the player: ")
         birthdate = input("Enter the birthdate of the player (optional): ")
@@ -21,39 +30,34 @@ class PlayerTemplate:
         }
 
     @classmethod
-    def update(cls, player_dict: dict) -> dict:
+    def display_players(cls, players: List[dict]):
+        """Display a list of players."""
 
-        for k, v in player_dict.items():
-            print(f"Current value for {k} is  {v}")
-            new_value = input(
-                f"Enter the new NEW value for {k}  if needed else JUST PRESS ENTER"
-            )
-
-            if new_value:
-                player_dict[k] = new_value
-
-        return player_dict
+        print("\nList of Players:")
+        for i, player in enumerate(players, 1):
+            print(f"{i}. {player['firstname']} {player['lastname']}")
 
     @classmethod
-    def delete(cls, player_dict: dict) -> bool:
-        """Delete a player."""
+    def confirm_delete(cls, player: dict) -> bool:
+        """Confirm player deletion."""
 
-        print(f"selected player: {player_dict}")
+        print(f"\nSelected player: {player['firstname']} {player['lastname']}")
         ans = input("Are you sure you want to delete this player? (y/n): ")
-
-        if ans.lower() == "y":
-            print("Deleting a player...")
-            return True
-
-        return False
+        return ans.lower() == "y"
 
     @classmethod
-    def list_all(cls, players: list[dict]):
-        """List all players."""
+    def deleted_successfully(cls, player: dict):
+        """Confirmation message for successful delete."""
 
-        print("Listing all players...")
+        print(f"Player {player['firstname']} {player['lastname']} deleted successfully.")
 
-        for player in players:
-            print(player)
+    @classmethod
+    def update_player(cls, player: dict) -> dict:
+        """Update player attributes."""
 
-        return None
+        print("\nUpdate Player")
+        for key, value in player.items():
+            new_value = input(f"Enter new value for {key} (or press Enter to keep): ")
+            if new_value:
+                player[key] = new_value
+        return player

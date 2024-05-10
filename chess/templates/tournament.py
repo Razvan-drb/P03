@@ -1,13 +1,10 @@
-# tournament_management.py
-
 import datetime
 import secrets
 
-# Pas de modeles dans les temlates ;)
-
 
 class TournamentManagementSystem:
-    def __init__(self):
+    def __init__(self, tournament_class):
+        self.tournament_class = tournament_class
         self.tournament = None
         self.players = []
 
@@ -37,7 +34,7 @@ class TournamentManagementSystem:
 
         tournament_id = secrets.token_hex(2)
 
-        self.tournament = Tournament(
+        self.tournament = self.tournament_class(
             name,
             start_date,
             end_date,
@@ -58,7 +55,7 @@ class TournamentManagementSystem:
         print("Automatically creating rounds...")
         for round_number in range(1, self.tournament.N_ROUNDS + 1):
             matches = []
-            self.tournament._add_round(round_number, matches)
+            self.tournament.add_round(round_number, matches)
         print("Rounds created successfully.")
 
     def launch_tournament(self):

@@ -8,8 +8,8 @@ import sys
 from chess.models.tournaments import Tournament
 from chess.templates import tournament
 from chess.templates.tournament import TournamentManagementSystem
-from chess.vues.player import PlayerView
-from chess.vues.tournament import display_available_tournaments, play_rounds
+from chess.views.player import PlayerView
+from chess.views.tournament import display_available_tournaments, play_rounds
 
 
 def main():
