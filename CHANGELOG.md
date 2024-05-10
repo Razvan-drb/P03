@@ -1,3 +1,19 @@
+# 2024-05-10 - 10h00 - Code Review
+## Deleted
+- Useles code in  views 
+- Comments some code in tempaltes / tournament
+
+
+## Updated
+- add comments code guideline to all views
+- Review all the code templates in players ==> OK
+- All the code in templates / tournament ==> to be written
+
+## ToDo
+- Valiadate templates / player
+- Write all views for player 
+- Vrite all templates for tournament
+- write all views for tournament
 
 
 # 2024-04-12 - 10h00 - Code Review

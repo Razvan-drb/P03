@@ -1,9 +1,6 @@
 import datetime
 import secrets
 
-
-
-
 # from chess.models.tournaments import Tournament
 #
 # # tu veux pas trop les inputs dans les views....

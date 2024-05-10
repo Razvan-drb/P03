@@ -11,59 +11,30 @@ class PlayerView:
     def create_player() -> dict:
         """Create a new player."""
 
+        # CODE LOGIQUE POUR CREER UN JOUEUR
         return PlayerTemplate.create()
 
     @staticmethod
     def display_players(players: List[dict]):
         """Display a list of players."""
 
+        # TODO ajouter CODE logique pour faire la liste des joueurs
         PlayerTemplate.display_players(players)
 
     @staticmethod
     def confirm_delete(player: dict) -> bool:
         """Confirm player deletion."""
 
-        return PlayerTemplate.confirm_delete(player)
-
-    @staticmethod
-    def deleted_successfully(player: dict):
-        """Confirmation message for successful delete."""
+        # ajouter code logique pour trouver et supprimer un joueur
+        PlayerTemplate.confirm_delete(player)
 
         PlayerTemplate.deleted_successfully(player)
+
+        return None
 
     @staticmethod
     def update_player(player: dict) -> dict:
         """Update player attributes."""
 
+        # ajouter CODE LOGIQUE pour mettre a jour un joueur
         return PlayerTemplate.update_player(player)
-
-
-
-# class PlayerView:
-#
-#     @staticmethod
-#     def create_player(tournament=None):
-#         """Handles creating a new player and adding them to the tournament if specified."""
-#
-#         p_dict = PlayerTemplate.create()
-#
-#         firstname = p_dict["firstname"]
-#         lastname = p_dict["lastname"]
-#         birthdate = p_dict["birthdate"]
-#
-#         new_player = Player(
-#             firstname=firstname,
-#             lastname=lastname,
-#             birthdate=birthdate,
-#         )
-#
-#         new_player.create()
-#         print("Player created successfully.")
-#
-#         if tournament:
-#             try:
-#                 tournament.add_player(new_player.player_id)
-#                 # TODO : etre sur que ca save bien ;) update()
-#                 print("Player added to the tournament.")
-#             except ValueError as e:
-#                 print(e)
