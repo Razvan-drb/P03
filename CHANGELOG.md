@@ -1,6 +1,32 @@
+# 2024-05-17 - 10h00 - Code Review
+
+## Done / Checklist / Work Review
+- Write all views for player - Not checked from last week
+- Vrite all templates for tournament - Not checked 
+- write all views for tournament - Not checked 
+- Done with week by Raz : change the template player (+ etc etc....)
+
+
+## Updated / Done during the session
+- Explain deeply the MVT structure 
+- Revamp the player template
+- No MODELS in the templates => only VIEWS
+- Make dummy explaination about how to packing your stuff before moving house :) 
+
+## ToDo
+-----------------------------------------------
+- 1. DO NOT TOUCH to templates / player  
+-----------------------------------------------
+- 2. READ MVT documentation on the web / youtube 😅
+- 3. Read The template player
+- 4. Update the views / player
+- 5. (objective) Make the whole module Player work (Models, Views and Templates) 
+
+
 # 2024-05-10 - 10h00 - Code Review
+
 ## Deleted
-- Useles code in  views 
+- Useles code in views 
 - Comments some code in tempaltes / tournament
 
 
@@ -10,7 +36,7 @@
 - All the code in templates / tournament ==> to be written
 
 ## ToDo
-- Valiadate templates / player
+- Validate templates / player
 - Write all views for player 
 - Vrite all templates for tournament
 - write all views for tournament

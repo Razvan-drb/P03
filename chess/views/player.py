@@ -1,5 +1,6 @@
 from typing import List
 from chess.templates.player import PlayerTemplate
+from chess.models.players import Player
 
 
 class PlayerView:
@@ -46,8 +47,6 @@ class PlayerView:
         """Update player attributes."""
 
         return PlayerTemplate.update_player(player)
-
-
 
 
 # class PlayerView:
