@@ -1,11 +1,10 @@
-
-
 class MainTemplate:
     """Template for the main menu."""
 
     @classmethod
     def menu(cls) -> str:
         """Display main menu options."""
+
         print("\nMain Menu")
         print("1. Players")
         print("2. Tournaments")

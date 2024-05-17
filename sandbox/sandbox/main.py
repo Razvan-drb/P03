@@ -1,7 +1,6 @@
 from views.main import MainView
 from views.player import PlayerView
 
-
 routes = {
     # MainView
     "MainView.menu": MainView.menu,
