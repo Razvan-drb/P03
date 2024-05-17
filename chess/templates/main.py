@@ -1,3 +1,8 @@
+"""
+Templates for the main menu.
+"""
+
+
 class MainTemplate:
     """Template for the main menu."""
 

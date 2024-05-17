@@ -1,6 +1,11 @@
 from typing import List
 
-from chess.models.players import Player
+# from chess.models.players import Player ===> PAS DE CLASSE PLAYER DANS LE FICHIER TEMPLATE
+
+##########################################
+#### KEEP THIS COMMENT                ####
+#### NO MODELS IN TEMPLATES !!!!      ####
+##########################################
 
 
 class PlayerTemplate:
@@ -18,17 +23,41 @@ class PlayerTemplate:
         return input("Enter the number you want: ")
 
     @classmethod
-    def list_all_players(cls, players: List[Player]):
+    def read_all(cls, players: List[dict]) -> None:
         """List all players."""
+
         if players:
             print("\nList of Players:")
-            for i, player in enumerate(players, 1):
-                print(f"{i}. {player.firstname} {player.lastname}")
+            for i, player in enumerate(players):
+                print(f"{i}. {player['firstname']} {player['lastname']}")
         else:
             print("No players available.")
 
+        return None
+
     @classmethod
-    def create(cls) -> None:
+    def select_player(cls, players: List[dict]) -> int | None:
+        """List all players AND Select the player."""
+
+        if players:
+            print("\nList of Players:")
+            for i, player in enumerate(players):
+                print(f"{i}. {player['firstname']} {player['lastname']}")
+        else:
+            print("No players available.")
+            return None
+
+        choice = input(
+            "Press The number of the player if selected else press Enter to return to the main menu."
+        )
+
+        if not choice:
+            return choice
+
+        return choice
+
+    @classmethod
+    def create(cls) -> dict:
         """Create a new player."""
         print("\nCreating a new player...")
 
@@ -36,23 +65,11 @@ class PlayerTemplate:
         lastname = input("Enter the last name of the player: ")
         birthdate = input("Enter the birthdate of the player (optional): ")
 
-        new_player = Player(firstname, lastname, birthdate)
-
-        new_player.create()
-
-        print("Player created successfully.")
-
-    @classmethod
-    def display_players(cls, players: List[dict]):
-        """Display a list of players."""
-
-        print("\nList of Players:")
-        for i, player in enumerate(players, 1):
-            print(f"{i}. {player['firstname']} {player['lastname']}")
-
-        return input(
-            "Press The number of the player if selected else press Enter to return to the main menu."
-        )
+        return {
+            "firstname": firstname,
+            "lastname": lastname,
+            "birthdate": birthdate,
+        }
 
     @classmethod
     def confirm_delete(cls, player: dict) -> bool:
@@ -64,7 +81,7 @@ class PlayerTemplate:
         return ans.lower() == "y"
 
     @classmethod
-    def deleted_successfully(cls, player: dict):
+    def deleted_successfully(cls, player: dict) -> None:
         """Confirmation message for successful delete."""
 
         print(
@@ -83,13 +100,3 @@ class PlayerTemplate:
                 player[key] = new_value
 
         return player
-
-    @classmethod
-    def read_all(cls, players: List[dict]):
-        """List all players."""
-        if players:
-            print("\nList of Players:")
-            for i, player in enumerate(players, 1):
-                print(f"{i}. {player['firstname']} {player['lastname']}")
-        else:
-            print("No players available.")
