@@ -83,7 +83,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-
+# TODO list all tournaments !!!!!!!!!!!!!!
 
 
 # add route to access this function
