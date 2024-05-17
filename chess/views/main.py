@@ -1,79 +1,90 @@
-"""
-Vues module for the chess application
-"""
-
-import logging
-import sys
-
-from chess.models.tournaments import Tournament
-from chess.templates import tournament
-from chess.templates.tournament import TournamentManagementSystem
+from chess.models.players import Player
+from chess.templates.main import MainTemplate
+from chess.templates.player import PlayerTemplate
 from chess.views.player import PlayerView
-from chess.views.tournament import display_available_tournaments, play_rounds
+from chess.views.tournament import TournamentManagementSystem, display_available_tournaments
+from chess.models.tournaments import Tournament
+
+
+class MainView:
+
+    @classmethod
+    def menu(cls, data={}):
+        """Display the main menu and handle user input."""
+
+        choice = MainTemplate.menu()
+
+        if choice == "1":
+            return PlayerView.menu, data
+
+        elif choice == "2":
+            return TournamentManagementSystem.menu, data
+
+        elif choice == "3":
+            return "exit", data
+
+        else:
+            return cls.menu, data
 
 
 def main():
-    tms = TournamentManagementSystem()
-    player_view = PlayerView()
-    tour = Tournament
-
     while True:
-        # menu template
-        print("\n===== Tournament Management System =====")
-        print("1. Create Tournament")
-        print("2. Create Player")
-        print("3. Launch Tournament")
-        print("4. Play Round")
-        print("5. View Player Scores")
-        print("6. Exit")
-        print("7. Display Available Tournaments")
-
-        choice = input("Enter your choice (1-7): ")
-
-        if choice == "1":
-            tms.create_tournament()
-        elif choice == "2":
-            player_view.create_player(tms.tournament)
-        elif choice == "3":
-            show_all = Tournament.read_all()
-            chosen_tournament_id = display_available_tournaments(show_all)
-            if chosen_tournament_id:
-                selected_tournament = Tournament.read_one(chosen_tournament_id)
-                if selected_tournament:
-                    tms.tournament = selected_tournament
-                    tms.launch_tournament()
-                else:
-                    logging.warning("Tournament not found.")
-        elif choice == "4":
-            show_all = Tournament.read_all()
-            chosen_tournament_id = display_available_tournaments(show_all)
-            if chosen_tournament_id:
-                selected_tournament = Tournament.read_one(chosen_tournament_id)
-                if selected_tournament:
-                    play_rounds(selected_tournament, tms)
-                else:
-                    logging.warning("Tournament not found.")
-        elif choice == "5":
-            tour.get_score()
-        elif choice == "6":
+        action, data = MainView.menu()
+        if action == "exit":
             print("Exiting the program...")
-            sys.exit()
-        elif choice == "7":
-            show_all = Tournament.read_all()
-            chosen_tournament_id = display_available_tournaments(show_all)
-            if chosen_tournament_id:
-                selected_tournament = Tournament.read_one(chosen_tournament_id)
-                if selected_tournament:
-                    print("You have selected the tournament:")
-                    print(selected_tournament)
+            break
+        elif action == PlayerView.menu:
+            player_choice = PlayerTemplate.menu()
+            if player_choice == "1":
+                PlayerTemplate.create()
+            elif player_choice == "2":
+                players = Player.read_all()
+                PlayerTemplate.list_all_players(players)
+            elif player_choice == "3":
+                pass
+            else:
+                print("Invalid choice. Please enter a number between 1 and 3.")
+        elif action == TournamentManagementSystem.menu:
+            tms = TournamentManagementSystem()
+            while True:
+                print("\n===== Tournament Management System =====")
+                print("1. Create Tournament")
+                print("2. Launch Tournament")
+                print("3. Exit")
+
+                choice = input("Enter your choice (1-3): ")
+
+                if choice == "1":
+                    tms.create_tournament(
+                        input("Enter the name of the tournament: "),
+                        input("Enter the start date of the tournament (YYYY-MM-DD): "),
+                        input("Enter the end date of the tournament (YYYY-MM-DD): "),
+                        input("Enter the description of the tournament: "),
+                        input("Enter the location of the tournament: "),
+                    )
+                elif choice == "2":
+                    show_all = Tournament.read_all()
+                    chosen_tournament_id = display_available_tournaments(show_all)
+                    if chosen_tournament_id:
+                        selected_tournament = Tournament.read_one(chosen_tournament_id)
+                        if selected_tournament:
+                            tms.tournament = selected_tournament
+                            tms.launch_tournament()
+                        else:
+                            print("Tournament not found.")
+                elif choice == "3":
+                    break
                 else:
-                    logging.warning("Tournament not found.")
+                    print("Invalid choice. Please enter a number between 1 and 3.")
         else:
-            print("Invalid choice. Please enter a number between 1 and 7.")
+            action(data)
 
 
 if __name__ == "__main__":
     main()
+
+
+
 
 # add route to access this function
 

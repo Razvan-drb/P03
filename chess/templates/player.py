@@ -1,5 +1,7 @@
 from typing import List
 
+from chess.models.players import Player
+
 
 class PlayerTemplate:
     """Template for player management."""
@@ -15,19 +17,28 @@ class PlayerTemplate:
         return input("Enter the number you want: ")
 
     @classmethod
-    def create(cls) -> dict:
-        """Create a new player."""
+    def list_all_players(cls, players: List[Player]):
+        """List all players."""
+        if players:
+            print("\nList of Players:")
+            for i, player in enumerate(players, 1):
+                print(f"{i}. {player.firstname} {player.lastname}")
+        else:
+            print("No players available.")
 
+    @classmethod
+    def create(cls) -> None:
+        """Create a new player."""
         print("\nCreating a new player...")
         firstname = input("Enter the first name of the player: ")
         lastname = input("Enter the last name of the player: ")
         birthdate = input("Enter the birthdate of the player (optional): ")
 
-        return {
-            "firstname": firstname,
-            "lastname": lastname,
-            "birthdate": birthdate,
-        }
+        new_player = Player(firstname, lastname, birthdate)
+
+        new_player.create()
+
+        print("Player created successfully.")
 
     @classmethod
     def display_players(cls, players: List[dict]):
@@ -61,3 +72,13 @@ class PlayerTemplate:
             if new_value:
                 player[key] = new_value
         return player
+
+    @classmethod
+    def read_all(cls, players: List[dict]):
+        """List all players."""
+        if players:
+            print("\nList of Players:")
+            for i, player in enumerate(players, 1):
+                print(f"{i}. {player['firstname']} {player['lastname']}")
+        else:
+            print("No players available.")
