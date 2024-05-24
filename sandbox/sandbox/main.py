@@ -4,6 +4,8 @@ from views.player import PlayerView
 routes = {
     # MainView
     "MainView.menu": MainView.menu,
+    #
+    #
     # PlayerView
     "PlayerView.menu": PlayerView.menu,
     "PlayerView.create": PlayerView.create,

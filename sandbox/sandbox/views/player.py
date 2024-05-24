@@ -1,12 +1,14 @@
 from templates.player import PlayerTemplate
 
+# from views.main import MainView
+
 # from ..models.player import Player
 
 
 class PlayerView:
 
-    @classmethod
-    def menu(self, data={}):
+    @staticmethod
+    def menu(data={}):
 
         choice = PlayerTemplate.menu()
 
@@ -23,8 +25,8 @@ class PlayerView:
 
             return "MainView.menu", data
 
-    @classmethod
-    def create(self, data={}):
+    @staticmethod
+    def create(data={}):
 
         player = PlayerTemplate.create()
 
@@ -35,8 +37,8 @@ class PlayerView:
 
         return "PlayerView.menu", {"player": player}
 
-    @classmethod
-    def list_all(self, data={}):
+    @staticmethod
+    def list_all(data={}):
 
         # players = Player.list_all()
         players = [  # MOCK UP :p

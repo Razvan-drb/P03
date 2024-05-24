@@ -68,7 +68,7 @@ class Player:
         return [player.player_id for player in cls.read_all()]
 
     @classmethod
-    def search(cls, player_id: str) -> list[dict]:
+    def search(cls, player_id: str) -> list[Player]:
         """Search for a player by player_id"""
 
         player_search = Query()
@@ -77,7 +77,7 @@ class Player:
         return [Player.from_dict(data) for data in result]
 
     @classmethod
-    def search_by(cls, key: str, value) -> list[dict]:
+    def search_by(cls, key: str, value) -> list[Player]:
         """Search method for players by key and value"""
 
         res = cls.db.search(where(key) == value)
