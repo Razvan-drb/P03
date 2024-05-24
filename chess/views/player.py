@@ -9,26 +9,46 @@ class PlayerView:
     @classmethod
     def menu(cls, data={}):
         """Display the player menu and handle user input."""
+
         choice = PlayerTemplate.menu()
 
         if choice == "1":
             return cls.create_player, data
         elif choice == "2":
+            return cls.read_all_players, data
+        elif choice == "3":
             return "exit", data
         else:
             return cls.menu, data
 
     @staticmethod
-    def create_player() -> dict:
+    def create_player():
         """Create a new player."""
 
-        return PlayerTemplate.create()
+        player_data = PlayerTemplate.create()
+        new_player = Player(
+            firstname=player_data["firstname"],
+            lastname=player_data["lastname"],
+            birthdate=player_data["birthdate"]
+        )
+        new_player.create()
+        print("Player created successfully.")
+        return PlayerView.menu
+
+    @staticmethod
+    def read_all_players():  # Update method name
+        """List all players."""
+
+        players = Player.read_all()
+        players_dict = [player.to_dict() for player in players if isinstance(player, Player)]
+        PlayerTemplate.read_all(players_dict)
+        return PlayerView.menu
 
     @staticmethod
     def display_players(players: List[dict]):
         """Display a list of players."""
 
-        PlayerTemplate.display_players(players)
+        PlayerTemplate.read_all(players)
 
     @staticmethod
     def confirm_delete(player: dict) -> bool:
@@ -46,34 +66,7 @@ class PlayerView:
     def update_player(player: dict) -> dict:
         """Update player attributes."""
 
-        return PlayerTemplate.update_player(player)
-
-
-# class PlayerView:
-#
-#     @staticmethod
-#     def create_player(tournament=None):
-#         """Handles creating a new player and adding them to the tournament if specified."""
-#
-#         p_dict = PlayerTemplate.create()
-#
-#         firstname = p_dict["firstname"]
-#         lastname = p_dict["lastname"]
-#         birthdate = p_dict["birthdate"]
-#
-#         new_player = Player(
-#             firstname=firstname,
-#             lastname=lastname,
-#             birthdate=birthdate,
-#         )
-#
-#         new_player.create()
-#         print("Player created successfully.")
-#
-#         if tournament:
-#             try:
-#                 tournament.add_player(new_player.player_id)
-#                 # TODO : etre sur que ca save bien ;) update()
-#                 print("Player added to the tournament.")
-#             except ValueError as e:
-#                 print(e)
+        updated_data = PlayerTemplate.update_player(player)
+        player_instance = Player.from_dict(updated_data)
+        player_instance.update()
+        return player_instance

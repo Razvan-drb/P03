@@ -38,8 +38,7 @@ def main():
             if player_choice == "1":
                 PlayerTemplate.create()
             elif player_choice == "2":
-                players = Player.read_all()
-                PlayerTemplate.list_all_players(players)
+                PlayerView.read_all_players()
             elif player_choice == "3":
                 pass
             else:
