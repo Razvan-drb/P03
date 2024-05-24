@@ -1,3 +1,22 @@
+# 2024-05-24 - 10h00 - Code Review
+
+## Done / Checklist / Work Review
+- done : update all the views for player OK
+
+## Updated / Done during the session
+- fix in  views the ```return "nom.view.method", data ```
+- small fixes 
+
+
+### ToDo
+- test "by hand" / ipython => all MainViews, PlayerViews (if needed PlayerTemplate, MainTemplate...)
+- update all tournament TEMPLATES / check if  good 
+- Update all tournaments VIEWS 
+- DO NOT WORRY IF THE ROUTING SYSTEM is down (lets keep for next week)
+- For Tournament => create, add a player, change status, launch, new round, record scores, classement, 
+--> for each on these we need AT LEAST 1 view + 1 template
+
+
 # 2024-05-17 - 10h00 - Code Review
 
 ## Done / Checklist / Work Review
