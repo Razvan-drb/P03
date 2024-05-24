@@ -1,20 +1,21 @@
 from templates.main import MainTemplate
 from templates.player import PlayerTemplate
 
+# from views.player import PlayerView
+
 
 class MainView:
 
-    @classmethod
-    def menu(self, data={}):
+    @staticmethod
+    def menu(data={}):
         """ """
 
         choice = MainTemplate.menu()
 
         if choice == "1":
-            return "PlayerView.menu", data
+            return "MainView.menu", data
 
         elif choice == "42":
-
             return "exit", data
 
         else:
