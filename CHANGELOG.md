@@ -1,3 +1,9 @@
+# 2024-05-31 - 10h00 - Code Review
+
+* always choose "" or 0 for return to upper menu
+* Staticmethod and not classmethod (minor)
+
+
 # 2024-05-24 - 10h00 - Code Review
 
 ## Done / Checklist / Work Review

@@ -245,35 +245,35 @@ class Tournament:
             round_0 = [
                 # 1er match du round 0
                 [
-                    (self.player_id_list[0], -1),  # Player 0, (son id, son score)
-                    (self.player_id_list[1], -1),  # Player 1, (son id, son score)
+                    [self.player_id_list[0], -1],  # Player 0, (son id, son score)
+                    [self.player_id_list[1], -1],  # Player 1, (son id, son score)
                 ],
                 # 2eme match du round 0
                 [
-                    (self.player_id_list[2], -1),  # Player 2,son id son score
-                    (self.player_id_list[3], -1),  # Player 3, son id son score
+                    [self.player_id_list[2], -1],  # Player 2,son id son score
+                    [self.player_id_list[3], -1],  # Player 3, son id son score
                 ],
             ]
 
             round_1 = [
                 [
-                    (self.player_id_list[0], -1),  # P0 (id, score)
-                    (self.player_id_list[2], -1),  # P2 (id, score)
+                    [self.player_id_list[0], -1],  # P0 (id, score)
+                    [self.player_id_list[2], -1],  # P2 (id, score)
                 ],  # 1er match
                 [
-                    (self.player_id_list[1], -1),
-                    (self.player_id_list[3], -1),
+                    [self.player_id_list[1], -1],
+                    [self.player_id_list[3], -1],
                 ],  # 2eme match
             ]
 
             round_2 = [
                 [
-                    (self.player_id_list[0], -1),
-                    (self.player_id_list[3], -1),
+                    [self.player_id_list[0], -1],
+                    [self.player_id_list[3], -1],
                 ],  # 1er match
                 [
-                    (self.player_id_list[1], -1),
-                    (self.player_id_list[2], -1),
+                    [self.player_id_list[1], -1],
+                    [self.player_id_list[2], -1],
                 ],  # 2eme match
             ]
 

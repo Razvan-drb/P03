@@ -58,7 +58,10 @@ class PlayerView:
     def select_a_player(data={}):
         """Display a list of players."""
 
+        # GOOD IDEA BUT => SELECT DIRECTLY IN APPORIORATE VIES
         # PlayerTemplate.read_all(players)
+
+        ErrorTemplate.not_implemented("Not implemented yet")
 
         return "PlayerView.menu", data
 
@@ -66,18 +69,16 @@ class PlayerView:
     def update_player(data={}) -> dict:
         """Update player attributes."""
 
-        player = data.get("player")
-        if not player:
-            ErrorTemplate.generic_error(f"Player not revieved in the View  : {data}")
-            return PlayerView.menu, data
+        # SELECT PLAYER
+        #   => selection ici ??? => crée  un tempalte ?? =>  ALLEZ GO
+        #   OU view à part ???  ==> NON PAS BONNE OPTION
 
-        if not isinstance(player, dict):
-            player = player.to_dict()
-
-        updated_data = PlayerTemplate.update_player(player)
-
-        player_instance = Player.from_dict(updated_data)
-        player_instance.update()
+        # ID DU PLAYER
+        # LOAD DU PLAYER EN BASE read by id => Player.read_one(id)
+        # TRASNFORM TO DICT
+        # tEMPLATE update player CHNAGE ATTRIBUTES
+        # UPDATE PLAYER IN DB
+        # save ... => p.update()
 
         return "PlayerView.menu", data
 
