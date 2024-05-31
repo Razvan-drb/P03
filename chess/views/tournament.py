@@ -1,5 +1,7 @@
 import secrets
+from chess.models.players import Player
 from chess.models.tournaments import Tournament
+from chess.templates.tournament import TournamentTemplate
 
 
 class TournamentManagementSystem:
@@ -11,20 +13,16 @@ class TournamentManagementSystem:
     def menu(self):
         """Display the tournament management menu."""
         while True:
-            print("\n===== Tournament Management System Menu =====")
-            print("1. Create Tournament")
-            print("2. Launch Tournament")
-            print("3. Exit")
-
-            choice = input("Enter your choice (1-3): ")
+            choice = TournamentTemplate.menu()
 
             if choice == "1":
+                tournament_data = TournamentTemplate.create()
                 self.create_tournament(
-                    input("Enter the name of the tournament: "),
-                    input("Enter the start date of the tournament (YYYY-MM-DD): "),
-                    input("Enter the end date of the tournament (YYYY-MM-DD): "),
-                    input("Enter the description of the tournament: "),
-                    input("Enter the location of the tournament: "),
+                    tournament_data["name"],
+                    tournament_data["start_date"],
+                    tournament_data["end_date"],
+                    tournament_data["description"],
+                    tournament_data["location"],
                 )
             elif choice == "2":
                 show_all = Tournament.read_all()
@@ -57,7 +55,6 @@ class TournamentManagementSystem:
 
     def auto_create_rounds(self):
         """Automatically creates rounds for the tournament."""
-
         print("Automatically creating rounds...")
         for round_number in range(1, self.tournament.N_ROUNDS + 1):
             matches = []
@@ -66,9 +63,9 @@ class TournamentManagementSystem:
 
     def launch_tournament(self):
         """Launches the tournament."""
-
         if self.tournament:
             try:
+                TournamentTemplate.launch()
                 self.tournament.update_status("In Progress")
                 print("Tournament launched successfully.")
             except ValueError as e:
@@ -76,9 +73,35 @@ class TournamentManagementSystem:
         else:
             print("No tournament available to launch.")
 
+    def add_player(self):
+        """Add a player to the tournament."""
+        player_data = TournamentTemplate.add_player()
+        new_player = Player(
+            firstname=player_data["firstname"],
+            lastname=player_data["lastname"],
+            birthdate=player_data["birthdate"]
+        )
+        new_player.create()
+        print("Player added successfully.")
+
+    def create_new_round(self):
+        """Create a new round in the tournament."""
+        if self.tournament:
+            TournamentTemplate.new_round()
+            self.auto_create_rounds()
+        else:
+            print("No tournament available to create a new round.")
+
+    def display_rankings(self):
+        """Display rankings of the tournament."""
+        if self.tournament:
+            rankings = self.tournament.calculate_rankings()
+            TournamentTemplate.display_rankings(rankings)
+        else:
+            print("No tournament available to display rankings.")
+
     def list_all_tournaments(self):
         """Lists all available tournaments."""
-
         list_tournaments = Tournament.read_all()
         display_available_tournaments(list_tournaments)
 
@@ -94,9 +117,9 @@ class TournamentManagementSystem:
             self.tournament.current_round_number += 1
         self.tournament.update()
 
+
 def play_rounds(tms, tournament):
     """Plays rounds for the given tournament."""
-
     if tournament:
         try:
             while tournament.status == "In Progress":
@@ -110,14 +133,13 @@ def play_rounds(tms, tournament):
     else:
         print("No tournament available to play rounds.")
 
+
 def display_available_tournaments(list_tournaments: list) -> str:
     """Display a list of available tournaments."""
-
     if list_tournaments:
         print("\nAvailable Tournaments:")
         for i, tournament in enumerate(list_tournaments):
             print(f"{i} - {tournament}")
     else:
         print("No tournaments available.")
-
     return ""
