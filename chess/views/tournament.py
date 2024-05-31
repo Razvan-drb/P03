@@ -49,10 +49,11 @@ class TournamentView:
     def create_tournament(data={}):
         """Creates a new tournament."""
 
-        # call crete template
-        # create tournament in db 
+        # call the template 
+        # create tournament object 
+        # save in db 
 
-        # return "TournamentView.menu", data
+        return "TournamentView.menu", data
 
 
     # @staticmethod
@@ -80,12 +81,24 @@ class TournamentView:
     def launch_tournament(data={}):
         """Launches the tournament."""
 
+        # select tournament 
+        # reucper tournament id 
+        # recup tourmmane i db
+        # display tournment data
 
-        # load the tournament with tournament id in data["tournament_id"]
-        # TournamenView.launch_tournament(tournament_dict)
-        # do tournament update status 
+        # check if 
+            # nb player ok
+            # status ok
+            # ==> conditions ok pour lauch tournament
+        
+        # if  so : 
+        #     tempalte confimation launch tournament
 
-        # return "TournamentView.menu", data    # return "TournamentView.menu", data
+        # if confim : 
+        #     t.chanhe_status("live")
+        #     t.update() in db
+
+        return "TournamentView.menu", data    # return "TournamentView.menu", data
 
     @staticmethod
     def add_player(data={}):
