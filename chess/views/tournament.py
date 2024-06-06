@@ -1,6 +1,7 @@
 import secrets
 from chess.models.players import Player
 from chess.models.tournaments import Tournament
+from chess.templates import tournament
 from chess.templates.tournament import TournamentTemplate
 
 
@@ -42,6 +43,7 @@ class TournamentView:
             return "TournamentView.Select", data
 
         else:
+             print("Invalid choice.")
             # is the possibility to go to main menu anticpicated ?
         # return "TournamentView.menu", data        return "PlayerView.menu", data
 
@@ -49,9 +51,19 @@ class TournamentView:
     def create_tournament(data={}):
         """Creates a new tournament."""
 
-        # call the template 
-        # create tournament object 
-        # save in db 
+        # Call the template to get tournament data
+        tournament_data = TournamentTemplate.create()
+
+        # Create tournament object
+        tournament = Tournament(
+            name=tournament_data["name"],
+            start_date=tournament_data["start_date"],
+            end_date=tournament_data["end_date"],
+            description=tournament_data["description"],
+            location=tournament_data["location"],
+        )
+
+        tournament.create()
 
         return "TournamentView.menu", data
 
@@ -81,24 +93,34 @@ class TournamentView:
     def launch_tournament(data={}):
         """Launches the tournament."""
 
-        # select tournament 
-        # reucper tournament id 
-        # recup tourmmane i db
-        # display tournment data
+        # Select tournament
+        tournament_id = input("Enter the tournament ID to launch: ")
 
-        # check if 
-            # nb player ok
-            # status ok
-            # ==> conditions ok pour lauch tournament
-        
-        # if  so : 
-        #     tempalte confimation launch tournament
+        # Retrieve tournament by ID from the database
+        tournament = Tournament.read_one(tournament_id)
 
-        # if confim : 
-        #     t.chanhe_status("live")
-        #     t.update() in db
+        if not tournament:
+            print("Tournament not found.")
+            return "TournamentView.menu", data
 
-        return "TournamentView.menu", data    # return "TournamentView.menu", data
+        # Display tournament data
+        TournamentTemplate.display_tournament(tournament)
+
+        # Check if conditions are met for launching the tournament
+        if len(Player.read_all()) >= 4 and tournament.status == "created":
+            # Template confirmation to launch tournament
+            confirmation = TournamentTemplate.launch()
+
+            if confirmation:
+                tournament.status("In Progress")
+                tournament.update()
+                print("Tournament launched successfully.")
+            else:
+                print("Tournament launch canceled.")
+        else:
+            print("Tournament conditions not met for launching.")
+
+        return "TournamentView.menu", data
 
     @staticmethod
     def add_player(data={}):
@@ -115,7 +137,7 @@ class TournamentView:
     def list_all_tournaments(data={}):
         """Lists all available tournaments."""
         list_tournaments = Tournament.read_all()
-        # return "TournamentView.menu", data    display_available_tournaments(list_tournaments)
+        # return "TournamentView.menu", data, display_available_tournaments(list_tournaments)
 
     @staticmethod
     def create_new_round(data={}):
@@ -154,14 +176,14 @@ class TournamentView:
 
     @staticmethod
     def play_rounds(tms, tournament):
-    """Plays rounds for the given tournament."""
+        """Plays rounds for the given tournament."""
 
     if tournament:
         try:
             while tournament.status == "In Progress":
-                current_round = tms.get_current_round(tournament)
+                current_round = Tournament.get_current_round()
                 if current_round:
-                    tms._next_round()
+                    Tournament._next_round()
                 else:
                     print("No round available to play.")
         except ValueError as e:
@@ -169,13 +191,15 @@ class TournamentView:
     else:
         # return "TournamentView.menu", data    print("No tournament available to play rounds.")
 
-    @staticmethod
-    def display_available_tournaments(list_tournaments: list) -> str:
-    """Display a list of available tournaments."""
-    if list_tournaments:
-        print("\nAvailable Tournaments:")
-        for i, tournament in enumerate(list_tournaments):
-            print(f"{i} - {tournament}")
-    else:
-        print("No tournaments available.")
-    return ""
+        @staticmethod
+        def display_available_tournaments(list_tournaments: list) -> str:
+            """Display a list of available tournaments."""
+            if list_tournaments:
+                print("\nAvailable Tournaments:")
+                for i, tournament in enumerate(list_tournaments):
+                    print(
+                        f"{i + 1}. {tournament.name} (ID: {tournament.id})")
+            else:
+                print("No tournaments available.")
+            return ""
+

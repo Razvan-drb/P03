@@ -7,7 +7,7 @@ import logging
 class TournamentTemplate:
     """Template for tournament management."""
 
-    @classmethod
+    @staticmethod
     def menu(cls) -> str:
         """Display tournament menu options."""
 
@@ -21,7 +21,7 @@ class TournamentTemplate:
 
         return input("Enter the number you want: ")
 
-    @classmethod
+    @staticmethod
     def create(cls) -> Dict:
         """Template for creating a tournament."""
 
@@ -41,19 +41,19 @@ class TournamentTemplate:
             "location": location,
         }
 
-    @classmethod
+    @staticmethod
     def update(cls, tournament: Dict) -> Dict:
         """Template for updating a tournament."""
 
         print("\nUpdating the tournament... NOT IMPLETED YET !")
 
-    @classmethod
+    @staticmethod
     def delete(cls, tournament: Dict) -> Dict:
         """Template for deleting a tournament."""
 
         print("\nDeleting the tournament... NOT IMPLETED YET !")
 
-    @classmethod
+    @staticmethod
     def add_player(cls) -> Dict:
         """Template for adding a player to the tournament."""
 
@@ -69,7 +69,7 @@ class TournamentTemplate:
             "birthdate": birthdate,
         }
 
-    @classmethod
+    @staticmethod
     def launch(cls) -> bool:
         """Template for launching the tournament."""
 
@@ -85,7 +85,7 @@ class TournamentTemplate:
 
         return False if choice else True  # ternary operator
 
-    @classmethod
+    @staticmethod
     def new_round(cls) -> None:
         """Template for creating a new round."""
 
@@ -94,7 +94,7 @@ class TournamentTemplate:
 
         return False if choice else True  # ternary operator
 
-    @classmethod
+    @staticmethod
     def update_current_round(cls, match_list: List[List]) -> List[List]:
         """Template for updating the current round."""
 
@@ -122,7 +122,7 @@ class TournamentTemplate:
 
         return match_list
 
-    @classmethod
+    @staticmethod
     def display_rankings(cls, rankings: List[Dict]) -> None:
         """Template for displaying rankings."""
 
@@ -132,3 +132,17 @@ class TournamentTemplate:
             print(
                 f"{rank}. {player['firstname']} {player['lastname']} - {player['score']} points"
             )
+
+    @staticmethod
+    def display_tournament(tournament):
+        """Display the details of the selected tournament."""
+
+        print("\nTournament Details:")
+        print(f"ID: {tournament.id}")
+        print(f"Name: {tournament.name}")
+        print(f"Start Date: {tournament.start_date}")
+        print(f"End Date: {tournament.end_date}")
+        print(f"Description: {tournament.description}")
+        print(f"Location: {tournament.location}")
+        print(f"Status: {tournament.status}")
+        print(f"Number of Players: {len(tournament.players)}")

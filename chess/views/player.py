@@ -1,7 +1,7 @@
 from typing import List
 from chess.templates.player import PlayerTemplate
 from chess.models.players import Player
-from chess.templates.error import ErrorTemplate
+from chess.templates.error import GenericErrorTemplate
 
 
 class PlayerView:
@@ -61,7 +61,7 @@ class PlayerView:
         # GOOD IDEA BUT => SELECT DIRECTLY IN APPORIORATE VIES
         # PlayerTemplate.read_all(players)
 
-        ErrorTemplate.not_implemented("Not implemented yet")
+        GenericErrorTemplate.not_implemented("Not implemented yet")
 
         return "PlayerView.menu", data
 
