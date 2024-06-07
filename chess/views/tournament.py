@@ -93,7 +93,6 @@ class TournamentView:
     def launch_tournament(data={}):
         """Launches the tournament."""
 
-        # Select tournament
         tournament_id = input("Enter the tournament ID to launch: ")
 
         # Retrieve tournament by ID from the database
@@ -107,12 +106,11 @@ class TournamentView:
         TournamentTemplate.display_tournament(tournament)
 
         # Check if conditions are met for launching the tournament
-        if len(Player.read_all()) >= 4 and tournament.status == "created":
-            # Template confirmation to launch tournament
-            confirmation = TournamentTemplate.launch()
+        if len(Player.all_ids()) >= 4 and tournament.status == "Created":
+            confirmation = TournamentTemplate.launch(None)
 
             if confirmation:
-                tournament.status("In Progress")
+                tournament.status = "In Progress"
                 tournament.update()
                 print("Tournament launched successfully.")
             else:
@@ -126,12 +124,37 @@ class TournamentView:
     def add_player(data={}):
         """Add a player to the tournament."""
 
-        # load the tournament with tournament id in data["tournament_id"]
-        # TournamenView.add_player(tournament_dict)
-        # DO Objsct player T.add_player(player)...
+        # Load the tournament with tournament id
+        tournament_id = data.get("tournament_id")
+        if not tournament_id:
+            print("No tournament ID provided.")
+            return "MainMenu", data
 
-        # return "TournamentView.menu", data
-    # return "TournamentView.menu", data
+        tournament = Tournament.read_one(tournament_id)
+        if not tournament:
+            print("Tournament not found.")
+            return "MainMenu", data
+
+        player_data = TournamentTemplate.add_player()
+
+        if player_data is None:
+            return "MainMenu", data
+
+        # player object
+        player = Player(
+            firstname=player_data["firstname"],
+            lastname=player_data["lastname"],
+            birthdate=player_data["birthdate"],
+        )
+
+        # Add player to tournament
+        tournament.add_player(player)
+
+        # Update tournament
+        tournament.update()
+        print("Player added successfully.")
+
+        return "MainMenu", data
 
     @staticmethod
     def list_all_tournaments(data={}):
@@ -175,21 +198,21 @@ class TournamentView:
         # return "TournamentView.menu", data    self.tournament.update()
 
     @staticmethod
-    def play_rounds(tms, tournament):
+    def play_rounds(tournament):
         """Plays rounds for the given tournament."""
 
-    if tournament:
-        try:
-            while tournament.status == "In Progress":
-                current_round = Tournament.get_current_round()
-                if current_round:
-                    Tournament._next_round()
-                else:
-                    print("No round available to play.")
-        except ValueError as e:
-            print(e)
-    else:
-        # return "TournamentView.menu", data    print("No tournament available to play rounds.")
+        if tournament:
+            try:
+                while tournament.status == "In Progress":
+                    current_round = Tournament.get_current_round()
+                    if current_round:
+                        Tournament._next_round()
+                    else:
+                        print("No round available to play.")
+            except ValueError as e:
+                print(e)
+        else:
+            print("No tournament available to play rounds.")
 
         @staticmethod
         def display_available_tournaments(list_tournaments: list) -> str:

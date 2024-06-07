@@ -17,9 +17,14 @@ class TournamentTemplate:
         print("3. Launch tournament")
         print("4. Create a new round")
         print("5. Display rankings")
-        print("6. Return to the main menu")  # "" to return to the main menu ?
+        print("6. Return to the main menu")
 
-        return input("Enter the number you want: ")
+        choice = input("Enter the number you want ('' or 0 to return): ")
+
+        if choice == "" or choice == "0":
+            return "MainMenu"
+
+        return choice
 
     @staticmethod
     def create(cls) -> Dict:
@@ -54,10 +59,14 @@ class TournamentTemplate:
         print("\nDeleting the tournament... NOT IMPLETED YET !")
 
     @staticmethod
-    def add_player(cls) -> Dict:
+    def add_player(cls) -> Dict | None:
         """Template for adding a player to the tournament."""
 
         print("\nAdding a new player...")
+        choice = input("Press Enter to cancel or any other key to continue: ")
+
+        if choice == "":
+            return None
 
         firstname = input("Enter the first name of the player: ")
         lastname = input("Enter the last name of the player: ")
