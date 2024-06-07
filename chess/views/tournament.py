@@ -159,24 +159,27 @@ class TournamentView:
     @staticmethod
     def list_all_tournaments(data={}):
         """Lists all available tournaments."""
+
         list_tournaments = Tournament.read_all()
         # return "TournamentView.menu", data, display_available_tournaments(list_tournaments)
 
     @staticmethod
-    def create_new_round(data={}):
+    def create_new_round(tournament=None, data={}):
         """Create a new round in the tournament."""
-        if self.tournament:
+
+        if tournament:
             TournamentTemplate.new_round()
-            self.auto_create_rounds()
+            tournament.auto_create_rounds()
         else:
-            pass
-        # return "TournamentView.menu", data        print("No tournament available to create a new round.")
+            print("No tournament available to create a new round.")
+        return "TournamentView.menu", data
 
     @staticmethod
-    def display_rankings(data={}):
+    def display_rankings(tournament=None):
         """Display rankings of the tournament."""
-        if self.tournament:
-            rankings = self.tournament.calculate_rankings()
+
+        if tournament:
+            rankings = tournament.calculate_rankings()
             TournamentTemplate.display_rankings(rankings)
         else:
             print("No tournament available to display rankings.")
@@ -189,13 +192,19 @@ class TournamentView:
         # return "TournamentView.menu", data    return tournament.current_round
 
     @staticmethod
-    def _next_round(data={}):
+    def _next_round(tournament=None, data={}):
         """Move to the next round."""
-        if self.tournament.current_round_number == self.tournament.N_ROUNDS - 1:
-            self.tournament.status = "Completed"
+
+        if tournament:
+            if tournament.current_round_number == tournament.N_ROUNDS - 1:
+                tournament.status = "Completed"
+            else:
+                tournament.current_round_number += 1
+            tournament.update()
+            print("Moved to the next round successfully.")
         else:
-            self.tournament.current_round_number += 1
-        # return "TournamentView.menu", data    self.tournament.update()
+            print("No tournament available to move to the next round.")
+        return "TournamentView.menu", data
 
     @staticmethod
     def play_rounds(tournament):
@@ -214,15 +223,16 @@ class TournamentView:
         else:
             print("No tournament available to play rounds.")
 
-        @staticmethod
-        def display_available_tournaments(list_tournaments: list) -> str:
-            """Display a list of available tournaments."""
-            if list_tournaments:
-                print("\nAvailable Tournaments:")
-                for i, tournament in enumerate(list_tournaments):
-                    print(
-                        f"{i + 1}. {tournament.name} (ID: {tournament.id})")
-            else:
-                print("No tournaments available.")
-            return ""
+    @staticmethod
+    def display_available_tournaments(list_tournaments: list) -> str:
+        """Display a list of available tournaments."""
+
+        if list_tournaments:
+            print("\nAvailable Tournaments:")
+            for i, tournament in enumerate(list_tournaments):
+                print(
+                    f"{i + 1}. {tournament.name} (ID: {tournament.id})")
+        else:
+            print("No tournaments available.")
+        return ""
 

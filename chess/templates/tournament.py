@@ -27,7 +27,7 @@ class TournamentTemplate:
         return choice
 
     @staticmethod
-    def create(cls) -> Dict:
+    def create() -> Dict:
         """Template for creating a tournament."""
 
         print("\nCreating a new tournament...")
@@ -98,8 +98,12 @@ class TournamentTemplate:
     def new_round(cls) -> None:
         """Template for creating a new round."""
 
-        print("\Going to netx round")
+        print("\Going to next round")
         choice = input("Press Enter to confirm / Any key to cancel.")
+        if choice:
+            print("Round creation cancelled.")
+        else:
+            print("Round created successfully.")
 
         return False if choice else True  # ternary operator
 
@@ -132,7 +136,7 @@ class TournamentTemplate:
         return match_list
 
     @staticmethod
-    def display_rankings(cls, rankings: List[Dict]) -> None:
+    def display_rankings(rankings: List[Dict]) -> None:
         """Template for displaying rankings."""
 
         print("\nRankings:")
