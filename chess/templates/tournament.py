@@ -8,7 +8,7 @@ class TournamentTemplate:
     """Template for tournament management."""
 
     @staticmethod
-    def menu(cls) -> str:
+    def menu() -> str:
         """Display tournament menu options."""
 
         print("\nTournament Menu")
@@ -47,19 +47,19 @@ class TournamentTemplate:
         }
 
     @staticmethod
-    def update(cls, tournament: Dict) -> Dict:
+    def update() -> Dict:
         """Template for updating a tournament."""
 
         print("\nUpdating the tournament... NOT IMPLETED YET !")
 
     @staticmethod
-    def delete(cls, tournament: Dict) -> Dict:
+    def delete() -> Dict:
         """Template for deleting a tournament."""
 
         print("\nDeleting the tournament... NOT IMPLETED YET !")
 
     @staticmethod
-    def add_player(cls) -> Dict | None:
+    def add_player() -> Dict | None:
         """Template for adding a player to the tournament."""
 
         print("\nAdding a new player...")
@@ -79,7 +79,7 @@ class TournamentTemplate:
         }
 
     @staticmethod
-    def launch(cls) -> bool:
+    def launch() -> bool:
         """Template for launching the tournament."""
 
         print("\nLaunching the tournament...")
@@ -95,7 +95,7 @@ class TournamentTemplate:
         return False if choice else True  # ternary operator
 
     @staticmethod
-    def new_round(cls) -> None:
+    def new_round() -> None:
         """Template for creating a new round."""
 
         print("\Going to next round")
@@ -108,7 +108,7 @@ class TournamentTemplate:
         return False if choice else True  # ternary operator
 
     @staticmethod
-    def update_current_round(cls, match_list: List[List]) -> List[List]:
+    def update_current_round(match_list: List[List]) -> List[List]:
         """Template for updating the current round."""
 
         # logging.info(f"BEFORE: {match_list}")
