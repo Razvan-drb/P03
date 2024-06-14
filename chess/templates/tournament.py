@@ -1,8 +1,6 @@
 #### NO MODELS IN TEMPLATES !!!!      ####
 from typing import List, Dict
 
-import logging
-
 
 class TournamentTemplate:
     """Template for tournament management."""
@@ -17,7 +15,8 @@ class TournamentTemplate:
         print("3. Launch tournament")
         print("4. Create a new round")
         print("5. Display rankings")
-        print("6. Return to the main menu")
+        print("6. List all available tournaments")
+        print("7. Return to the main menu")
 
         choice = input("Enter the number you want ('' or 0 to return): ")
 
@@ -121,7 +120,6 @@ class TournamentTemplate:
             # logging.info(f"match: {match}")
 
             for n_player, player in enumerate(match):
-
                 # logging.info(f"player: {player}")
                 print(f"Enter the score of the player id {player[0]}: ")
                 score = int(input())
@@ -151,11 +149,13 @@ class TournamentTemplate:
         """Display the details of the selected tournament."""
 
         print("\nTournament Details:")
-        print(f"ID: {tournament.id}")
+        print(f"ID: {tournament.tournament_id}")
         print(f"Name: {tournament.name}")
         print(f"Start Date: {tournament.start_date}")
         print(f"End Date: {tournament.end_date}")
         print(f"Description: {tournament.description}")
         print(f"Location: {tournament.location}")
         print(f"Status: {tournament.status}")
-        print(f"Number of Players: {len(tournament.players)}")
+        print(f"Number of Players: {len(tournament.player_id_list)}")
+
+

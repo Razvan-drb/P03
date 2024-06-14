@@ -52,7 +52,6 @@ class Tournament:
         status: str = "Created",
     ):
         """Init method for tournaments"""
-
         self.name = name
         self.start_date = start_date
         self.end_date = end_date
@@ -122,8 +121,29 @@ class Tournament:
     @classmethod
     def from_dict(cls, tournament_dict):
         """Convert dict to tournament"""
+        name = tournament_dict.get('name')
+        start_date = tournament_dict.get('start_date')
+        end_date = tournament_dict.get('end_date')
+        description = tournament_dict.get('description', "")
+        location = tournament_dict.get('location', "")
+        tournament_id = tournament_dict.get('tournament_id', None)
+        round_id_list = tournament_dict.get('round_id_list', [])
+        player_id_list = tournament_dict.get('player_id_list', [])
+        current_round_number = tournament_dict.get('current_round_number', -1)
+        status = tournament_dict.get('status', "Created")
 
-        return Tournament(**tournament_dict)
+        return Tournament(
+            name=name,
+            start_date=start_date,
+            end_date=end_date,
+            description=description,
+            location=location,
+            tournament_id=tournament_id,
+            round_id_list=round_id_list,
+            player_id_list=player_id_list,
+            current_round_number=current_round_number,
+            status=status
+        )
 
     def create(self) -> None:
         """Create method for tournaments"""
@@ -145,7 +165,7 @@ class Tournament:
         """Read all method for tournaments"""
 
         res = cls.db.all()
-        return [Tournament.from_dict(tournament) for tournament in res]
+        return [Tournament.from_dict(tournament) for tournament in res if 'id' in tournament]
 
     @classmethod
     def search(cls, tournament_id):
