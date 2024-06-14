@@ -93,3 +93,36 @@ class PlayerView:
     #     """Confirmation message for successful delete."""
 
     #     PlayerTemplate.deleted_successfully(player)
+
+    @staticmethod
+    def list_players():
+        """List all players."""
+
+        players = Player.read_all()
+        if players:
+            print("\nList of Players:")
+            for i, player in enumerate(players):
+                print(f"{i}. {player.firstname} {player.lastname}")
+        else:
+            print("No players found.")
+
+    @staticmethod
+    def select_player():
+        """Select a player from the list."""
+        PlayerView.list_players()
+        choice = input("Enter the number of the player to add to a tournament ('' or 0 to return): ")
+
+        if choice.isdigit():
+            index = int(choice)
+            players = Player.read_all()
+            if 0 <= index < len(players):
+                return players[index]
+            else:
+                print("Invalid player selection.")
+                return None
+        elif choice == "" or choice == "0":
+            print("Returning to menu.")
+            return None
+        else:
+            print("Invalid input.")
+            return None

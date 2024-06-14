@@ -3,6 +3,7 @@ import secrets
 from chess.models.players import Player
 from chess.models.tournaments import Tournament
 from chess.templates.tournament import TournamentTemplate
+from chess.views.player import PlayerView
 
 
 class TournamentView:
@@ -12,21 +13,13 @@ class TournamentView:
         self.tournament = None
 
     def menu(self):
-        """Display the tournament management menu."""
         while True:
             choice = TournamentTemplate.menu()
 
             if choice == "1":
-                tournament_data = TournamentTemplate.create()
-                self.create_tournament(
-                    tournament_data["name"],
-                    tournament_data["start_date"],
-                    tournament_data["end_date"],
-                    tournament_data["description"],
-                    tournament_data["location"],
-                )
+                self.create_tournament()
             elif choice == "2":
-                self.add_player()
+                self.add_player_to_tournament()
             elif choice == "3":
                 self.launch_tournament_menu()
             elif choice == "4":
@@ -36,9 +29,10 @@ class TournamentView:
             elif choice == "6":
                 self.list_all_tournaments()
             elif choice == "7":
-                break
+                return "MainView.menu"
             else:
                 print("Invalid choice. Please enter a number between 1 and 7.")
+
 
     def list_all_tournaments(self):
         """Lists all available tournaments."""
@@ -109,17 +103,17 @@ class TournamentView:
         else:
             print("No tournament selected.")
 
-    def add_player(self):
-        """Add a player to the tournament."""
-        player_data = TournamentTemplate.add_player()
-        if player_data:
-            new_player = Player(
-                firstname=player_data["firstname"],
-                lastname=player_data["lastname"],
-                birthdate=player_data["birthdate"]
-            )
-            new_player.create()
-            print("Player added successfully.")
+    # def add_player(self):
+    #     """Add a player to the tournament."""
+    #     player_data = TournamentTemplate.add_player()
+    #     if player_data:
+    #         new_player = Player(
+    #             firstname=player_data["firstname"],
+    #             lastname=player_data["lastname"],
+    #             birthdate=player_data["birthdate"]
+    #         )
+    #         new_player.create()
+    #         print("Player added successfully.")
 
     def create_new_round(self):
         """Create a new round in the tournament."""
@@ -140,12 +134,42 @@ class TournamentView:
 
     @staticmethod
     def display_available_tournaments(list_tournaments: list) -> str:
-        """Display a list of available tournaments."""
+        """Display a list of available tournaments with numbering."""
 
         if list_tournaments:
             print("\nAvailable Tournaments:")
             for i, tournament in enumerate(list_tournaments):
-                print(f"{i} - {tournament}")
+                print(f"{i + 1}.")
+                print(f"Name: {tournament.name}")
+                print(f"Description: {tournament.description}")
+                print(f"Location: {tournament.location}")
+                print(f"Status: {tournament.status}")
+                print(f"Start Date: {tournament.start_date}")
+                print(f"End Date: {tournament.end_date}")
         else:
             print("No tournaments available.")
         return ""
+
+    def add_player_to_tournament(self):
+        """Add a player to a selected tournament."""
+        player = PlayerView.select_player()
+        if not player:
+            return
+
+        tournaments = Tournament.read_all()
+        self.display_available_tournaments(tournaments)
+
+        choice = input("Enter the number of the tournament to add the player ('' or 0 to return): ")
+
+        if choice.isdigit():
+            index = int(choice) - 1
+            if 0 <= index < len(tournaments):
+                selected_tournament = tournaments[index]
+                selected_tournament.add_player(player.player_id)
+                print(f"{player.firstname} {player.lastname} added to {selected_tournament.name}.")
+            else:
+                print("Invalid tournament selection.")
+        elif choice == "" or choice == "0":
+            print("Returning to menu.")
+        else:
+            print("Invalid input.")

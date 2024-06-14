@@ -62,8 +62,10 @@ def main():
                             print("Tournament not found.")
                 elif choice == "3":
                     break
+                elif choice == "MainView.menu":
+                    break  # Exit the inner loop to return to the main menu
                 else:
-                    print("Invalid choice. Please enter a number between 1 and 3.")
+                    print("Invalid choice. Please enter a number between 1 and 7.")
         else:
             action(data)
 
