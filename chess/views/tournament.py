@@ -1,6 +1,7 @@
 import secrets
 
 from chess.models.players import Player
+from chess.models.rounds import Round
 from chess.models.tournaments import Tournament
 from chess.templates.tournament import TournamentTemplate
 from chess.views.player import PlayerView
@@ -29,6 +30,8 @@ class TournamentView:
             elif choice == "6":
                 self.list_all_tournaments()
             elif choice == "7":
+                self.view_rounds_and_input_scores()
+            elif choice == "8":
                 return "MainView.menu"
             else:
                 print("Invalid choice. Please enter a number between 1 and 7.")
@@ -47,6 +50,7 @@ class TournamentView:
 
     def create_tournament(self, name, start_date, end_date, description, location):
         """Creates a new tournament."""
+
         tournament_id = secrets.token_hex(2)
         self.tournament = Tournament(
             name,
@@ -61,6 +65,7 @@ class TournamentView:
 
     def auto_create_rounds(self):
         """Automatically creates rounds for the tournament."""
+
         if self.tournament:
             print("Automatically creating rounds...")
             for round_number in range(1, self.tournament.N_ROUNDS + 1):
@@ -70,6 +75,7 @@ class TournamentView:
 
     def launch_tournament_menu(self):
         """Menu to select and launch a tournament."""
+
         self.list_all_tournaments()
         choice = input("Enter the number of the tournament to launch ('' or 0 to return): ")
 
@@ -88,6 +94,7 @@ class TournamentView:
 
     def launch_tournament(self, tournament):
         """Launches the selected tournament."""
+
         if tournament:
             if tournament.status == "Created":
                 try:
@@ -117,6 +124,7 @@ class TournamentView:
 
     def create_new_round(self):
         """Create a new round in the tournament."""
+
         if self.tournament:
             if TournamentTemplate.new_round():
                 self.auto_create_rounds()
@@ -152,6 +160,7 @@ class TournamentView:
 
     def add_player_to_tournament(self):
         """Add a player to a selected tournament."""
+
         player = PlayerView.select_player()
         if not player:
             return
@@ -173,3 +182,72 @@ class TournamentView:
             print("Returning to menu.")
         else:
             print("Invalid input.")
+
+    def view_rounds_and_input_scores(self):
+        """View rounds of a selected tournament and input scores."""
+        self.list_all_tournaments()
+        choice = input("Enter the number of the tournament to view rounds and input scores ('' or 0 to return): ")
+
+        if choice.isdigit():
+            index = int(choice) - 1
+            tournaments = Tournament.read_all()
+            if 0 <= index < len(tournaments):
+                selected_tournament = tournaments[index]
+                print(f"Debug: Selected tournament: {selected_tournament.to_dict()}")  # Debug print
+                self.display_rounds(selected_tournament)
+            else:
+                print("Invalid tournament selection.")
+        elif choice == "" or choice == "0":
+            print("Returning to menu.")
+        else:
+            print("Invalid input.")
+
+    def display_rounds(self, tournament):
+        """Display rounds of the selected tournament and allow score input."""
+        print(f"\nRounds for Tournament: {tournament.name}")
+        for i, round_id in enumerate(tournament.round_id_list):
+            print(f"{i + 1}. Round {i + 1}")
+
+        round_choice = input("Enter the number of the round to input scores ('' or 0 to return): ")
+        if round_choice.isdigit():
+            round_index = int(round_choice) - 1
+            if 0 <= round_index < len(tournament.round_id_list):
+                round_id = tournament.round_id_list[round_index]
+                print(f"Debug: Selected round_id: {round_id}")  # Debug print
+                self.input_scores(round_id)
+            else:
+                print("Invalid round selection.")
+        elif round_choice == "" or round_choice == "0":
+            print("Returning to menu.")
+        else:
+            print("Invalid input.")
+
+    def input_scores(self, round_id):
+        """Input scores for matches in a selected round."""
+
+        round_data = Round.read_one(round_id)
+
+        if not round_data:
+            print(f"Round with ID {round_id} not found.")
+            return
+
+        print(f"\nRound Number: {round_data.round_number}")
+        print("\nMatches in the round:")
+        print(f"Debug: round_data.matches = {round_data.matches}")
+
+        for match in round_data.matches:
+            player1_id = match['player1_id']
+            player2_id = match['player2_id']
+            player1 = Player.read_one(player1_id)
+            player2 = Player.read_one(player2_id)
+
+            print(f"Match: {player1.firstname} {player1.lastname} vs {player2.firstname} {player2.lastname}")
+            score1 = float(input(f"Enter score for {player1.firstname} {player1.lastname}: "))
+            score2 = float(input(f"Enter score for {player2.firstname} {player2.lastname}: "))
+
+            # Update match scores
+            match['score1'] = score1
+            match['score2'] = score2
+
+        round_data.update()
+        print("Scores input completed.")

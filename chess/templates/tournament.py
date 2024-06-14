@@ -16,7 +16,8 @@ class TournamentTemplate:
         print("4. Create a new round")
         print("5. Display rankings")
         print("6. List all available tournaments")
-        print("7. Return to the main menu")
+        print("7. View rounds and input scores")
+        print("8. Return to the main menu")
 
         choice = input("Enter the number you want ('' or 0 to return): ")
 
