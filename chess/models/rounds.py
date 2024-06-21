@@ -42,14 +42,12 @@ class Round:
         self.db.insert(self.to_dict())
 
     @classmethod
-    def read_one(cls, round_id: str) -> dict | None:
-        """Read method for players (Read one)"""
-        player = Query()
-        result = cls.db.search(player.round_id == round_id)
+    def read_one(cls, round_id: str) -> 'Round' | None:
+        """Read method for rounds (Read one)"""
+        round_query = Query()
+        result = cls.db.search(round_query.round_id == round_id)
 
-        res = result[0] if result else None
-
-        return Round.from_dict(res) if res else None
+        return cls.from_dict(result[0]) if result else None
 
     @classmethod
     def read_all(cls) -> list[dict]:

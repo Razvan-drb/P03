@@ -18,7 +18,13 @@ class TournamentView:
             choice = TournamentTemplate.menu()
 
             if choice == "1":
-                self.create_tournament()
+                name = input("Enter tournament name: ")
+                start_date = input("Enter start date (YYYY-MM-DD): ")
+                end_date = input("Enter end date (YYYY-MM-DD): ")
+                description = input("Enter tournament description: ")
+                location = input("Enter tournament location: ")
+
+                self.create_tournament(name, start_date, end_date, description, location)
             elif choice == "2":
                 self.add_player_to_tournament()
             elif choice == "3":
@@ -36,17 +42,12 @@ class TournamentView:
             else:
                 print("Invalid choice. Please enter a number between 1 and 7.")
 
-
     def list_all_tournaments(self):
-        """Lists all available tournaments."""
+        """List all available tournaments."""
+        tournaments_data = Tournament.db.all()
+        tournaments = [Tournament.from_dict(data) for data in tournaments_data]
 
-        list_tournaments = Tournament.read_all()
-
-        if list_tournaments:
-            for tournament in list_tournaments:
-                TournamentTemplate.display_tournament(tournament)
-        else:
-            print("No tournaments available.")
+        self.display_available_tournaments(tournaments)
 
     def create_tournament(self, name, start_date, end_date, description, location):
         """Creates a new tournament."""
@@ -193,7 +194,7 @@ class TournamentView:
             tournaments = Tournament.read_all()
             if 0 <= index < len(tournaments):
                 selected_tournament = tournaments[index]
-                print(f"Debug: Selected tournament: {selected_tournament.to_dict()}")  # Debug print
+                print(f"Debug: Selected tournament: {selected_tournament.to_dict()}")
                 self.display_rounds(selected_tournament)
             else:
                 print("Invalid tournament selection.")
@@ -213,7 +214,7 @@ class TournamentView:
             round_index = int(round_choice) - 1
             if 0 <= round_index < len(tournament.round_id_list):
                 round_id = tournament.round_id_list[round_index]
-                print(f"Debug: Selected round_id: {round_id}")  # Debug print
+                print(f"Debug: Selected round_id: {round_id}")
                 self.input_scores(round_id)
             else:
                 print("Invalid round selection.")
@@ -224,7 +225,6 @@ class TournamentView:
 
     def input_scores(self, round_id):
         """Input scores for matches in a selected round."""
-
         round_data = Round.read_one(round_id)
 
         if not round_data:
@@ -235,19 +235,40 @@ class TournamentView:
         print("\nMatches in the round:")
         print(f"Debug: round_data.matches = {round_data.matches}")
 
+        if not round_data.matches:
+            print("No matches found in this round.")
+            return
+
         for match in round_data.matches:
-            player1_id = match['player1_id']
-            player2_id = match['player2_id']
-            player1 = Player.read_one(player1_id)
-            player2 = Player.read_one(player2_id)
+            if isinstance(match, dict):
+                player1_id = match.get('player1_id')
+                player2_id = match.get('player2_id')
 
-            print(f"Match: {player1.firstname} {player1.lastname} vs {player2.firstname} {player2.lastname}")
-            score1 = float(input(f"Enter score for {player1.firstname} {player1.lastname}: "))
-            score2 = float(input(f"Enter score for {player2.firstname} {player2.lastname}: "))
+                if not player1_id or not player2_id:
+                    print("Player IDs not found in match data.")
+                    continue
 
-            # Update match scores
-            match['score1'] = score1
-            match['score2'] = score2
+                player1 = Player.read_one(player1_id)
+                player2 = Player.read_one(player2_id)
+
+                if isinstance(player1, dict) and isinstance(player2, dict):
+                    print(f"Match: {player1.get('firstname')} {player1.get('lastname')} "
+                          f"vs {player2.get('firstname')} {player2.get('lastname')}")
+
+                    score1 = float(input(f"Enter score for {player1.get('firstname')} "
+                                         f"{player1.get('lastname', '')}: "))
+                    score2 = float(input(f"Enter score for {player2.get('firstname')} "
+                                         f"{player2.get('lastname')}: "))
+
+                    # Update match scores
+                    match['score1'] = score1
+                    match['score2'] = score2
+
+                else:
+                    print("Invalid player data")
+
+            else:
+                print("Match data not found.")
 
         round_data.update()
         print("Scores input completed.")

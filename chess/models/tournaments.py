@@ -161,11 +161,10 @@ class Tournament:
         return Tournament.from_dict(res) if res else None
 
     @classmethod
-    def read_all(cls) -> list[dict]:
-        """Read all method for tournaments"""
-
-        res = cls.db.all()
-        return [Tournament.from_dict(tournament) for tournament in res if 'id' in tournament]
+    def read_all(cls):
+        """Read all tournaments from the database."""
+        tournaments_data = cls.db.all()
+        return [cls.from_dict(data) for data in tournaments_data]
 
     @classmethod
     def search(cls, tournament_id):

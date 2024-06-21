@@ -46,6 +46,7 @@ class Player:
     @classmethod
     def read_one(cls, player_id: str) -> dict | None:
         """Read method for players (Read one)"""
+
         player = Query()
         result = cls.db.search(player.player_id == player_id)
 
