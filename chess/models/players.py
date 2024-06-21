@@ -44,15 +44,33 @@ class Player:
         self.db.insert(self.to_dict())
 
     @classmethod
-    def read_one(cls, player_id: str) -> dict | None:
+    # def read_one(cls, player_id: str) -> dict | None:
+    #     """Read method for players (Read one)"""
+    #
+    #     player = Query()
+    #     result = cls.db.search(player.player_id == player_id)
+    #
+    #     res = result[0] if result else None
+    #
+    #     return Player.from_dict(res) if res else None
+
+    def read_one(cls, player_id):
+
         """Read method for players (Read one)"""
 
         player = Query()
+
         result = cls.db.search(player.player_id == player_id)
 
-        res = result[0] if result else None
+        # Check if the result is not empty and return the player data as a dictionary
 
-        return Player.from_dict(res) if res else None
+        if result:
+
+            return result[0]
+
+        else:
+
+            return None
 
     @classmethod
     def read_all(cls) -> list[dict]:

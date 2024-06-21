@@ -186,6 +186,7 @@ class TournamentView:
 
     def view_rounds_and_input_scores(self):
         """View rounds of a selected tournament and input scores."""
+
         self.list_all_tournaments()
         choice = input("Enter the number of the tournament to view rounds and input scores ('' or 0 to return): ")
 
@@ -225,12 +226,11 @@ class TournamentView:
 
     def input_scores(self, round_id):
         """Input scores for matches in a selected round."""
-        round_data = Round.read_one(round_id)
 
+        round_data = Round.read_one(round_id)
         if not round_data:
             print(f"Round with ID {round_id} not found.")
             return
-
         print(f"\nRound Number: {round_data.round_number}")
         print("\nMatches in the round:")
         print(f"Debug: round_data.matches = {round_data.matches}")
@@ -240,35 +240,31 @@ class TournamentView:
             return
 
         for match in round_data.matches:
-            if isinstance(match, dict):
-                player1_id = match.get('player1_id')
-                player2_id = match.get('player2_id')
-
+            if isinstance(match, list) and len(match) == 2:
+                player1_id = match[0][0]
+                player2_id = match[1][0]
                 if not player1_id or not player2_id:
                     print("Player IDs not found in match data.")
                     continue
 
                 player1 = Player.read_one(player1_id)
                 player2 = Player.read_one(player2_id)
+                print(player1)
 
                 if isinstance(player1, dict) and isinstance(player2, dict):
                     print(f"Match: {player1.get('firstname')} {player1.get('lastname')} "
                           f"vs {player2.get('firstname')} {player2.get('lastname')}")
-
                     score1 = float(input(f"Enter score for {player1.get('firstname')} "
                                          f"{player1.get('lastname', '')}: "))
                     score2 = float(input(f"Enter score for {player2.get('firstname')} "
                                          f"{player2.get('lastname')}: "))
 
                     # Update match scores
-                    match['score1'] = score1
-                    match['score2'] = score2
-
+                    match[0][1] = score1
+                    match[1][1] = score2
                 else:
-                    print("Invalid player data")
-
+                    print("Invalid player data2")
             else:
                 print("Match data not found.")
 
         round_data.update()
-        print("Scores input completed.")
