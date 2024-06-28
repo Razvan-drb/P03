@@ -40,7 +40,7 @@ class TournamentView:
             elif choice == "8":
                 return "MainView.menu"
             else:
-                print("Invalid choice. Please enter a number between 1 and 7.")
+                print("Invalid choice. Please enter a number between 1 and 8.")
 
     def list_all_tournaments(self):
         """List all available tournaments."""
@@ -111,18 +111,6 @@ class TournamentView:
         else:
             print("No tournament selected.")
 
-    # def add_player(self):
-    #     """Add a player to the tournament."""
-    #     player_data = TournamentTemplate.add_player()
-    #     if player_data:
-    #         new_player = Player(
-    #             firstname=player_data["firstname"],
-    #             lastname=player_data["lastname"],
-    #             birthdate=player_data["birthdate"]
-    #         )
-    #         new_player.create()
-    #         print("Player added successfully.")
-
     def create_new_round(self):
         """Create a new round in the tournament."""
 
@@ -133,13 +121,6 @@ class TournamentView:
                 print("Round creation cancelled.")
         else:
             print("No tournament available to create a new round.")
-
-    def display_rankings(self):
-        """Display rankings of the tournament."""
-        if self.tournament:
-            TournamentTemplate.display_rankings(rankings=self.tournament)
-        else:
-            print("No tournament available to display rankings.")
 
     @staticmethod
     def display_available_tournaments(list_tournaments: list) -> str:
@@ -206,6 +187,7 @@ class TournamentView:
 
     def display_rounds(self, tournament):
         """Display rounds of the selected tournament and allow score input."""
+
         print(f"\nRounds for Tournament: {tournament.name}")
         for i, round_id in enumerate(tournament.round_id_list):
             print(f"{i + 1}. Round {i + 1}")
@@ -268,3 +250,35 @@ class TournamentView:
                 print("Match data not found.")
 
         round_data.update()
+
+    def display_rankings(self):
+        """Display rankings of the selected tournament."""
+
+        self.list_all_tournaments()
+        choice = input("Enter the number of the tournament to display rankings ('' or 0 to return): ")
+
+        if choice.isdigit():
+            index = int(choice) - 1
+            tournaments = Tournament.read_all()
+            if 0 <= index < len(tournaments):
+                selected_tournament = tournaments[index]
+                print(f"Debug: Selected tournament: {selected_tournament.to_dict()}")
+                self.display_rankings_for_tournament(selected_tournament)
+            else:
+                print("Invalid tournament selection.")
+        elif choice == "" or choice == "0":
+            print("Returning to menu.")
+        else:
+            print("Invalid input.")
+
+    def display_rankings_for_tournament(self, tournament):
+        """Display rankings of the selected tournament."""
+
+        if tournament:
+            rankings = tournament.get_rankings()
+            if rankings:
+                TournamentTemplate.display_rankings(rankings=rankings)
+            else:
+                print("No rankings available.")
+        else:
+            print("No tournament available to display rankings.")

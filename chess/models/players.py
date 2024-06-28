@@ -54,22 +54,14 @@ class Player:
     #
     #     return Player.from_dict(res) if res else None
 
-    def read_one(cls, player_id):
-
+    def read_one(cls, player_id: str) -> 'Player' | None:
         """Read method for players (Read one)"""
-
         player = Query()
-
         result = cls.db.search(player.player_id == player_id)
 
-        # Check if the result is not empty and return the player data as a dictionary
-
         if result:
-
-            return result[0]
-
+            return Player.from_dict(result[0])
         else:
-
             return None
 
     @classmethod

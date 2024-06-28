@@ -18,9 +18,8 @@ class PlayerView:
         elif choice == "2":
             return "PlayerView.read_all_players", data
         elif choice == "3":
-            return "exit", data
+            return "MainView.menu", data
         else:
-            # is the possibility to go to main menu anticpicated ?
             return "PlayerView.menu", data
 
     @staticmethod

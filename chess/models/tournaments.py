@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import random
 import secrets
-from typing import List
+from typing import List, Dict
 
 from tinydb import Query, TinyDB, where
 
@@ -490,3 +490,36 @@ class Tournament:
 
     def __repr__(self) -> str:
         return f"{self.__dict__}"
+
+    def get_rankings(self) -> List[Dict]:
+        """Get rankings of players in the tournament."""
+
+        player_scores = {}
+
+        # Iterate through rounds
+        for round_id in self.round_id_list:
+            round_data = Round.read_one(round_id)
+
+            if round_data:
+                # Iterate matches in the round
+                for match in round_data.matches:
+                    for player_tuple in match:
+                        player_id = player_tuple[0]
+                        score = player_tuple[1]
+
+                        if player_id in player_scores:
+                            player_scores[player_id] += score
+                        else:
+                            player_scores[player_id] = score
+
+        rankings = []
+        for player_id, score in sorted(player_scores.items(), key=lambda x: x[1], reverse=True):
+            player = Player.read_one(player_id)
+            if player:
+                rankings.append({
+                    'firstname': player.firstname,
+                    'lastname': player.lastname,
+                    'score': score
+                })
+
+        return rankings
