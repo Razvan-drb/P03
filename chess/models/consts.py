@@ -1,5 +1,5 @@
 # SOURCE = "/home/razvandaraban/Projets/OC/Projet_03_OC/"
-from config import SOURCE
+from chess.config import SOURCE
 
 DATA = SOURCE + "data/"
 PLAYER_FILE = DATA + "players.json"
