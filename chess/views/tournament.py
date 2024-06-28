@@ -6,6 +6,12 @@ from chess.models.tournaments import Tournament
 from chess.templates.tournament import TournamentTemplate
 from chess.views.player import PlayerView
 
+####################
+
+# POASSER EN STATIC METHODS
+
+####################
+
 
 class TournamentView:
     """Handles tournament management operations."""
@@ -24,7 +30,9 @@ class TournamentView:
                 description = input("Enter tournament description: ")
                 location = input("Enter tournament location: ")
 
-                self.create_tournament(name, start_date, end_date, description, location)
+                self.create_tournament(
+                    name, start_date, end_date, description, location
+                )
             elif choice == "2":
                 self.add_player_to_tournament()
             elif choice == "3":
@@ -78,7 +86,9 @@ class TournamentView:
         """Menu to select and launch a tournament."""
 
         self.list_all_tournaments()
-        choice = input("Enter the number of the tournament to launch ('' or 0 to return): ")
+        choice = input(
+            "Enter the number of the tournament to launch ('' or 0 to return): "
+        )
 
         if choice.isdigit():
             index = int(choice) - 1
@@ -150,14 +160,18 @@ class TournamentView:
         tournaments = Tournament.read_all()
         self.display_available_tournaments(tournaments)
 
-        choice = input("Enter the number of the tournament to add the player ('' or 0 to return): ")
+        choice = input(
+            "Enter the number of the tournament to add the player ('' or 0 to return): "
+        )
 
         if choice.isdigit():
             index = int(choice) - 1
             if 0 <= index < len(tournaments):
                 selected_tournament = tournaments[index]
                 selected_tournament.add_player(player.player_id)
-                print(f"{player.firstname} {player.lastname} added to {selected_tournament.name}.")
+                print(
+                    f"{player.firstname} {player.lastname} added to {selected_tournament.name}."
+                )
             else:
                 print("Invalid tournament selection.")
         elif choice == "" or choice == "0":
@@ -169,7 +183,9 @@ class TournamentView:
         """View rounds of a selected tournament and input scores."""
 
         self.list_all_tournaments()
-        choice = input("Enter the number of the tournament to view rounds and input scores ('' or 0 to return): ")
+        choice = input(
+            "Enter the number of the tournament to view rounds and input scores ('' or 0 to return): "
+        )
 
         if choice.isdigit():
             index = int(choice) - 1
@@ -192,7 +208,9 @@ class TournamentView:
         for i, round_id in enumerate(tournament.round_id_list):
             print(f"{i + 1}. Round {i + 1}")
 
-        round_choice = input("Enter the number of the round to input scores ('' or 0 to return): ")
+        round_choice = input(
+            "Enter the number of the round to input scores ('' or 0 to return): "
+        )
         if round_choice.isdigit():
             round_index = int(round_choice) - 1
             if 0 <= round_index < len(tournament.round_id_list):
@@ -234,12 +252,22 @@ class TournamentView:
                 print(player1)
 
                 if isinstance(player1, dict) and isinstance(player2, dict):
-                    print(f"Match: {player1.get('firstname')} {player1.get('lastname')} "
-                          f"vs {player2.get('firstname')} {player2.get('lastname')}")
-                    score1 = float(input(f"Enter score for {player1.get('firstname')} "
-                                         f"{player1.get('lastname', '')}: "))
-                    score2 = float(input(f"Enter score for {player2.get('firstname')} "
-                                         f"{player2.get('lastname')}: "))
+                    print(
+                        f"Match: {player1.get('firstname')} {player1.get('lastname')} "
+                        f"vs {player2.get('firstname')} {player2.get('lastname')}"
+                    )
+                    score1 = float(
+                        input(
+                            f"Enter score for {player1.get('firstname')} "
+                            f"{player1.get('lastname', '')}: "
+                        )
+                    )
+                    score2 = float(
+                        input(
+                            f"Enter score for {player2.get('firstname')} "
+                            f"{player2.get('lastname')}: "
+                        )
+                    )
 
                     # Update match scores
                     match[0][1] = score1
@@ -255,7 +283,9 @@ class TournamentView:
         """Display rankings of the selected tournament."""
 
         self.list_all_tournaments()
-        choice = input("Enter the number of the tournament to display rankings ('' or 0 to return): ")
+        choice = input(
+            "Enter the number of the tournament to display rankings ('' or 0 to return): "
+        )
 
         if choice.isdigit():
             index = int(choice) - 1

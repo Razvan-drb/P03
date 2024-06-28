@@ -1,3 +1,11 @@
+# 2024-06-28 - 10h00 - Code Review
+* Update App.py
+* remove  sandbox code
+* all views should use staticmethods
+* delete useless comments 
+* refcato .utils 
+* moove config.py
+
 # 2024-05-31 - 10h00 - Code Review
 
 * always choose "" or 0 for return to upper menu
