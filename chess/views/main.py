@@ -3,12 +3,11 @@ Main View module : Contains the MainView class and the main function.
 """
 
 from chess.templates.main import MainTemplate
-from chess.templates.player import PlayerTemplate
-from chess.views.player import PlayerView
-from chess.views.tournament import TournamentView
-from chess.templates.tournament import TournamentTemplate
-from chess.models.tournaments import Tournament
-
+# from chess.templates.player import PlayerTemplate
+# from chess.views.player import PlayerView
+# from chess.views.tournament import TournamentView
+# from chess.templates.tournament import TournamentTemplate
+# from chess.models.tournaments import Tournament
 
 class MainView:
 
