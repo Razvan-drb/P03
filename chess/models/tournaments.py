@@ -72,25 +72,6 @@ class Tournament:
             logging.error(f"Error getting current round id: {e}")
             return None
 
-    # @property
-    # def current_round(self):
-    #     """Get the current round number for the tournament."""
-    #
-    #     if not self.round_id_list:
-    #         logging.warning("No rounds have been computed yet.")
-    #         return None
-    #
-    #     # try to get current round data
-    #     current_round_ = Round.search_by("round_id", self.current_round_id)
-    #     print("***********************", current_round_)
-    #     assert len(current_round_) == 1
-    #     current_round_ = current_round_[0]
-    #
-    #     if not current_round_:
-    #         logging.warning(f"No data found for Round ID: {self.current_round_id}")
-    #         return None
-    #
-    #     return current_round_
     @property
     def current_round(self):
         """Get the current round for the tournament."""
@@ -244,83 +225,6 @@ class Tournament:
 
         return new_round.round_id
 
-    # def update_status(self, new_status: str):
-    #     """Update the status of the tournament."""
-    #
-    #     # Check if the new status is authorised
-    #     if new_status not in self.AUTHORISED_STATUS:
-    #         raise ValueError(
-    #             f"Invalid tournament status should be in {self.AUTHORISED_STATUS} recieved {new_status}."
-    #         )
-    #
-    #     if self.status == "Created" and new_status == "In Progress":
-    #         # Check if there are enough players
-    #         if self.n_players != self.N_PLAYERS:
-    #             raise ValueError(
-    #                 f"Impossible de passer à 'In Progress' sans {self.N_PLAYERS} joueurs, for now on en a {self.n_players}."
-    #             )
-    #
-    #         # on calcule les rounds
-    #         round_0 = [
-    #             # 1er match du round 0
-    #             [
-    #                 [self.player_id_list[0], -1],  # Player 0, (son id, son score)
-    #                 [self.player_id_list[1], -1],  # Player 1, (son id, son score)
-    #             ],
-    #             # 2eme match du round 0
-    #             [
-    #                 [self.player_id_list[2], -1],  # Player 2,son id son score
-    #                 [self.player_id_list[3], -1],  # Player 3, son id son score
-    #             ],
-    #         ]
-    #
-    #         round_1 = [
-    #             [
-    #                 [self.player_id_list[0], -1],  # P0 (id, score)
-    #                 [self.player_id_list[2], -1],  # P2 (id, score)
-    #             ],  # 1er match
-    #             [
-    #                 [self.player_id_list[1], -1],
-    #                 [self.player_id_list[3], -1],
-    #             ],  # 2eme match
-    #         ]
-    #
-    #         round_2 = [
-    #             [
-    #                 [self.player_id_list[0], -1],
-    #                 [self.player_id_list[3], -1],
-    #             ],  # 1er match
-    #             [
-    #                 [self.player_id_list[1], -1],
-    #                 [self.player_id_list[2], -1],
-    #             ],  # 2eme match
-    #         ]
-    #
-    #         # match list
-    #         match_list = [round_0, round_1, round_2]
-    #
-    #         # Add rounds to database
-    #         for i, round_matches in enumerate(match_list):
-    #             _ = self._add_round(i, round_matches)
-    #
-    #         # Update status to 'In Progress' and save
-    #         self.status = "In Progress"
-    #         self.current_round_number = 0
-    #         self.update()
-    #
-    #     elif self.status == "In Progress" and new_status == "Completed":
-    #         # Check if all rounds are played
-    #         if self.current_round_number + 1 != self.N_ROUNDS:
-    #             raise ValueError(
-    #                 "Impossible de terminer le tournoi sans que tous les rounds soient finis."
-    #             )
-    #         self.status = "Completed"
-    #         self.update()
-    #
-    #     else:
-    #         raise ValueError(
-    #             f"Statut invalide. Impossible de changer le statut de {self.status} à {new_status}."
-    #         )
 
     def update_status(self, new_status: str):
         """Update the status of the tournament."""
@@ -521,5 +425,8 @@ class Tournament:
                     'lastname': player.lastname,
                     'score': score
                 })
+            else:
+                # Handle case where player data cannot be retrieved
+                print(f"Player with ID {player_id} not found.")
 
         return rankings

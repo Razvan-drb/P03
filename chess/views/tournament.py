@@ -236,6 +236,7 @@ class TournamentView:
         if not round_data:
             print(f"Round with ID {round_id} not found.")
             return
+
         print(f"\nRound Number: {round_data.round_number}")
         print("\nMatches in the round:")
         print(f"Debug: round_data.matches = {round_data.matches}")
@@ -254,31 +255,32 @@ class TournamentView:
 
                 player1 = Player.read_one(player1_id)
                 player2 = Player.read_one(player2_id)
-                print(player1)
 
-                if isinstance(player1, dict) and isinstance(player2, dict):
-                    print(
-                        f"Match: {player1.get('firstname')} {player1.get('lastname')} "
-                        f"vs {player2.get('firstname')} {player2.get('lastname')}"
-                    )
-                    score1 = float(
-                        input(
-                            f"Enter score for {player1.get('firstname')} "
-                            f"{player1.get('lastname', '')}: "
-                        )
-                    )
-                    score2 = float(
-                        input(
-                            f"Enter score for {player2.get('firstname')} "
-                            f"{player2.get('lastname')}: "
-                        )
-                    )
+                if not player1 or not player2:
+                    print("Invalid player data")
+                    continue
 
-                    # Update match scores
-                    match[0][1] = score1
-                    match[1][1] = score2
-                else:
-                    print("Invalid player data2")
+                # Safely retrieve player attributes using attribute access
+                player1_firstname = player1.firstname if hasattr(player1, 'firstname') else 'Unknown'
+                player1_lastname = player1.lastname if hasattr(player1, 'lastname') else ''
+                player2_firstname = player2.firstname if hasattr(player2, 'firstname') else 'Unknown'
+                player2_lastname = player2.lastname if hasattr(player2, 'lastname') else ''
+
+                print(
+                    f"Match: {player1_firstname} {player1_lastname} "
+                    f"vs {player2_firstname} {player2_lastname}"
+                )
+
+                try:
+                    score1 = float(input(f"Enter score for {player1_firstname} {player1_lastname}: "))
+                    score2 = float(input(f"Enter score for {player2_firstname} {player2_lastname}: "))
+                except ValueError:
+                    print("Invalid score input. Please enter a valid number.")
+                    continue
+
+                # Update match scores
+                match[0][1] = score1
+                match[1][1] = score2
             else:
                 print("Match data not found.")
 
@@ -286,29 +288,13 @@ class TournamentView:
 
     @staticmethod
     def display_rankings():
-        """Display rankings of the selected tournament."""
-
-        tournaments = Tournament.read_all()
-        if not tournaments:
-            print("No tournaments available.")
-            return
-
-        print("\nAvailable Tournaments:")
-        for i, tournament in enumerate(tournaments):
-            print(f"{i + 1}.")
-            print(f"Name: {tournament.name}")
-            print(f"Description: {tournament.description}")
-            print(f"Location: {tournament.location}")
-            print(f"Status: {tournament.status}")
-            print(f"Start Date: {tournament.start_date}")
-            print(f"End Date: {tournament.end_date}")
-
-        choice = input(
-            "Enter the number of the tournament to display rankings ('' or 0 to return): "
-        )
+        """Static method to display rankings of the selected tournament."""
+        TournamentView.list_all_tournaments()
+        choice = input("Enter the number of the tournament to display rankings ('' or 0 to return): ")
 
         if choice.isdigit():
             index = int(choice) - 1
+            tournaments = Tournament.read_all()
             if 0 <= index < len(tournaments):
                 selected_tournament = tournaments[index]
                 print(f"Debug: Selected tournament: {selected_tournament.to_dict()}")
@@ -322,8 +308,7 @@ class TournamentView:
 
     @staticmethod
     def display_rankings_for_tournament(tournament):
-        """Display rankings of the selected tournament."""
-
+        """Static method to display rankings of the selected tournament."""
         if tournament:
             rankings = tournament.get_rankings()
             if rankings:

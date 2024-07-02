@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import logging
 import secrets
-from typing import List, Optional
+from typing import List
 
 from tinydb import Query, TinyDB, where
 
