@@ -55,7 +55,6 @@ class TournamentView:
     @staticmethod
     def create_tournament(name, start_date, end_date, description, location):
         """Creates a new tournament."""
-
         tournament_id = secrets.token_hex(2)
         tournament = Tournament(
             name,
@@ -66,12 +65,11 @@ class TournamentView:
             tournament_id=tournament_id,
         )
         tournament.create()
-        TournamentView.auto_create_rounds()
+        TournamentView.auto_create_rounds(tournament)
 
     @staticmethod
     def auto_create_rounds(tournament):
         """Automatically creates rounds for the tournament."""
-
         if tournament:
             print("Automatically creating rounds...")
             for round_number in range(1, tournament.N_ROUNDS + 1):
