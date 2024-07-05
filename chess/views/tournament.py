@@ -70,7 +70,7 @@ class TournamentView:
         """Automatically creates rounds for the tournament."""
         if tournament:
             print("Automatically creating rounds...")
-            for round_number in range(1, tournament.N_ROUNDS + 1):
+            for round_number in range(tournament.N_ROUNDS):
                 matches = []
                 tournament._add_round(round_number, matches)
             print("Rounds created successfully.")

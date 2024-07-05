@@ -27,6 +27,7 @@ class Round:
 
     def to_dict(self) -> dict:
         """Convert round to dict"""
+
         return self.__dict__
 
     @classmethod
@@ -39,6 +40,7 @@ class Round:
         """Create method for rounds"""
 
         self.db.insert(self.to_dict())
+        print(f"Round {self.round_number} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
     @classmethod
     def read_one(cls, round_id: str) -> 'Round' | None:
@@ -83,7 +85,7 @@ class Round:
         """Update method for players"""
 
         self.db.update(self.to_dict(), where("round_id") == self.round_id)
-
+        print(self.round_id, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         # logging.warning(f"Round {self.round_id} updated successfully.")
 
     def delete(self) -> None:

@@ -204,7 +204,7 @@ class Tournament:
 
         self.update()
 
-    def _add_round(self, round_number: int, matches: List[str]) -> str:
+    def _add_round(self, round_number: int, matches: List[List[List[str]]]) -> str:
         """Add a round to the tournament."""
 
         round_id = f"{self.tournament_id}_round_{round_number}"
@@ -304,9 +304,9 @@ class Tournament:
         # Match list
         match_list = [round_0, round_1, round_2]
 
-        # Add rounds to database
+        # Add rounds to database with matches
         for i, round_matches in enumerate(match_list):
-            _ = self._add_round(i, round_matches)
+            self._add_round(i, round_matches)
 
     def _next_round(self):
         """change the round +=1"""
