@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import logging
-import random
 import secrets
 from typing import List, Dict
 
 from tinydb import Query, TinyDB, where
 
-from chess.helpers import now
 from chess.models.consts import TOURNAMENT_FILE
 from chess.models.players import Player
 from chess.models.rounds import Round
@@ -184,9 +182,6 @@ class Tournament:
     def add_player(self, player_id: str) -> None:
         """Add player to tournament"""
 
-        # TODO : add verification that the player is not already in the tournament
-        # TODO : add verification that the player is not already in the Player DB Table
-
         if player_id in self.player_id_list:
             raise ValueError("Le jouer existe deja dans le tournament.")
 
@@ -207,24 +202,29 @@ class Tournament:
         # add player to the player list
         self.player_id_list.append(player_id)
 
-        self.update()  # for now it is useless?
+        self.update()
 
     def _add_round(self, round_number: int, matches: List[str]) -> str:
         """Add a round to the tournament."""
 
-        # init and create a new round
         round_id = f"{self.tournament_id}_round_{round_number}"
+
+        # Check if the round already exists
+        if round_id in self.round_id_list:
+            print(f"Round {round_number} already exists.")
+            return round_id
+
+        # Initialize and create a new round
         new_round = Round(round_number, matches, round_id=round_id)
         new_round.create()
 
         # Add the round to the list of rounds
         self.round_id_list.append(new_round.round_id)
 
-        # save the tournament
+        # Save the tournament
         self.update()
 
         return new_round.round_id
-
 
     def update_status(self, new_status: str):
         """Update the status of the tournament."""
@@ -232,14 +232,16 @@ class Tournament:
         # Check if the new status is authorised
         if new_status not in self.AUTHORISED_STATUS:
             raise ValueError(
-                f"Invalid tournament status should be in {self.AUTHORISED_STATUS} received {new_status}."
+                f"Invalid tournament status should be in {self.AUTHORISED_STATUS} "
+                f"received {new_status}."
             )
 
         if self.status == "Created" and new_status == "In Progress":
             # Check if there are enough players
             if self.n_players != self.N_PLAYERS:
                 raise ValueError(
-                    f"Impossible de passer à 'In Progress' sans {self.N_PLAYERS} joueurs, for now on en a {self.n_players}."
+                    f"Impossible de passer à 'In Progress' sans {self.N_PLAYERS} "
+                    f"joueurs, for now on en a {self.n_players}."
                 )
 
             # Create matches
@@ -361,21 +363,6 @@ class Tournament:
         return player_score
 
     @classmethod
-    def bootstrap(cls, num_tournaments: int = 3) -> None:
-        """Create method for tournaments (Bootstrap)"""
-
-        for _ in range(num_tournaments):
-            token = "test_" + secrets.token_hex(3) + "_" + now()
-
-            t = Tournament(
-                token + "_" + now(),
-                token,
-                token,
-                tournament_id=token + "_" + now(),
-            )
-            t.create()
-
-    @classmethod
     def bootstrap(cls, num_tournament: int = 4) -> None:
         """Create method for players (Bootstrap)"""
 
@@ -397,7 +384,6 @@ class Tournament:
 
     def get_rankings(self) -> List[Dict]:
         """Get rankings of players in the tournament."""
-
         player_scores = {}
 
         # Iterate through rounds
@@ -418,15 +404,12 @@ class Tournament:
 
         rankings = []
         for player_id, score in sorted(player_scores.items(), key=lambda x: x[1], reverse=True):
-            player = Player.read_one(player_id)
+            player = Player.read_one(player_id)  # Ensure the correct method call
             if player:
                 rankings.append({
                     'firstname': player.firstname,
                     'lastname': player.lastname,
                     'score': score
                 })
-            else:
-                # Handle case where player data cannot be retrieved
-                print(f"Player with ID {player_id} not found.")
 
         return rankings

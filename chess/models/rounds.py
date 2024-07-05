@@ -65,13 +65,19 @@ class Round:
 
         return [Round.from_dict(data) for data in result]
 
+    # @classmethod
+    # def search_by(cls, key: str, value) -> list[dict]:
+    #     """Search method for players by key and value"""
+    #
+    #     res = cls.db.search(where(key) == value)
+    #
+    #     return [Round.from_dict(player) for player in res]
     @classmethod
-    def search_by(cls, key: str, value) -> list[dict]:
-        """Search method for players by key and value"""
-
-        res = cls.db.search(where(key) == value)
-
-        return [Round.from_dict(player) for player in res]
+    def search_by(cls, field: str, value: str) -> list:
+        """Search method for rounds by a specific field"""
+        round_query = Query()
+        result = cls.db.search(round_query[field] == value)
+        return [cls.from_dict(r) for r in result] if result else []
 
     def update(self) -> None:
         """Update method for players"""

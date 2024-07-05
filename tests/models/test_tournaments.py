@@ -1,10 +1,6 @@
 import logging
 import secrets
 
-import pytest
-
-from chess.models.players import Player
-from chess.models.rounds import Round
 from chess.models.tournaments import Tournament
 
 
@@ -17,7 +13,7 @@ class TestTournamentBase:
         token = "test_" + secrets.token_hex(2)
 
         t = Tournament(token, token, token, tournament_id=token)
-        # logging.warning(t)
+        logging.warning(t)
 
     def test_to_dict(self):
         """convert tournament to dict"""
@@ -25,7 +21,7 @@ class TestTournamentBase:
         token = "test_" + secrets.token_hex(2)
 
         t = Tournament(token, token, token, tournament_id=token)
-        # logging.warning(t.to_dict())
+        logging.warning(t.to_dict())
 
     def test_from_dict(self):
         """convert dict to tournament"""
@@ -41,7 +37,7 @@ class TestTournamentBase:
         }
 
         t = Tournament.from_dict(t_dict)
-        # logging.warning(t)
+        logging.warning(t)
 
     def test_create(self):
         """convert dict to tournament"""
@@ -49,9 +45,9 @@ class TestTournamentBase:
         token = "test_" + secrets.token_hex(2)
         t = Tournament(token, token, token, tournament_id=token)
 
-        # logging.warning(t.to_dict())
+        logging.warning(t.to_dict())
         t.create()
-        # logging.warning(t)
+        logging.warning(t)
 
     def test_search_by_tournament(self):
         """search method for tournaments by key and value"""
@@ -59,14 +55,14 @@ class TestTournamentBase:
         token = "test_" + secrets.token_hex(2)
         t = Tournament(token, token, token, tournament_id=token)
 
-        # logging.warning(t.to_dict())
+        logging.warning(t.to_dict())
         t.create()
-        # logging.warning(t)
+        logging.warning(t)
 
         del t
 
         result = Tournament.search_by("tournament_id", token)
-        # logging.info(result)
+        logging.info(result)
         assert len(result) == 1
 
     def test_update(self):

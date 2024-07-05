@@ -1,4 +1,3 @@
-from typing import List
 from chess.templates.player import PlayerTemplate
 from chess.models.players import Player
 from chess.templates.error import GenericErrorTemplate
@@ -109,7 +108,7 @@ class PlayerView:
     def select_player():
         """Select a player from the list."""
         PlayerView.list_players()
-        choice = input("Enter the number of the player to add to a tournament ('' or 0 to return): ")
+        choice = input("Enter the number of the player to add to a tournament('' or 0 to return):")
 
         if choice.isdigit():
             index = int(choice)

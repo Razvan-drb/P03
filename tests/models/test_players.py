@@ -1,7 +1,4 @@
-import logging
 import secrets
-
-import pytest
 
 from chess.helpers import now
 from chess.models.players import Player

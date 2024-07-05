@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import random
 import secrets
 
 from tinydb import Query, TinyDB, where
@@ -14,11 +13,11 @@ class Player:
     db = TinyDB(PLAYER_FILE)
 
     def __init__(
-        self,
-        firstname: str,
-        lastname: str,
-        birthdate: str = "1970-01-01",
-        player_id: int | None = None,
+            self,
+            firstname: str,
+            lastname: str,
+            birthdate: str = "1970-01-01",
+            player_id: int | None = None,
     ) -> None:
         """Init method for players"""
 
@@ -44,16 +43,6 @@ class Player:
         self.db.insert(self.to_dict())
 
     @classmethod
-    # def read_one(cls, player_id: str) -> dict | None:
-    #     """Read method for players (Read one)"""
-    #
-    #     player = Query()
-    #     result = cls.db.search(player.player_id == player_id)
-    #
-    #     res = result[0] if result else None
-    #
-    #     return Player.from_dict(res) if res else None
-
     def read_one(cls, player_id: str) -> 'Player' | None:
         """Read method for players (Read one)"""
         player = Query()

@@ -20,4 +20,3 @@ class MainView:
             return "exit", data
         else:
             return "MainView.menu", data
-

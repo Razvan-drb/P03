@@ -1,4 +1,4 @@
-#### NO MODELS IN TEMPLATES !!!!      ####
+# NO MODELS IN TEMPLATES
 from typing import List, Dict
 
 
@@ -13,11 +13,10 @@ class TournamentTemplate:
         print("1. Create a tournament")
         print("2. Add a player")
         print("3. Launch tournament")
-        print("4. Create a new round")
-        print("5. Display rankings")
-        print("6. List all available tournaments")
-        print("7. View rounds and input scores")
-        print("8. Return to the main menu")
+        print("4. Display rankings")
+        print("5. List all available tournaments")
+        print("6. View rounds and input scores")
+        print("7. Return to the main menu")
 
         choice = input("Enter the number you want ('' or 0 to return): ")
 
@@ -98,7 +97,7 @@ class TournamentTemplate:
     def new_round() -> None:
         """Template for creating a new round."""
 
-        print("\Going to next round")
+        print("Going to next round")
         choice = input("Press Enter to confirm / Any key to cancel.")
         if choice:
             print("Round creation cancelled.")
@@ -158,5 +157,3 @@ class TournamentTemplate:
         print(f"Location: {tournament.location}")
         print(f"Status: {tournament.status}")
         print(f"Number of Players: {len(tournament.player_id_list)}")
-
-

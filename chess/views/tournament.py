@@ -32,17 +32,15 @@ class TournamentView:
             elif choice == "3":
                 self.launch_tournament_menu()
             elif choice == "4":
-                self.create_new_round()
-            elif choice == "5":
                 self.display_rankings()
-            elif choice == "6":
+            elif choice == "5":
                 self.list_all_tournaments()
-            elif choice == "7":
+            elif choice == "6":
                 self.view_rounds_and_input_scores()
-            elif choice == "8":
+            elif choice == "7":
                 return "MainView.menu"
             else:
-                print("Invalid choice. Please enter a number between 1 and 8.")
+                print("Invalid choice. Please enter a number between 1 and 7.")
 
     @staticmethod
     def list_all_tournaments():
@@ -186,7 +184,7 @@ class TournamentView:
         TournamentView.display_available_tournaments(tournaments)
 
         choice = input(
-            "Enter the number of the tournament to view rounds and input scores ('' or 0 to return): "
+            "Enter the number of the tournament to view rounds and input scores('' or 0 to return):"
         )
 
         if choice.isdigit():
@@ -259,9 +257,9 @@ class TournamentView:
                     continue
 
                 # Safely retrieve player attributes using attribute access
-                player1_firstname = player1.firstname if hasattr(player1, 'firstname') else 'Unknown'
+                player1_firstname = player1.firstname if hasattr(player1, 'firstname') else ''
                 player1_lastname = player1.lastname if hasattr(player1, 'lastname') else ''
-                player2_firstname = player2.firstname if hasattr(player2, 'firstname') else 'Unknown'
+                player2_firstname = player2.firstname if hasattr(player2, 'firstname') else ''
                 player2_lastname = player2.lastname if hasattr(player2, 'lastname') else ''
 
                 print(
@@ -270,8 +268,8 @@ class TournamentView:
                 )
 
                 try:
-                    score1 = float(input(f"Enter score for {player1_firstname} {player1_lastname}: "))
-                    score2 = float(input(f"Enter score for {player2_firstname} {player2_lastname}: "))
+                    score1 = float(input(f"Score for {player1_firstname} {player1_lastname}:"))
+                    score2 = float(input(f"Score for {player2_firstname} {player2_lastname}:"))
                 except ValueError:
                     print("Invalid score input. Please enter a valid number.")
                     continue
@@ -288,7 +286,7 @@ class TournamentView:
     def display_rankings():
         """Static method to display rankings of the selected tournament."""
         TournamentView.list_all_tournaments()
-        choice = input("Enter the number of the tournament to display rankings ('' or 0 to return): ")
+        choice = input("Enter the number of the tournament to display rankings (or 0 to return): ")
 
         if choice.isdigit():
             index = int(choice) - 1
@@ -315,4 +313,3 @@ class TournamentView:
                 print("No rankings available.")
         else:
             print("No tournament available to display rankings.")
-

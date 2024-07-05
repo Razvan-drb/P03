@@ -3,7 +3,6 @@ This module contains the template for the Tournaments class.
 """
 
 import logging
-import pytest
 
 from chess.templates.tournament import TournamentTemplate
 

@@ -1,11 +1,7 @@
 from typing import List
 
-# from chess.models.players import Player ===> PAS DE CLASSE PLAYER DANS LE FICHIER TEMPLATE
-
-##########################################
-#### KEEP THIS COMMENT                ####
-#### NO MODELS IN TEMPLATES !!!!      ####
-##########################################
+# KEEP THIS COMMENT
+# NO MODELS IN TEMPLATES
 
 
 class PlayerTemplate:
@@ -48,7 +44,7 @@ class PlayerTemplate:
             return None
 
         choice = input(
-            "Press The number of the player if selected else press Enter to return to the main menu."
+            "Press The number of the player if selected else press Enter to return to the main menu"
         )
 
         if not choice:

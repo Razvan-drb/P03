@@ -9,18 +9,18 @@ Currently, the club organizes tournaments manually, and they are looking for an 
 
 ## Requirements
 
-- Python 3.11: [Download Python 3.11](https://www.python.org/downloads/release/python-3115/)
-- Clone the repository: [Projet_03_OC](https://github.com/Razvan-drb/Projet_03_OC.git)
+- Python 3.10: https://www.python.org/downloads/release/python-31014/
+- Clone the repository: https://github.com/Razvan-drb/Projet_04_OC
 
 ## Installation
 
-Before proceeding, ensure that you have Python 3.11 installed on your computer. 
+Before proceeding, ensure that you have Python 3.10 installed on your computer. 
 Follow the [Python Installation Guide](https://www.python.org/downloads/) if needed.
 
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/Razvan-drb/Projet_03_OC.git
+    git clone https://github.com/Razvan-drb/Projet_04_OC
     ```
 
 2. Install the virtual environment:
@@ -41,11 +41,18 @@ Follow the [Python Installation Guide](https://www.python.org/downloads/) if nee
     ```bash
     pip install -r requirements.txt
     ```
-
+5. Run for linting flak8 report  (if needed)
+```bash
+flake8 --max-line-length=100 --format=html --htmldir=flake-report
+```
 ## Usage
 
 After completing the installation, you can run the scripts for the chess tournament management software. 
 Make sure the virtual environment is activated.
+
+```bash
+python3 main.py
+```
 
 ## Author
 
@@ -56,5 +63,6 @@ Make sure the virtual environment is activated.
 
 For any questions or concerns, you can contact the author:
 
-- Email: [razvan@example.com](mailto:razvan@example.com)
+- Email: [razvan_drb@yahoo.com](mailto:razvan-drb@yahoo.com)
 - GitHub: [Razvan-drb](https://github.com/Razvan-drb)
+

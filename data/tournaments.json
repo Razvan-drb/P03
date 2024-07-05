@@ -1,1 +1,53 @@
-{"_default": {"1": {"name": "test", "start_date": "2021-03-03", "end_date": "2021-03-03", "description": "fun tour", "location": "paris", "tournament_id": "27b4", "round_id_list": ["27b4_round_1", "27b4_round_2", "27b4_round_3", "27b4_round_0", "27b4_round_1", "27b4_round_2", "27b4_round_1", "27b4_round_2", "27b4_round_3"], "player_id_list": ["8262abe1", "adb0d1f3", "131b2f8f", "6aeab2e7"], "current_round_number": 0, "status": "In Progress"}}}
+{
+  "_default": {
+    "1": {
+      "name": "test",
+      "start_date": "2021-03-03",
+      "end_date": "2021-03-03",
+      "description": "fun tour",
+      "location": "paris",
+      "tournament_id": "27b4",
+      "round_id_list": [
+        "27b4_round_1",
+        "27b4_round_2",
+        "27b4_round_3",
+        "27b4_round_0",
+        "27b4_round_1",
+        "27b4_round_2",
+        "27b4_round_1",
+        "27b4_round_2",
+        "27b4_round_3"
+      ],
+      "player_id_list": [
+        "8262abe1",
+        "adb0d1f3",
+        "131b2f8f",
+        "6aeab2e7"
+      ],
+      "current_round_number": 0,
+      "status": "In Progress"
+    },
+    "2": {
+      "name": "fancy",
+      "start_date": "2021-03-03",
+      "end_date": "2021-03-03",
+      "description": "very important",
+      "location": "home",
+      "tournament_id": "360a",
+      "round_id_list": [
+        "360a_round_1",
+        "360a_round_2",
+        "360a_round_3",
+        "360a_round_0"
+      ],
+      "player_id_list": [
+        "7c498a07",
+        "227a7359",
+        "b0ae30f4",
+        "c8e6fb29"
+      ],
+      "current_round_number": 0,
+      "status": "In Progress"
+    }
+  }
+}
