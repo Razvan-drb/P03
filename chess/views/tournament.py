@@ -243,43 +243,45 @@ class TournamentView:
 
         for match in round_data.matches:
             if isinstance(match, list) and len(match) == 2:
-                player1_id = match[0][0]
-                player2_id = match[1][0]
-                if not player1_id or not player2_id:
-                    print("Player IDs not found in match data.")
+                player_id = match[0]
+                score = match[1]
+
+                # Ensure player ID is valid
+                if not player_id or player_id == -1:
+                    print("Invalid player ID in match data.")
                     continue
 
-                player1 = Player.read_one(player1_id)
-                player2 = Player.read_one(player2_id)
+                # Retrieve player data
+                player = Player.read_one(player_id)
 
-                if not player1 or not player2:
-                    print("Invalid player data")
+                # Validate player data
+                if not player:
+                    print(f"Invalid data for Player ID: {player_id}")
                     continue
 
                 # Safely retrieve player attributes using attribute access
-                player1_firstname = player1.firstname if hasattr(player1, 'firstname') else ''
-                player1_lastname = player1.lastname if hasattr(player1, 'lastname') else ''
-                player2_firstname = player2.firstname if hasattr(player2, 'firstname') else ''
-                player2_lastname = player2.lastname if hasattr(player2, 'lastname') else ''
+                player_firstname = player.firstname if hasattr(player, 'firstname') else ''
+                player_lastname = player.lastname if hasattr(player, 'lastname') else ''
 
                 print(
-                    f"Match: {player1_firstname} {player1_lastname} "
-                    f"vs {player2_firstname} {player2_lastname}"
+                    f"Match: {player_firstname} {player_lastname} "
+                    f"Score: {score}"
                 )
 
                 try:
-                    score1 = float(input(f"Score for {player1_firstname} {player1_lastname}:"))
-                    score2 = float(input(f"Score for {player2_firstname} {player2_lastname}:"))
+                    new_score = float(input(f"Enter new score for {player_firstname} {player_lastname}: "))
                 except ValueError:
                     print("Invalid score input. Please enter a valid number.")
                     continue
 
-                # Update match scores
-                match[0][1] = score1
-                match[1][1] = score2
-            else:
-                print("Match data not found.")
+                # Update match score in the round_data
+                match[1] = new_score
 
+            else:
+                print("Match data not found or has invalid structure.")
+
+        # After updating all matches, update the round_data
+        round_data.matches = round_data.matches  # Ensure round_data.matches is correctly structured
         round_data.update()
 
     @staticmethod

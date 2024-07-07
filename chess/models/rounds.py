@@ -41,6 +41,7 @@ class Round:
 
         self.db.insert(self.to_dict())
         print(f"Round {self.round_number} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print(f"Round {self.round_number} created with matches: {self.matches}")
 
     @classmethod
     def read_one(cls, round_id: str) -> 'Round' | None:

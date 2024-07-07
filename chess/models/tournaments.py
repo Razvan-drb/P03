@@ -204,7 +204,7 @@ class Tournament:
 
         self.update()
 
-    def _add_round(self, round_number: int, matches: List[List[List[str]]]) -> str:
+    def _add_round(self, round_number: int, matches: List[str]) -> str:
         """Add a round to the tournament."""
 
         round_id = f"{self.tournament_id}_round_{round_number}"
@@ -216,6 +216,7 @@ class Tournament:
 
         # Initialize and create a new round
         new_round = Round(round_number, matches, round_id=round_id)
+        print(f"Adding Round {round_number} with matches: {matches}")
         new_round.create()
 
         # Add the round to the list of rounds
@@ -267,46 +268,49 @@ class Tournament:
             )
 
     def create_matches(self):
-        """Create matches for the tournament."""
+        """Create or update matches for the tournament's rounds."""
+
+        print("Creating matches with players: ", self.player_id_list)
+
         round_0 = [
-            [
-                [self.player_id_list[0], -1],
-                [self.player_id_list[1], -1],
-            ],
-            [
-                [self.player_id_list[2], -1],
-                [self.player_id_list[3], -1],
-            ],
+            [self.player_id_list[0], -1],
+            [self.player_id_list[1], -1],
         ]
 
         round_1 = [
-            [
-                [self.player_id_list[0], -1],
-                [self.player_id_list[2], -1],
-            ],
-            [
-                [self.player_id_list[1], -1],
-                [self.player_id_list[3], -1],
-            ],
+            [self.player_id_list[0], -1],
+            [self.player_id_list[2], -1],
         ]
 
         round_2 = [
-            [
-                [self.player_id_list[0], -1],
-                [self.player_id_list[3], -1],
-            ],
-            [
-                [self.player_id_list[1], -1],
-                [self.player_id_list[2], -1],
-            ],
+            [self.player_id_list[0], -1],
+            [self.player_id_list[3], -1],
         ]
 
-        # Match list
         match_list = [round_0, round_1, round_2]
 
-        # Add rounds to database with matches
         for i, round_matches in enumerate(match_list):
-            self._add_round(i, round_matches)
+            round_id = f"{self.tournament_id}_round_{i}"
+
+            # Check if round already exists in the database
+            round_data = Round.db.get(where("round_id") == round_id)
+
+            if round_data:
+                # Round exists, update matches
+                existing_round = Round.from_dict(round_data)
+                existing_round.matches = round_matches
+                existing_round.update()
+            else:
+                # Round does not exist, create new round
+                new_round = Round(i, round_matches, round_id=round_id)
+                new_round.create()
+
+                # Add round_id to tournament's round_id_list if not already present
+                if round_id not in self.round_id_list:
+                    self.round_id_list.append(round_id)
+
+        # Update the tournament in the database after all rounds are processed
+        self.update()
 
     def _next_round(self):
         """change the round +=1"""
