@@ -390,30 +390,31 @@ class Tournament:
         """Get rankings of players in the tournament."""
         player_scores = {}
 
-        # Iterate through rounds
+        # Iterate through rounds and accumulate scores
         for round_id in self.round_id_list:
             round_data = Round.read_one(round_id)
 
             if round_data:
-                # Iterate matches in the round
-                for match in round_data.matches:
-                    for player_tuple in match:
-                        player_id = player_tuple[0]
-                        score = player_tuple[1]
+                print(f"Debug: round_data.matches = {round_data.matches}")
+                for player_id, score in round_data.matches:
+                    if isinstance(player_id, str) and isinstance(score, (int, float)):
+                        player_scores[player_id] = player_scores.get(player_id, 0) + score
+                    else:
+                        print(f"Invalid match structure: {player_id}, {score}")
 
-                        if player_id in player_scores:
-                            player_scores[player_id] += score
-                        else:
-                            player_scores[player_id] = score
+        if not player_scores:
+            print("No rankings available.")
+            return []
 
-        rankings = []
-        for player_id, score in sorted(player_scores.items(), key=lambda x: x[1], reverse=True):
-            player = Player.read_one(player_id)  # Ensure the correct method call
-            if player:
-                rankings.append({
-                    'firstname': player.firstname,
-                    'lastname': player.lastname,
-                    'score': score
-                })
+        rankings = [
+            {
+                'firstname': player.firstname,
+                'lastname': player.lastname,
+                'score': score
+            }
+            for player_id, score in sorted(player_scores.items(), key=lambda x: x[1], reverse=True)
+            if (player := Player.read_one(player_id))
+        ]
 
         return rankings
+

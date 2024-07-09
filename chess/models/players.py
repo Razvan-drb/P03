@@ -8,7 +8,10 @@ from .consts import PLAYER_FILE
 
 
 class Player:
-    """players model class"""
+    """
+    Player class to interact with player data in  database.
+
+    """
 
     db = TinyDB(PLAYER_FILE)
 

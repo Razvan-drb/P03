@@ -9,7 +9,9 @@ from .consts import ROUND_FILE
 
 
 class Round:
-    """Round model class"""
+    """
+    Round class to interact with round data in  database.
+    """
 
     db = TinyDB(ROUND_FILE)
 

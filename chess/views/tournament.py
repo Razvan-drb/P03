@@ -269,7 +269,8 @@ class TournamentView:
                 )
 
                 try:
-                    new_score = float(input(f"Enter new score for {player_firstname} {player_lastname}: "))
+                    new_score = int(input(f"Enter new score for {player_firstname} "
+                                          f"{player_lastname}: "))
                 except ValueError:
                     print("Invalid score input. Please enter a valid number.")
                     continue
