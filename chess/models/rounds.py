@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import secrets
 from typing import List
 
@@ -42,7 +43,7 @@ class Round:
         """Create method for rounds"""
 
         self.db.insert(self.to_dict())
-        print(f"Round {self.round_number} !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        print(f"Round {self.round_number} ")
         print(f"Round {self.round_number} created with matches: {self.matches}")
 
     @classmethod
@@ -88,8 +89,7 @@ class Round:
         """Update method for players"""
 
         self.db.update(self.to_dict(), where("round_id") == self.round_id)
-        print(self.round_id, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        # logging.warning(f"Round {self.round_id} updated successfully.")
+        print(f"Round {self.round_id} updated successfully.")
 
     def delete(self) -> None:
         """Delete method for players"""

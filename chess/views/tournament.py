@@ -191,7 +191,7 @@ class TournamentView:
             index = int(choice) - 1
             if 0 <= index < len(tournaments):
                 selected_tournament = tournaments[index]
-                print(f"Debug: Selected tournament: {selected_tournament.to_dict()}")
+                print(f"**** Selected tournament: {selected_tournament.to_dict()}")
                 TournamentView.display_rounds(selected_tournament)
             else:
                 print("Invalid tournament selection.")
@@ -243,46 +243,45 @@ class TournamentView:
 
         for match in round_data.matches:
             if isinstance(match, list) and len(match) == 2:
-                player_id = match[0]
-                score = match[1]
+                player1_id = match[0]
+                player2_id = match[1]
 
-                # Ensure player ID is valid
-                if not player_id or player_id == -1:
-                    print("Invalid player ID in match data.")
-                    continue
-
-                # Retrieve player data
-                player = Player.read_one(player_id)
+                # Retrieve player data for both players
+                player1 = Player.read_one(player1_id)
+                player2 = Player.read_one(player2_id)
 
                 # Validate player data
-                if not player:
-                    print(f"Invalid data for Player ID: {player_id}")
+                if not player1 or not player2:
+                    print(f"Invalid data for Player IDs: {player1_id}, {player2_id}")
                     continue
 
                 # Safely retrieve player attributes using attribute access
-                player_firstname = player.firstname if hasattr(player, 'firstname') else ''
-                player_lastname = player.lastname if hasattr(player, 'lastname') else ''
+                player1_firstname = player1.firstname if hasattr(player1, 'firstname') else ''
+                player1_lastname = player1.lastname if hasattr(player1, 'lastname') else ''
+                player2_firstname = player2.firstname if hasattr(player2, 'firstname') else ''
+                player2_lastname = player2.lastname if hasattr(player2, 'lastname') else ''
 
                 print(
-                    f"Match: {player_firstname} {player_lastname} "
-                    f"Score: {score}"
+                    f"Match: {player1_firstname} {player1_lastname} "
+                    f"vs {player2_firstname} {player2_lastname}"
                 )
 
                 try:
-                    new_score = int(input(f"Enter new score for {player_firstname} "
-                                          f"{player_lastname}: "))
+                    score1 = int(input(f"Enter score for {player1_firstname} {player1_lastname}: "))
+                    score2 = int(input(f"Enter score for {player2_firstname} {player2_lastname}: "))
                 except ValueError:
                     print("Invalid score input. Please enter a valid number.")
                     continue
 
-                # Update match score in the round_data
-                match[1] = new_score
+                # Update match scores in the round_data
+                match[0] = [player1_id, score1]
+                match[1] = [player2_id, score2]
 
             else:
                 print("Match data not found or has invalid structure.")
 
         # After updating all matches, update the round_data
-        round_data.matches = round_data.matches  # Ensure round_data.matches is correctly structured
+        round_data.matches = round_data.matches
         round_data.update()
 
     @staticmethod
@@ -296,7 +295,7 @@ class TournamentView:
             tournaments = Tournament.read_all()
             if 0 <= index < len(tournaments):
                 selected_tournament = tournaments[index]
-                print(f"Debug: Selected tournament: {selected_tournament.to_dict()}")
+                print(f"**** Debug: Selected tournament: {selected_tournament.to_dict()}")
                 TournamentView.display_rankings_for_tournament(selected_tournament)
             else:
                 print("Invalid tournament selection.")

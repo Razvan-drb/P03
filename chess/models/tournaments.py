@@ -273,21 +273,26 @@ class Tournament:
         print("Creating matches with players: ", self.player_id_list)
 
         round_0 = [
-            [self.player_id_list[0], -1],
-            [self.player_id_list[1], -1],
+            [self.player_id_list[0], self.player_id_list[1]],
+            [self.player_id_list[2], self.player_id_list[3]],
         ]
 
         round_1 = [
-            [self.player_id_list[0], -1],
-            [self.player_id_list[2], -1],
+            [self.player_id_list[0], self.player_id_list[2]],
+            [self.player_id_list[1], self.player_id_list[3]],
         ]
 
         round_2 = [
-            [self.player_id_list[0], -1],
-            [self.player_id_list[3], -1],
+            [self.player_id_list[0], self.player_id_list[3]],
+            [self.player_id_list[1], self.player_id_list[2]],
         ]
 
-        match_list = [round_0, round_1, round_2]
+        round_3 = [
+            [self.player_id_list[0], self.player_id_list[1]],
+            [self.player_id_list[2], self.player_id_list[3]],
+        ]
+
+        match_list = [round_0, round_1, round_2, round_3]
 
         for i, round_matches in enumerate(match_list):
             round_id = f"{self.tournament_id}_round_{i}"
@@ -395,7 +400,8 @@ class Tournament:
             round_data = Round.read_one(round_id)
 
             if round_data:
-                print(f"Debug: round_data.matches = {round_data.matches}")
+                print(f"Rounds played: players and scores = {round_data.matches}")
+
                 for player_id, score in round_data.matches:
                     if isinstance(player_id, str) and isinstance(score, (int, float)):
                         player_scores[player_id] = player_scores.get(player_id, 0) + score
