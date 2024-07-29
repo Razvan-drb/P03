@@ -279,11 +279,14 @@ class TournamentView:
             player_2_firstname = player_2.firstname if hasattr(player_2, 'firstname') else ''
             player_2_lastname = player_2.lastname if hasattr(player_2, 'lastname') else ''
 
-            print(f"Match: {player_1_firstname} {player_1_lastname} vs {player_2_firstname} {player_2_lastname}")
+            print(f"Match: {player_1_firstname} {player_1_lastname} vs {player_2_firstname} "
+                  f"{player_2_lastname}")
 
             try:
-                player_1_score = int(input(f"Enter score for {player_1_firstname} {player_1_lastname}: "))
-                player_2_score = int(input(f"Enter score for {player_2_firstname} {player_2_lastname}: "))
+                player_1_score = int(input(f"Enter score for {player_1_firstname} "
+                                           f"{player_1_lastname}: "))
+                player_2_score = int(input(f"Enter score for {player_2_firstname} "
+                                           f"{player_2_lastname}: "))
             except ValueError:
                 print("Invalid score input. Please enter valid numbers.")
                 continue
@@ -303,7 +306,8 @@ class TournamentView:
             if isinstance(tournament_data, dict):
                 tournament = Tournament.from_dict(tournament_data)
             else:
-                print(f"Error: Expected tournament data to be a dictionary, but got {type(tournament_data)}")
+                print(f"Error: Expected tournament data to be a dictionary, "
+                      f"but got {type(tournament_data)}")
                 return
 
             if round_data.round_number == tournament.N_ROUNDS - 1:
