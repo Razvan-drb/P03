@@ -255,7 +255,9 @@ class Tournament:
 
         elif self.status == "In Progress" and new_status == "Completed":
             # Check if all rounds are played
-            if self.current_round_number + 1 != self.N_ROUNDS:
+            if self.current_round_number + 1 == self.N_ROUNDS:
+                self.status = "Completed"
+                self.update()
                 raise ValueError(
                     "Impossible de terminer le tournoi sans que tous les rounds soient finis."
                 )
@@ -402,11 +404,15 @@ class Tournament:
             if round_data:
                 print(f"Rounds played: players and scores = {round_data.matches}")
 
-                for player_id, score in round_data.matches:
-                    if isinstance(player_id, str) and isinstance(score, (int, float)):
-                        player_scores[player_id] = player_scores.get(player_id, 0) + score
+                for match in round_data.matches:
+                    if isinstance(match, list) and len(match) == 2:
+                        for player_id, score in match:
+                            if isinstance(player_id, str) and isinstance(score, (int, float)):
+                                player_scores[player_id] = player_scores.get(player_id, 0) + score
+                            else:
+                                print(f"Invalid match structure: {player_id}, {score}")
                     else:
-                        print(f"Invalid match structure: {player_id}, {score}")
+                        print(f"Invalid match structure: {match}")
 
         if not player_scores:
             print("No rankings available.")

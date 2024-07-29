@@ -6,6 +6,8 @@ from chess.models.tournaments import Tournament
 from chess.templates.tournament import TournamentTemplate
 from chess.views.player import PlayerView
 
+# TODO display rankings and pass to completed once all rounds played !!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 class TournamentView:
     """Handles tournament management operations."""
@@ -241,48 +243,71 @@ class TournamentView:
             print("No matches found in this round.")
             return
 
+        updated_matches = []
+
         for match in round_data.matches:
-            if isinstance(match, list) and len(match) == 2:
-                player1_id = match[0]
-                player2_id = match[1]
-
-                # Retrieve player data for both players
-                player1 = Player.read_one(player1_id)
-                player2 = Player.read_one(player2_id)
-
-                # Validate player data
-                if not player1 or not player2:
-                    print(f"Invalid data for Player IDs: {player1_id}, {player2_id}")
-                    continue
-
-                # Safely retrieve player attributes using attribute access
-                player1_firstname = player1.firstname if hasattr(player1, 'firstname') else ''
-                player1_lastname = player1.lastname if hasattr(player1, 'lastname') else ''
-                player2_firstname = player2.firstname if hasattr(player2, 'firstname') else ''
-                player2_lastname = player2.lastname if hasattr(player2, 'lastname') else ''
-
-                print(
-                    f"Match: {player1_firstname} {player1_lastname} "
-                    f"vs {player2_firstname} {player2_lastname}"
-                )
-
-                try:
-                    score1 = int(input(f"Enter score for {player1_firstname} {player1_lastname}: "))
-                    score2 = int(input(f"Enter score for {player2_firstname} {player2_lastname}: "))
-                except ValueError:
-                    print("Invalid score input. Please enter a valid number.")
-                    continue
-
-                # Update match scores in the round_data
-                match[0] = [player1_id, score1]
-                match[1] = [player2_id, score2]
-
+            if isinstance(match[0], list) and len(match[0]) == 2:
+                # Match already has scores, just continue
+                player_1_data, player_2_data = match[0], match[1]
+            elif isinstance(match, list) and len(match) == 2:
+                # Match has player IDs but no scores
+                player_1_data, player_2_data = [match[0], 0], [match[1], 0]
             else:
-                print("Match data not found or has invalid structure.")
+                print(f"Invalid match structure: {match}")
+                continue
+
+            player_1_id, player_1_score = player_1_data
+            player_2_id, player_2_score = player_2_data
+
+            # Retrieve player data
+            player_1 = Player.read_one(player_1_id)
+            player_2 = Player.read_one(player_2_id)
+
+            # Validate player data
+            if not player_1:
+                print(f"Invalid data for Player ID: {player_1_id}")
+                continue
+
+            if not player_2:
+                print(f"Invalid data for Player ID: {player_2_id}")
+                continue
+
+            # Safely retrieve player attributes using attribute access
+            player_1_firstname = player_1.firstname if hasattr(player_1, 'firstname') else ''
+            player_1_lastname = player_1.lastname if hasattr(player_1, 'lastname') else ''
+
+            player_2_firstname = player_2.firstname if hasattr(player_2, 'firstname') else ''
+            player_2_lastname = player_2.lastname if hasattr(player_2, 'lastname') else ''
+
+            print(f"Match: {player_1_firstname} {player_1_lastname} vs {player_2_firstname} {player_2_lastname}")
+
+            try:
+                player_1_score = int(input(f"Enter score for {player_1_firstname} {player_1_lastname}: "))
+                player_2_score = int(input(f"Enter score for {player_2_firstname} {player_2_lastname}: "))
+            except ValueError:
+                print("Invalid score input. Please enter valid numbers.")
+                continue
+
+            # Update match score in the updated_matches
+            updated_matches.append([[player_1_id, player_1_score], [player_2_id, player_2_score]])
 
         # After updating all matches, update the round_data
-        round_data.matches = round_data.matches
+        round_data.matches = updated_matches
         round_data.update()
+
+        # Check if this was the last round and update tournament status if necessary
+        tournament_id = round_id.split("_round_")[0]
+        tournament_data = Tournament.read_one(tournament_id)
+
+        if tournament_data:
+            if isinstance(tournament_data, dict):
+                tournament = Tournament.from_dict(tournament_data)
+            else:
+                print(f"Error: Expected tournament data to be a dictionary, but got {type(tournament_data)}")
+                return
+
+            if round_data.round_number == tournament.N_ROUNDS - 1:
+                tournament.update_status("Completed")
 
     @staticmethod
     def display_rankings():
